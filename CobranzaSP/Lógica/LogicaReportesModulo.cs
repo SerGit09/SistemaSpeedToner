@@ -147,7 +147,7 @@ namespace CobranzaSP.Lógica
             //string NombreArchivo = @"C:\\ADMINISTRACION-\archivos compartidos\Reportes\Servicios\" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             string NombreArchivo;
             string NombreReporte;
-            NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Modulos\" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            NombreArchivo = ConfiguracionPdf.RutaReportesModulos + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
 
             DateTime Fecha;
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);

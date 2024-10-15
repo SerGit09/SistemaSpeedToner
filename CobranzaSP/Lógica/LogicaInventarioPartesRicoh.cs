@@ -91,7 +91,8 @@ namespace CobranzaSP.Lógica
             tblDatosInventario.Load(comando.ExecuteReader());
 
             //CONFIGURAR DOCUMENTO PDF
-            string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Inventario\" + "Inventario" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            string RutaArchivo = ConfiguracionPdf.RutaReportesInventarioPartes;
+            string NombreArchivo = RutaArchivo + "Inventario" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
 
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);
             Document document = new Document(PageSize.LETTER);

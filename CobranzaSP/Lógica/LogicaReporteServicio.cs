@@ -237,7 +237,8 @@ namespace CobranzaSP.Lógica
         public string DefinirNombreArchivoPdf(Reporte NuevoReporte)
         {
             //@"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Servicios\" + NuevoReporte.TipoBusqueda + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
-            StringBuilder NombreArchivo = new StringBuilder(@"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Servicios\");
+            
+            StringBuilder NombreArchivo = new StringBuilder();
             switch (NuevoReporte.TipoBusqueda.ToUpper())
             {
                 case "CLIENTE": NombreArchivo.Append(NuevoReporte.TipoBusqueda).Append("-").Append(NuevoReporte.Cliente); break;
@@ -258,9 +259,13 @@ namespace CobranzaSP.Lógica
                 case "MANTENIMIENTOS":
                     NombreArchivo.Append("REPORTE-MANTENIMIENTO-RICOH");
                     break;
+                case "RANGO DE FECHA": NombreArchivo.Append("RANGO-DE-FECHA");break;
             }
             string Fecha = DateTime.Now.ToString("ddMMyyyyHHmmss");
-            return NombreArchivo.Append("-").Append(Fecha).Append(".pdf").ToString();
+            NombreArchivo.Append("-").Append(Fecha).Append(".pdf").ToString();
+            string RutaArchivo = ConfiguracionPdf.RutaReportesServicios;
+            RutaArchivo +=  NombreArchivo.ToString();
+            return RutaArchivo;
         }
 
         public string ColocarNombreReporte(Reporte NuevoReporte)

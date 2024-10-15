@@ -111,7 +111,8 @@ namespace CobranzaSP.Lógica
 
         public void Pdf(ReporteFactura NuevoReporte)
         {
-            string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Facturas\" + "ReporteFactura" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            string RutaArchivo = ConfiguracionPdf.RutaReportesFacturasPagadas;
+            string NombreArchivo = RutaArchivo + "ReporteFactura" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             bool ColocarTotal = false;
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);
             document = new Document(PageSize.LETTER);

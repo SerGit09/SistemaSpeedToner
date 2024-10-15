@@ -93,7 +93,8 @@ namespace CobranzaSP.Lógica
 
         public void Pdf(ReporteFactura NuevoReporte)
         {
-            string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Facturas\" + "ReporteFactura" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            string RutaArchivo = ConfiguracionPdf.RutaReportesFacturas;
+            string NombreArchivo = RutaArchivo + "ReporteFactura" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);
             document = new Document(PageSize.LETTER);
             document.SetMargins(25f, 25f, 25f, 25f);

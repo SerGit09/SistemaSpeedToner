@@ -83,7 +83,8 @@ namespace CobranzaSP.Lógica
             comando.Parameters.AddWithValue("@Fecha", FechaActual);
             Inventario = comando.ExecuteReader();
 
-            string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Inventario\" + "Inventario" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            string RutaArchivo = ConfiguracionPdf.RutaReportesInventarioToners;
+            string NombreArchivo = RutaArchivo + "Inventario" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             //string NombreArchivo = @"C:\Users\DELL PC\Documents\" + "Inventaarioooo" + DateTime.Now.ToString("dd-MM-yyyy") + ".pdf";
             //string NombreArchivo = @"\\Desktop-de0cg86\archivos compartidos\Reportes\" + "Reporte" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);

@@ -191,7 +191,8 @@ namespace CobranzaSP.Lógica
         }
         public void GenerarReporteFusores(Reporte NuevoReporte)
         {
-            string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Fusores\" + "ReporteFusores" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            string RutaArchivo = ConfiguracionPdf.RutaReportesFusores;
+            string NombreArchivo = RutaArchivo + "ReporteFusores" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             //string NombreArchivo = @"C:\Users\DELL PC\Documents\Base de datos\" + "ReporteFusores" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             //Lista de las series para evitar que se repitan las series en algunas consultas
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);

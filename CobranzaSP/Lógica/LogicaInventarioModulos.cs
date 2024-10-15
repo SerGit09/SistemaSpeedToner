@@ -43,7 +43,8 @@ namespace CobranzaSP.Lógica
 
             //string NombreArchivo = @"C:\Users\Cobranza\Documents\Reportes\" + "ReporteServicio" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             //string NombreArchivo = @"C:\Users\DELL PC\Documents\Base de datos\" + "Inventario" + DateTime.Now.ToString("dd-MM-yyyy") + ".pdf";
-            string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Modulos\" + "Reporte" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            string RutaArchivo = ConfiguracionPdf.RutaReportesInventarioModulos;
+            string NombreArchivo = RutaArchivo + "Reporte" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);
             Document document = new Document(PageSize.LETTER);
             document.SetMargins(25f, 25f, 25f, 25f);

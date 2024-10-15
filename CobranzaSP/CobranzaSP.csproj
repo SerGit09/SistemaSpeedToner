@@ -15,7 +15,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>D:\SPEED TONER 9.2.0\</PublishUrl>
+    <PublishUrl>D:\SPEED TONER 9.2.1\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -25,7 +25,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>81</ApplicationRevision>
+    <ApplicationRevision>82</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -479,6 +479,7 @@
     <Compile Include="Lógica\AccionesLógica.cs" />
     <Compile Include="Lógica\CD_Conexion.cs" />
     <Compile Include="Lógica\CobranzaLógica.cs" />
+    <Compile Include="Lógica\ConfiguracionPdf.cs" />
     <Compile Include="Lógica\ContactoLogica.cs" />
     <Compile Include="Lógica\CuentasPagadasLogica.cs" />
     <Compile Include="Lógica\FuncionesFormularios.cs" />

@@ -80,7 +80,8 @@ namespace CobranzaSP.Lógica
 
         public void GenerarPdf()
         {
-            string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\EquiposBodega\" + "ReporteEquipos" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            string RutaArchivo = ConfiguracionPdf.RutaReportesEquiposBodega;
+            string NombreArchivo = RutaArchivo + "ReporteEquipos" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             //string NombreArchivo = @"\\administracion-pc\ARCHIVOS COMPARTIDOS\Reportes\Equipos\" + "ReporteEquipos" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
 
 

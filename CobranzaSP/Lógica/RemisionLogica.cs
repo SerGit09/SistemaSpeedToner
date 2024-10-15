@@ -266,7 +266,8 @@ namespace CobranzaSP.Lógica
         public void Pdf(Reporte NuevoReporte)
         {
             //string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Servicios\" + NuevoReporte.TipoBusqueda + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
-            string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Remisiones\" + NuevoReporte.TipoBusqueda + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf"; ;
+            string RutaArchivo = ConfiguracionPdf.RutaReportesRemisiones;
+            string NombreArchivo = RutaArchivo + NuevoReporte.TipoBusqueda + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf"; ;
 
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);
             document = new Document(PageSize.LETTER);

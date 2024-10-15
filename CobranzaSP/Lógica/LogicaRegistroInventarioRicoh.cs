@@ -276,7 +276,8 @@ namespace CobranzaSP.Lógica
 
         public void Pdf(ReporteRegistroParte NuevoReporte)
         {
-            string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Partes\" + "RegistroPartesRicoh" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            string RutaArchivo = ConfiguracionPdf.RutaReportesRegistrosInventarioPartes;
+            string NombreArchivo = RutaArchivo + "RegistroPartesRicoh" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
 
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);
             document = new Document(PageSize.LETTER);

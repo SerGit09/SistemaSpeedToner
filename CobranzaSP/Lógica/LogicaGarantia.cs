@@ -163,7 +163,8 @@ namespace CobranzaSP.Lógica
         #region CreacionPdf
         public void Pdf(DatosReporteGarantia NuevoReporte)
         {
-            string NombreArchivo = @"\\DESKTOP-34U2P48\Archivos Compartidos\Reportes\Garantias\" + "ReporteGarantia" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            string RutaArchivo = ConfiguracionPdf.RutaReportesGarantias;
+            string NombreArchivo = RutaArchivo + "ReporteGarantia" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             //string NombreArchivo = @"\\administracion-pc\ARCHIVOS COMPARTIDOS\Reportes\Equipos\" + "ReporteEquipos" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
 
 
