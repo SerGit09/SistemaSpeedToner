@@ -46,7 +46,6 @@
             this.rtxtServicio = new System.Windows.Forms.RichTextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.cboClaves = new System.Windows.Forms.ComboBox();
             this.cboModulos = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
             this.grpDatosPartes = new System.Windows.Forms.GroupBox();
@@ -63,6 +62,7 @@
             this.dtgReportes = new System.Windows.Forms.DataGridView();
             this.erReportesModulos = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnGuardarReporte = new System.Windows.Forms.Button();
+            this.cboClaves = new System.Windows.Forms.ComboBox();
             this.grpDatosReporte.SuspendLayout();
             this.grpDatosPartes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgPartesUsadas)).BeginInit();
@@ -156,19 +156,6 @@
             this.label15.Size = new System.Drawing.Size(67, 19);
             this.label15.TabIndex = 65;
             this.label15.Text = "Modulo:";
-            // 
-            // cboClaves
-            // 
-            this.cboClaves.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboClaves.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cboClaves.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboClaves.FormattingEnabled = true;
-            this.cboClaves.Location = new System.Drawing.Point(142, 123);
-            this.cboClaves.Margin = new System.Windows.Forms.Padding(4);
-            this.cboClaves.Name = "cboClaves";
-            this.cboClaves.Size = new System.Drawing.Size(289, 27);
-            this.cboClaves.Sorted = true;
-            this.cboClaves.TabIndex = 69;
             // 
             // cboModulos
             // 
@@ -464,6 +451,19 @@
             this.btnGuardarReporte.UseVisualStyleBackColor = true;
             this.btnGuardarReporte.Click += new System.EventHandler(this.btnGuardarReporte_Click);
             // 
+            // cboClaves
+            // 
+            this.cboClaves.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboClaves.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboClaves.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboClaves.FormattingEnabled = true;
+            this.cboClaves.Location = new System.Drawing.Point(142, 123);
+            this.cboClaves.Margin = new System.Windows.Forms.Padding(4);
+            this.cboClaves.Name = "cboClaves";
+            this.cboClaves.Size = new System.Drawing.Size(289, 27);
+            this.cboClaves.Sorted = true;
+            this.cboClaves.TabIndex = 69;
+            // 
             // Fr_Restauracion_Modulos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -501,7 +501,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox grpDatosReporte;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.ComboBox cboClaves;
         private System.Windows.Forms.ComboBox cboModulos;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.GroupBox grpDatosPartes;
@@ -520,5 +519,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtCantidad;
+        private System.Windows.Forms.ComboBox cboClaves;
     }
 }

@@ -16,7 +16,8 @@ namespace CobranzaSP.Lógica
     {
         private CD_Conexion conexion = new CD_Conexion();
         SqlCommand comando = new SqlCommand();
-        
+
+
 
         public string GuardarParte(ParteRicoh NuevaParte)
         {
@@ -30,10 +31,12 @@ namespace CobranzaSP.Lógica
             //Preguntamos que accion realizaremos en la base de datos para posteriormente mostrale al usuario la accion que realizo
             AccionRealizada = (NuevaParte.IdParte > 0) ? "modifico" : "agrego";
 
-            comando.Parameters.AddWithValue("@Id", NuevaParte.IdParte);
+            comando.Parameters.AddWithValue("@IdNumeroParte", NuevaParte.IdParte);
+            comando.Parameters.AddWithValue("@NumeroParte", NuevaParte.NumeroParte);
             comando.Parameters.AddWithValue("@IdModelo", NuevaParte.IdModelo);
-            comando.Parameters.AddWithValue("@Nombre", NuevaParte.Descripcion);
+            comando.Parameters.AddWithValue("@Descripcion", NuevaParte.Descripcion);
             comando.Parameters.AddWithValue("@Cantidad", NuevaParte.Cantidad);
+            comando.Parameters.AddWithValue("@UrlImagen", NuevaParte.UrlImagen);
 
 
             respuesta = comando.ExecuteNonQuery();
@@ -75,24 +78,48 @@ namespace CobranzaSP.Lógica
             conexion.CerrarConexion();
         }
 
+        public void GuardarArchivoInventarioPartes(InventarioPartesDatos NuevoInventarioPartes)
+        {
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "GuardarArchivoInventarioPartes";
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.Clear();
+            comando.Parameters.AddWithValue("@IdInventarioPartes", NuevoInventarioPartes.IdInventarioPartes);
+            comando.Parameters.AddWithValue("@Fecha", NuevoInventarioPartes.Fecha);
+            comando.Parameters.AddWithValue("@UrlArchivo", NuevoInventarioPartes.UrlArchivo);
+            comando.ExecuteNonQuery();
+
+            comando.Parameters.Clear();
+            conexion.CerrarConexion();
+        }
+
         #region Pdf
         #endregion
 
-        public void ImprimirInventario(DateTime FechaElegida)
+        public void ImprimirInventario(bool FormatoBlanco)
+        {
+            string NombreArchivo = CrearPDF(FormatoBlanco, DateTime.Now);
+            var pe = new Pdf();
+
+            //Abrimos el pdf
+            pe.AbrirPdf(NombreArchivo);
+        }
+
+        public string CrearPDF(bool FormatoBlanco, DateTime FechaCreacion)
         {
             DataTable tblDatosInventario = new DataTable();
             //Primero obtenemos de la base de datos nuestro inventario 
             comando.Connection = conexion.AbrirConexion();
             comando.CommandText = "spReporteInventarioPartes";
             comando.Parameters.Clear();
-            comando.Parameters.AddWithValue("@Fecha", FechaElegida);
+            //comando.Parameters.AddWithValue("@Fecha", FechaElegida);
 
             comando.CommandType = CommandType.StoredProcedure;
             tblDatosInventario.Load(comando.ExecuteReader());
 
             //CONFIGURAR DOCUMENTO PDF
             string RutaArchivo = ConfiguracionPdf.RutaReportesInventarioPartes;
-            string NombreArchivo = RutaArchivo + "Inventario" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+            string NombreArchivo = RutaArchivo + "Inventario" + FechaCreacion.ToString("ddMMyyyyHHmmss") + ".pdf";
 
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);
             Document document = new Document(PageSize.LETTER);
@@ -106,57 +133,58 @@ namespace CobranzaSP.Lógica
 
             document.Open();
 
-            Paragraph titulo = new Paragraph("EXISTENCIAS PARTES RICOH SPEED TONER", pe.FuenteTitulo18);
+            Paragraph titulo = new Paragraph("FORMATO INVENTARIO PARTES RICOH", pe.FuenteTitulo18);
             titulo.Alignment = Element.ALIGN_CENTER;
             document.Add(titulo);
 
-            Paragraph Fecha = new Paragraph("Fecha: " + DateTime.Now.ToString("dd/MM/yyyy"), pe.FuenteFechaGrande) { Alignment = Element.ALIGN_RIGHT };
+            Paragraph Fecha = new Paragraph("Fecha: " + FechaCreacion.ToString("dd/MM/yyyy"), pe.FuenteFechaGrande) { Alignment = Element.ALIGN_CENTER };
             document.Add(Fecha);
 
-            Paragraph Hora = new Paragraph("Hora: " + DateTime.Now.ToString("hh:mm:ss tt"), pe.FuenteFechaGrande) { Alignment = Element.ALIGN_RIGHT };
-            document.Add(Hora);
+            //Paragraph Hora = new Paragraph("Hora: " + DateTime.Now.ToString("hh:mm:ss tt"), pe.FuenteFechaGrande) { Alignment = Element.ALIGN_CENTER };
+            //document.Add(Hora);
 
-            PdfPTable tblInventario = new PdfPTable(6);
+            PdfPTable tblInventario = new PdfPTable(5);
             //PdfPTable tblInventario = new PdfPTable(5);
 
             document.Add(new Paragraph("\n"));
 
             //Agregamos los titulos de la tabla
             PdfPCell clClave = new PdfPCell(new Phrase("MODELO", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+            PdfPCell clNumeroParte = new PdfPCell(new Phrase("NUMERO DE PARTE", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
             PdfPCell clDescripcion = new PdfPCell(new Phrase("DESCRIPCION", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 2 };
             PdfPCell clExistencias = new PdfPCell(new Phrase("EXISTENCIA", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
-            PdfPCell clSalidas = new PdfPCell(new Phrase("SALIDAS", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
-            PdfPCell clEntradas = new PdfPCell(new Phrase("ENTRADAS", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+            //PdfPCell clSalidas = new PdfPCell(new Phrase("SALIDAS", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+            //PdfPCell clEntradas = new PdfPCell(new Phrase("ENTRADAS", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
 
             tblInventario.AddCell(clClave);
+            tblInventario.AddCell(clNumeroParte);
             tblInventario.AddCell(clDescripcion);
             tblInventario.AddCell(clExistencias);
-            tblInventario.AddCell(clSalidas);
-            tblInventario.AddCell(clEntradas);
+            //tblInventario.AddCell(clSalidas);
+            //tblInventario.AddCell(clEntradas);
 
             foreach (DataRow fila in tblDatosInventario.Rows)
             {
                 PdfPCell clModeloDato = new PdfPCell(new Phrase(fila[0].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
-                PdfPCell clDescripcionDato = new PdfPCell(new Phrase(fila[1].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 2 };
-                PdfPCell clExistenciasDato = new PdfPCell(new Phrase(ComprobarValoresO(fila[2].ToString()), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
-                PdfPCell clSalidasDato = new PdfPCell(new Phrase(ComprobarValoresO(fila[3].ToString()), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
-                PdfPCell clEntradasDato = new PdfPCell(new Phrase(ComprobarValoresO(fila[4].ToString()), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
+                PdfPCell clNumeroParteDato = new PdfPCell(new Phrase(fila[1].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
+                PdfPCell clDescripcionDato = new PdfPCell(new Phrase(fila[2].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 2 };
+                string Cantidad = (FormatoBlanco) ?"": fila[3].ToString();
+                PdfPCell clExistenciasDato = new PdfPCell(new Phrase(Cantidad, pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
+                //PdfPCell clSalidasDato = new PdfPCell(new Phrase(ComprobarValoresO(fila[3].ToString()), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
+                //PdfPCell clEntradasDato = new PdfPCell(new Phrase(ComprobarValoresO(fila[4].ToString()), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
 
                 tblInventario.AddCell(clModeloDato);
+                tblInventario.AddCell(clNumeroParteDato);
                 tblInventario.AddCell(clDescripcionDato);
                 tblInventario.AddCell(clExistenciasDato);
-                tblInventario.AddCell(clSalidasDato);
-                tblInventario.AddCell(clEntradasDato);
             }
 
             //Añadimos la tabla al documento
             document.Add(tblInventario);
             tblDatosInventario.Clear();
             document.Close();
-
-            //Abrimos el pdf
-            pe.AbrirPdf(NombreArchivo);
             conexion.CerrarConexion();
+            return NombreArchivo;
         }
 
         //Metodo para evitar que salgan valores en 0 en el inventario
@@ -171,6 +199,8 @@ namespace CobranzaSP.Lógica
                 return Cantidad;
             }
         }
+
+        //Guardar el inventario de ricoh
 
 
     }

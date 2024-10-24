@@ -29,18 +29,23 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InventarioPartes));
             this.dtgInventario = new System.Windows.Forms.DataGridView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabInventario = new System.Windows.Forms.TabPage();
             this.grpDatosInventario = new System.Windows.Forms.GroupBox();
+            this.btnAbrirInventariosPartes = new System.Windows.Forms.Button();
+            this.btnGuardarInventario = new System.Windows.Forms.Button();
+            this.txtNumeroParte = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.btnPruebaImagen = new System.Windows.Forms.Button();
             this.btnNuevoModelo = new System.Windows.Forms.Button();
             this.grpReporteInventario = new System.Windows.Forms.GroupBox();
-            this.dtpFecha = new System.Windows.Forms.DateTimePicker();
+            this.chkSoloPlantilla = new System.Windows.Forms.CheckBox();
             this.btnImprimir = new System.Windows.Forms.Button();
             this.cboModelos = new System.Windows.Forms.ComboBox();
             this.txtCantidadExistencia = new System.Windows.Forms.TextBox();
@@ -63,10 +68,11 @@
             this.label12 = new System.Windows.Forms.Label();
             this.dtpFechaRegistro = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
+            this.erInventarioPartesRicoh = new System.Windows.Forms.ErrorProvider(this.components);
+            this.pcbParte = new System.Windows.Forms.PictureBox();
             this.btnCancelar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnGuardar = new System.Windows.Forms.Button();
-            this.erInventarioPartesRicoh = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dtgInventario)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabInventario.SuspendLayout();
@@ -75,6 +81,7 @@
             this.tabRegistros.SuspendLayout();
             this.grpDatosRegistro.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.erInventarioPartesRicoh)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pcbParte)).BeginInit();
             this.SuspendLayout();
             // 
             // dtgInventario
@@ -85,45 +92,45 @@
             this.dtgInventario.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dtgInventario.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
             this.dtgInventario.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgInventario.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgInventario.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dtgInventario.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InfoText;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtgInventario.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtgInventario.DefaultCellStyle = dataGridViewCellStyle6;
             this.dtgInventario.EnableHeadersVisualStyles = false;
-            this.dtgInventario.Location = new System.Drawing.Point(12, 284);
+            this.dtgInventario.Location = new System.Drawing.Point(12, 326);
             this.dtgInventario.Name = "dtgInventario";
             this.dtgInventario.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgInventario.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgInventario.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgInventario.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgInventario.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.dtgInventario.RowTemplate.Height = 25;
-            this.dtgInventario.Size = new System.Drawing.Size(1326, 681);
+            this.dtgInventario.Size = new System.Drawing.Size(1326, 639);
             this.dtgInventario.TabIndex = 39;
             this.dtgInventario.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgInventario_CellClick);
             // 
@@ -134,7 +141,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1141, 209);
+            this.tabControl1.Size = new System.Drawing.Size(965, 251);
             this.tabControl1.TabIndex = 35;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -145,12 +152,17 @@
             this.tabInventario.Location = new System.Drawing.Point(4, 28);
             this.tabInventario.Name = "tabInventario";
             this.tabInventario.Padding = new System.Windows.Forms.Padding(3);
-            this.tabInventario.Size = new System.Drawing.Size(1133, 177);
+            this.tabInventario.Size = new System.Drawing.Size(957, 219);
             this.tabInventario.TabIndex = 0;
             this.tabInventario.Text = "Catalogo";
             // 
             // grpDatosInventario
             // 
+            this.grpDatosInventario.Controls.Add(this.btnAbrirInventariosPartes);
+            this.grpDatosInventario.Controls.Add(this.btnGuardarInventario);
+            this.grpDatosInventario.Controls.Add(this.txtNumeroParte);
+            this.grpDatosInventario.Controls.Add(this.label6);
+            this.grpDatosInventario.Controls.Add(this.btnPruebaImagen);
             this.grpDatosInventario.Controls.Add(this.btnNuevoModelo);
             this.grpDatosInventario.Controls.Add(this.grpReporteInventario);
             this.grpDatosInventario.Controls.Add(this.cboModelos);
@@ -162,10 +174,73 @@
             this.grpDatosInventario.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.grpDatosInventario.Location = new System.Drawing.Point(6, 6);
             this.grpDatosInventario.Name = "grpDatosInventario";
-            this.grpDatosInventario.Size = new System.Drawing.Size(1111, 156);
+            this.grpDatosInventario.Size = new System.Drawing.Size(936, 207);
             this.grpDatosInventario.TabIndex = 0;
             this.grpDatosInventario.TabStop = false;
             this.grpDatosInventario.Text = "Datos";
+            // 
+            // btnAbrirInventariosPartes
+            // 
+            this.btnAbrirInventariosPartes.FlatAppearance.BorderColor = System.Drawing.Color.CornflowerBlue;
+            this.btnAbrirInventariosPartes.FlatAppearance.BorderSize = 2;
+            this.btnAbrirInventariosPartes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAbrirInventariosPartes.ForeColor = System.Drawing.Color.White;
+            this.btnAbrirInventariosPartes.Image = ((System.Drawing.Image)(resources.GetObject("btnAbrirInventariosPartes.Image")));
+            this.btnAbrirInventariosPartes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAbrirInventariosPartes.Location = new System.Drawing.Point(761, 150);
+            this.btnAbrirInventariosPartes.Name = "btnAbrirInventariosPartes";
+            this.btnAbrirInventariosPartes.Size = new System.Drawing.Size(169, 51);
+            this.btnAbrirInventariosPartes.TabIndex = 57;
+            this.btnAbrirInventariosPartes.Text = "Ver Inventarios";
+            this.btnAbrirInventariosPartes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnAbrirInventariosPartes.UseVisualStyleBackColor = true;
+            this.btnAbrirInventariosPartes.Click += new System.EventHandler(this.btnAbrirInventariosPartes_Click);
+            // 
+            // btnGuardarInventario
+            // 
+            this.btnGuardarInventario.FlatAppearance.BorderColor = System.Drawing.Color.DeepPink;
+            this.btnGuardarInventario.FlatAppearance.BorderSize = 2;
+            this.btnGuardarInventario.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGuardarInventario.ForeColor = System.Drawing.Color.White;
+            this.btnGuardarInventario.Image = ((System.Drawing.Image)(resources.GetObject("btnGuardarInventario.Image")));
+            this.btnGuardarInventario.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGuardarInventario.Location = new System.Drawing.Point(620, 150);
+            this.btnGuardarInventario.Name = "btnGuardarInventario";
+            this.btnGuardarInventario.Size = new System.Drawing.Size(135, 51);
+            this.btnGuardarInventario.TabIndex = 41;
+            this.btnGuardarInventario.Text = "Guardar Inventario";
+            this.btnGuardarInventario.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnGuardarInventario.UseVisualStyleBackColor = true;
+            this.btnGuardarInventario.Click += new System.EventHandler(this.btnGuardarInventario_Click);
+            // 
+            // txtNumeroParte
+            // 
+            this.txtNumeroParte.Location = new System.Drawing.Point(141, 55);
+            this.txtNumeroParte.Name = "txtNumeroParte";
+            this.txtNumeroParte.Size = new System.Drawing.Size(239, 27);
+            this.txtNumeroParte.TabIndex = 56;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(6, 60);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(129, 19);
+            this.label6.TabIndex = 55;
+            this.label6.Text = "Numero de Parte";
+            // 
+            // btnPruebaImagen
+            // 
+            this.btnPruebaImagen.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnPruebaImagen.Location = new System.Drawing.Point(403, 56);
+            this.btnPruebaImagen.Name = "btnPruebaImagen";
+            this.btnPruebaImagen.Size = new System.Drawing.Size(75, 55);
+            this.btnPruebaImagen.TabIndex = 54;
+            this.btnPruebaImagen.Text = "Cargar Imagen";
+            this.btnPruebaImagen.UseVisualStyleBackColor = true;
+            this.btnPruebaImagen.Click += new System.EventHandler(this.btnPruebaImagen_Click);
             // 
             // btnNuevoModelo
             // 
@@ -174,7 +249,7 @@
             this.btnNuevoModelo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNuevoModelo.ForeColor = System.Drawing.Color.White;
             this.btnNuevoModelo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnNuevoModelo.Location = new System.Drawing.Point(698, 90);
+            this.btnNuevoModelo.Location = new System.Drawing.Point(510, 16);
             this.btnNuevoModelo.Name = "btnNuevoModelo";
             this.btnNuevoModelo.Size = new System.Drawing.Size(83, 51);
             this.btnNuevoModelo.TabIndex = 53;
@@ -184,22 +259,25 @@
             // 
             // grpReporteInventario
             // 
-            this.grpReporteInventario.Controls.Add(this.dtpFecha);
+            this.grpReporteInventario.Controls.Add(this.chkSoloPlantilla);
             this.grpReporteInventario.Controls.Add(this.btnImprimir);
             this.grpReporteInventario.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.grpReporteInventario.Location = new System.Drawing.Point(787, 16);
+            this.grpReporteInventario.Location = new System.Drawing.Point(621, 16);
             this.grpReporteInventario.Name = "grpReporteInventario";
-            this.grpReporteInventario.Size = new System.Drawing.Size(309, 125);
+            this.grpReporteInventario.Size = new System.Drawing.Size(309, 101);
             this.grpReporteInventario.TabIndex = 52;
             this.grpReporteInventario.TabStop = false;
             this.grpReporteInventario.Text = "Reporte Inventario";
             // 
-            // dtpFecha
+            // chkSoloPlantilla
             // 
-            this.dtpFecha.Location = new System.Drawing.Point(10, 26);
-            this.dtpFecha.Name = "dtpFecha";
-            this.dtpFecha.Size = new System.Drawing.Size(293, 27);
-            this.dtpFecha.TabIndex = 37;
+            this.chkSoloPlantilla.AutoSize = true;
+            this.chkSoloPlantilla.Location = new System.Drawing.Point(6, 47);
+            this.chkSoloPlantilla.Name = "chkSoloPlantilla";
+            this.chkSoloPlantilla.Size = new System.Drawing.Size(224, 23);
+            this.chkSoloPlantilla.TabIndex = 37;
+            this.chkSoloPlantilla.Text = "Imprimir plantilla en blanco";
+            this.chkSoloPlantilla.UseVisualStyleBackColor = true;
             // 
             // btnImprimir
             // 
@@ -208,7 +286,7 @@
             this.btnImprimir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnImprimir.ForeColor = System.Drawing.Color.White;
             this.btnImprimir.Image = ((System.Drawing.Image)(resources.GetObject("btnImprimir.Image")));
-            this.btnImprimir.Location = new System.Drawing.Point(245, 59);
+            this.btnImprimir.Location = new System.Drawing.Point(245, 36);
             this.btnImprimir.Name = "btnImprimir";
             this.btnImprimir.Size = new System.Drawing.Size(58, 49);
             this.btnImprimir.TabIndex = 36;
@@ -251,7 +329,7 @@
             // 
             // rtxtDescripcion
             // 
-            this.rtxtDescripcion.Location = new System.Drawing.Point(10, 68);
+            this.rtxtDescripcion.Location = new System.Drawing.Point(10, 117);
             this.rtxtDescripcion.Name = "rtxtDescripcion";
             this.rtxtDescripcion.Size = new System.Drawing.Size(370, 73);
             this.rtxtDescripcion.TabIndex = 2;
@@ -262,7 +340,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(6, 46);
+            this.label4.Location = new System.Drawing.Point(6, 92);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(90, 19);
             this.label4.TabIndex = 39;
@@ -286,7 +364,7 @@
             this.tabRegistros.Location = new System.Drawing.Point(4, 28);
             this.tabRegistros.Name = "tabRegistros";
             this.tabRegistros.Padding = new System.Windows.Forms.Padding(3);
-            this.tabRegistros.Size = new System.Drawing.Size(1133, 177);
+            this.tabRegistros.Size = new System.Drawing.Size(957, 219);
             this.tabRegistros.TabIndex = 1;
             this.tabRegistros.Text = "Movimientos";
             // 
@@ -308,7 +386,7 @@
             this.grpDatosRegistro.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.grpDatosRegistro.Location = new System.Drawing.Point(11, 5);
             this.grpDatosRegistro.Name = "grpDatosRegistro";
-            this.grpDatosRegistro.Size = new System.Drawing.Size(1111, 166);
+            this.grpDatosRegistro.Size = new System.Drawing.Size(793, 166);
             this.grpDatosRegistro.TabIndex = 1;
             this.grpDatosRegistro.TabStop = false;
             this.grpDatosRegistro.Text = "Datos";
@@ -364,7 +442,7 @@
             this.btnGenerarReporte.ForeColor = System.Drawing.Color.White;
             this.btnGenerarReporte.Image = ((System.Drawing.Image)(resources.GetObject("btnGenerarReporte.Image")));
             this.btnGenerarReporte.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGenerarReporte.Location = new System.Drawing.Point(972, 18);
+            this.btnGenerarReporte.Location = new System.Drawing.Point(619, 92);
             this.btnGenerarReporte.Name = "btnGenerarReporte";
             this.btnGenerarReporte.Size = new System.Drawing.Size(133, 56);
             this.btnGenerarReporte.TabIndex = 35;
@@ -459,6 +537,18 @@
             this.label9.TabIndex = 6;
             this.label9.Text = "Fecha:";
             // 
+            // erInventarioPartesRicoh
+            // 
+            this.erInventarioPartesRicoh.ContainerControl = this;
+            // 
+            // pcbParte
+            // 
+            this.pcbParte.Location = new System.Drawing.Point(994, 40);
+            this.pcbParte.Name = "pcbParte";
+            this.pcbParte.Size = new System.Drawing.Size(344, 238);
+            this.pcbParte.TabIndex = 40;
+            this.pcbParte.TabStop = false;
+            // 
             // btnCancelar
             // 
             this.btnCancelar.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
@@ -467,7 +557,7 @@
             this.btnCancelar.ForeColor = System.Drawing.Color.White;
             this.btnCancelar.Image = ((System.Drawing.Image)(resources.GetObject("btnCancelar.Image")));
             this.btnCancelar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancelar.Location = new System.Drawing.Point(258, 227);
+            this.btnCancelar.Location = new System.Drawing.Point(262, 269);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(117, 51);
             this.btnCancelar.TabIndex = 38;
@@ -484,7 +574,7 @@
             this.btnEliminar.ForeColor = System.Drawing.Color.White;
             this.btnEliminar.Image = ((System.Drawing.Image)(resources.GetObject("btnEliminar.Image")));
             this.btnEliminar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEliminar.Location = new System.Drawing.Point(135, 227);
+            this.btnEliminar.Location = new System.Drawing.Point(139, 269);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new System.Drawing.Size(117, 51);
             this.btnEliminar.TabIndex = 37;
@@ -501,7 +591,7 @@
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
             this.btnGuardar.Image = ((System.Drawing.Image)(resources.GetObject("btnGuardar.Image")));
             this.btnGuardar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGuardar.Location = new System.Drawing.Point(12, 227);
+            this.btnGuardar.Location = new System.Drawing.Point(16, 269);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(117, 51);
             this.btnGuardar.TabIndex = 36;
@@ -510,16 +600,13 @@
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
-            // erInventarioPartesRicoh
-            // 
-            this.erInventarioPartesRicoh.ContainerControl = this;
-            // 
             // InventarioPartes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(69)))), ((int)(((byte)(82)))));
             this.ClientSize = new System.Drawing.Size(1350, 977);
+            this.Controls.Add(this.pcbParte);
             this.Controls.Add(this.dtgInventario);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btnCancelar);
@@ -536,10 +623,12 @@
             this.grpDatosInventario.ResumeLayout(false);
             this.grpDatosInventario.PerformLayout();
             this.grpReporteInventario.ResumeLayout(false);
+            this.grpReporteInventario.PerformLayout();
             this.tabRegistros.ResumeLayout(false);
             this.grpDatosRegistro.ResumeLayout(false);
             this.grpDatosRegistro.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.erInventarioPartesRicoh)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pcbParte)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -577,7 +666,13 @@
         private System.Windows.Forms.TextBox txtFolio;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox grpReporteInventario;
-        private System.Windows.Forms.DateTimePicker dtpFecha;
         private System.Windows.Forms.Button btnNuevoModelo;
+        private System.Windows.Forms.PictureBox pcbParte;
+        private System.Windows.Forms.Button btnPruebaImagen;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtNumeroParte;
+        private System.Windows.Forms.Button btnGuardarInventario;
+        private System.Windows.Forms.Button btnAbrirInventariosPartes;
+        private System.Windows.Forms.CheckBox chkSoloPlantilla;
     }
 }

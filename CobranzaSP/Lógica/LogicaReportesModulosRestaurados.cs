@@ -31,7 +31,7 @@ namespace CobranzaSP.Lógica
             comando.Parameters.AddWithValue("@FolioReporte", ReporteModulo.FolioReporte);
             comando.Parameters.AddWithValue("@Fecha", ReporteModulo.Fecha);
             comando.Parameters.AddWithValue("@IdModulo", ReporteModulo.IdModulo);
-            comando.Parameters.AddWithValue("@IdClave", ReporteModulo.IdClave);
+            comando.Parameters.AddWithValue("@Clave", ReporteModulo.Clave);
             comando.Parameters.AddWithValue("@ServicioRealizado", ReporteModulo.ServicioRealizado);
 
             respuesta = comando.ExecuteNonQuery();

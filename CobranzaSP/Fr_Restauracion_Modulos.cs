@@ -155,7 +155,7 @@ namespace CobranzaSP
                 FolioReporte = txtNumeroFolio.Text,
                 Fecha = dtpFecha.Value,
                 IdModulo = lgModuloCliente.BuscarIdModulo(cboModulos.SelectedItem.ToString(), 1),
-                IdClave = NuevaAccion.BuscarId(cboClaves.SelectedItem.ToString(), "ObtenerIdClaveModulo"),
+                Clave = cboClaves.SelectedItem.ToString(),
                 ServicioRealizado = rtxtServicio.Text
             };
 
@@ -279,7 +279,7 @@ namespace CobranzaSP
             {
                 if (!ValidarCamposVaciosPartesUsadas())
                     return;
-                string ModeloImpresora = "MP-4002";
+                string ModeloImpresora = "4002/5002/9050";
                 string Mensaje;
                 MovimientoParteRicoh nuevoMovimiento = new MovimientoParteRicoh()
                 {
@@ -343,7 +343,7 @@ namespace CobranzaSP
             tabla = lgRegistroPartes.MostrarPartes(NumeroFolio);
             //Asignamos los registros que optuvimos al datagridview
             dtgPartesUsadas.DataSource = tabla;
-            dtgPartesUsadas.Columns["IdRegistro"].Visible = false;
+            dtgPartesUsadas.Columns["IdRegistroParte"].Visible = false;
         }
         private void dtgPartesUsadas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -354,7 +354,7 @@ namespace CobranzaSP
             IdRegistro = int.Parse(dtgPartesUsadas.CurrentRow.Cells[0].Value.ToString());
             cboPartesRicoh.SelectedItem = dtgPartesUsadas.CurrentRow.Cells[1].Value.ToString();
             txtCantidad.Text = dtgPartesUsadas.CurrentRow.Cells[2].Value.ToString();
-            IdParte = int.Parse(dtgPartesUsadas.CurrentRow.Cells[2].Value.ToString());
+            IdParte = int.Parse(dtgPartesUsadas.CurrentRow.Cells[3].Value.ToString());
         }
         #endregion
 

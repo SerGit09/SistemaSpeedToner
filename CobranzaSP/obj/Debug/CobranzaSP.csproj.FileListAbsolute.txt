@@ -402,3 +402,5 @@ C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.application
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.csproj.CopyComplete
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.exe
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.pdb
+C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.InventariosPartesGuardados.resources
+C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.GuardarArchivoInventarioPartes.resources

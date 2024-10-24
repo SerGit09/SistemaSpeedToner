@@ -15,5 +15,7 @@ namespace CobranzaSP.Modelos
         public int Cantidad { get; set; }
 
         public string Descripcion { get; set; }
+        public string NumeroParte { get; set; }
+        public string UrlImagen { get; set; }
     }
 }

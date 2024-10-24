@@ -32,51 +32,51 @@ namespace CobranzaSP
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panelSuperior = new System.Windows.Forms.Panel();
+            this.btnRestaurar = new System.Windows.Forms.PictureBox();
+            this.btnMinimizar = new System.Windows.Forms.PictureBox();
+            this.btnMaximizar = new System.Windows.Forms.PictureBox();
+            this.btnCerrar = new System.Windows.Forms.PictureBox();
             this.pLateral = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
             this.SubMenuModulos = new System.Windows.Forms.Panel();
             this.SubMenuEquipos = new System.Windows.Forms.Panel();
-            this.SubMenuInventario = new System.Windows.Forms.Panel();
-            this.SubMenuServicios = new System.Windows.Forms.Panel();
-            this.panelSubMenuCobranza = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panelCentral = new System.Windows.Forms.Panel();
-            this.button3 = new System.Windows.Forms.Button();
             this.btnEquiposVendidos = new System.Windows.Forms.Button();
             this.btnRentaEquipo = new System.Windows.Forms.Button();
             this.btnBodega = new System.Windows.Forms.Button();
             this.btnEquipos = new System.Windows.Forms.Button();
             this.btnFusores = new System.Windows.Forms.Button();
             this.btnProveedores = new System.Windows.Forms.Button();
+            this.SubMenuInventario = new System.Windows.Forms.Panel();
             this.btnModulos = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.btnInventarioToners = new System.Windows.Forms.Button();
             this.btnInventario = new System.Windows.Forms.Button();
             this.btnClientes = new System.Windows.Forms.Button();
+            this.SubMenuServicios = new System.Windows.Forms.Panel();
             this.btnServiciosEquipos = new System.Windows.Forms.Button();
             this.btnServiciosRicoh = new System.Windows.Forms.Button();
             this.btnServicios = new System.Windows.Forms.Button();
+            this.panelSubMenuCobranza = new System.Windows.Forms.Panel();
             this.btnCompras = new System.Windows.Forms.Button();
             this.btnCobranza = new System.Windows.Forms.Button();
             this.btnCobrado = new System.Windows.Forms.Button();
             this.btnGraficas = new System.Windows.Forms.Button();
             this.btnRemisiones = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.btnRestaurar = new System.Windows.Forms.PictureBox();
-            this.btnMinimizar = new System.Windows.Forms.PictureBox();
-            this.btnMaximizar = new System.Windows.Forms.PictureBox();
-            this.btnCerrar = new System.Windows.Forms.PictureBox();
+            this.panelCentral = new System.Windows.Forms.Panel();
             this.panelSuperior.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnRestaurar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnMinimizar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnMaximizar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
             this.pLateral.SuspendLayout();
             this.SubMenuEquipos.SuspendLayout();
             this.SubMenuInventario.SuspendLayout();
             this.SubMenuServicios.SuspendLayout();
             this.panelSubMenuCobranza.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.btnRestaurar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnMinimizar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnMaximizar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
             this.SuspendLayout();
             // 
             // panelSuperior
@@ -93,6 +93,62 @@ namespace CobranzaSP
             this.panelSuperior.TabIndex = 0;
             this.panelSuperior.Paint += new System.Windows.Forms.PaintEventHandler(this.panelSuperior_Paint);
             this.panelSuperior.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSuperior_MouseDown);
+            // 
+            // btnRestaurar
+            // 
+            this.btnRestaurar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRestaurar.ErrorImage = null;
+            this.btnRestaurar.Image = ((System.Drawing.Image)(resources.GetObject("btnRestaurar.Image")));
+            this.btnRestaurar.InitialImage = null;
+            this.btnRestaurar.Location = new System.Drawing.Point(1541, 11);
+            this.btnRestaurar.Name = "btnRestaurar";
+            this.btnRestaurar.Size = new System.Drawing.Size(25, 28);
+            this.btnRestaurar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnRestaurar.TabIndex = 4;
+            this.btnRestaurar.TabStop = false;
+            this.btnRestaurar.Visible = false;
+            this.btnRestaurar.Click += new System.EventHandler(this.btnRestaurar_Click);
+            // 
+            // btnMinimizar
+            // 
+            this.btnMinimizar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnMinimizar.ErrorImage = null;
+            this.btnMinimizar.Image = ((System.Drawing.Image)(resources.GetObject("btnMinimizar.Image")));
+            this.btnMinimizar.InitialImage = null;
+            this.btnMinimizar.Location = new System.Drawing.Point(1510, 11);
+            this.btnMinimizar.Name = "btnMinimizar";
+            this.btnMinimizar.Size = new System.Drawing.Size(25, 28);
+            this.btnMinimizar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnMinimizar.TabIndex = 3;
+            this.btnMinimizar.TabStop = false;
+            this.btnMinimizar.Click += new System.EventHandler(this.btnMinimizar_Click);
+            // 
+            // btnMaximizar
+            // 
+            this.btnMaximizar.ErrorImage = null;
+            this.btnMaximizar.Image = ((System.Drawing.Image)(resources.GetObject("btnMaximizar.Image")));
+            this.btnMaximizar.InitialImage = null;
+            this.btnMaximizar.Location = new System.Drawing.Point(1541, 11);
+            this.btnMaximizar.Name = "btnMaximizar";
+            this.btnMaximizar.Size = new System.Drawing.Size(25, 28);
+            this.btnMaximizar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnMaximizar.TabIndex = 2;
+            this.btnMaximizar.TabStop = false;
+            this.btnMaximizar.Click += new System.EventHandler(this.btnMaximizar_Click);
+            // 
+            // btnCerrar
+            // 
+            this.btnCerrar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCerrar.ErrorImage = null;
+            this.btnCerrar.Image = ((System.Drawing.Image)(resources.GetObject("btnCerrar.Image")));
+            this.btnCerrar.InitialImage = null;
+            this.btnCerrar.Location = new System.Drawing.Point(1572, 11);
+            this.btnCerrar.Name = "btnCerrar";
+            this.btnCerrar.Size = new System.Drawing.Size(25, 28);
+            this.btnCerrar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnCerrar.TabIndex = 1;
+            this.btnCerrar.TabStop = false;
+            this.btnCerrar.Click += new System.EventHandler(this.btnCerrar_Click);
             // 
             // pLateral
             // 
@@ -119,79 +175,6 @@ namespace CobranzaSP
             this.pLateral.Size = new System.Drawing.Size(250, 977);
             this.pLateral.TabIndex = 1;
             // 
-            // SubMenuModulos
-            // 
-            this.SubMenuModulos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SubMenuModulos.Location = new System.Drawing.Point(0, 1481);
-            this.SubMenuModulos.Name = "SubMenuModulos";
-            this.SubMenuModulos.Size = new System.Drawing.Size(233, 81);
-            this.SubMenuModulos.TabIndex = 44;
-            // 
-            // SubMenuEquipos
-            // 
-            this.SubMenuEquipos.Controls.Add(this.btnEquiposVendidos);
-            this.SubMenuEquipos.Controls.Add(this.btnRentaEquipo);
-            this.SubMenuEquipos.Controls.Add(this.btnBodega);
-            this.SubMenuEquipos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SubMenuEquipos.Location = new System.Drawing.Point(0, 1269);
-            this.SubMenuEquipos.Name = "SubMenuEquipos";
-            this.SubMenuEquipos.Size = new System.Drawing.Size(233, 212);
-            this.SubMenuEquipos.TabIndex = 42;
-            // 
-            // SubMenuInventario
-            // 
-            this.SubMenuInventario.Controls.Add(this.btnModulos);
-            this.SubMenuInventario.Controls.Add(this.button2);
-            this.SubMenuInventario.Controls.Add(this.btnInventarioToners);
-            this.SubMenuInventario.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SubMenuInventario.Location = new System.Drawing.Point(0, 877);
-            this.SubMenuInventario.Name = "SubMenuInventario";
-            this.SubMenuInventario.Size = new System.Drawing.Size(233, 197);
-            this.SubMenuInventario.TabIndex = 38;
-            // 
-            // SubMenuServicios
-            // 
-            this.SubMenuServicios.Controls.Add(this.btnServiciosEquipos);
-            this.SubMenuServicios.Controls.Add(this.btnServiciosRicoh);
-            this.SubMenuServicios.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SubMenuServicios.Location = new System.Drawing.Point(0, 616);
-            this.SubMenuServicios.Name = "SubMenuServicios";
-            this.SubMenuServicios.Size = new System.Drawing.Size(233, 131);
-            this.SubMenuServicios.TabIndex = 21;
-            // 
-            // panelSubMenuCobranza
-            // 
-            this.panelSubMenuCobranza.Controls.Add(this.btnCompras);
-            this.panelSubMenuCobranza.Controls.Add(this.btnCobranza);
-            this.panelSubMenuCobranza.Controls.Add(this.btnCobrado);
-            this.panelSubMenuCobranza.Controls.Add(this.btnGraficas);
-            this.panelSubMenuCobranza.Controls.Add(this.btnRemisiones);
-            this.panelSubMenuCobranza.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSubMenuCobranza.Location = new System.Drawing.Point(0, 223);
-            this.panelSubMenuCobranza.Name = "panelSubMenuCobranza";
-            this.panelSubMenuCobranza.Size = new System.Drawing.Size(233, 328);
-            this.panelSubMenuCobranza.TabIndex = 19;
-            // 
-            // panel1
-            // 
-            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel1.Controls.Add(this.panel3);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(233, 158);
-            this.panel1.TabIndex = 17;
-            // 
-            // panelCentral
-            // 
-            this.panelCentral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(69)))), ((int)(((byte)(82)))));
-            this.panelCentral.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCentral.Location = new System.Drawing.Point(250, 43);
-            this.panelCentral.Name = "panelCentral";
-            this.panelCentral.Size = new System.Drawing.Size(1350, 977);
-            this.panelCentral.TabIndex = 2;
-            this.panelCentral.Paint += new System.Windows.Forms.PaintEventHandler(this.panelCentral_Paint);
-            // 
             // button3
             // 
             this.button3.Dock = System.Windows.Forms.DockStyle.Top;
@@ -212,6 +195,25 @@ namespace CobranzaSP
             this.button3.UseCompatibleTextRendering = true;
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // SubMenuModulos
+            // 
+            this.SubMenuModulos.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SubMenuModulos.Location = new System.Drawing.Point(0, 1481);
+            this.SubMenuModulos.Name = "SubMenuModulos";
+            this.SubMenuModulos.Size = new System.Drawing.Size(233, 81);
+            this.SubMenuModulos.TabIndex = 44;
+            // 
+            // SubMenuEquipos
+            // 
+            this.SubMenuEquipos.Controls.Add(this.btnEquiposVendidos);
+            this.SubMenuEquipos.Controls.Add(this.btnRentaEquipo);
+            this.SubMenuEquipos.Controls.Add(this.btnBodega);
+            this.SubMenuEquipos.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SubMenuEquipos.Location = new System.Drawing.Point(0, 1269);
+            this.SubMenuEquipos.Name = "SubMenuEquipos";
+            this.SubMenuEquipos.Size = new System.Drawing.Size(233, 212);
+            this.SubMenuEquipos.TabIndex = 42;
             // 
             // btnEquiposVendidos
             // 
@@ -323,6 +325,17 @@ namespace CobranzaSP
             this.btnProveedores.UseVisualStyleBackColor = true;
             this.btnProveedores.Click += new System.EventHandler(this.btnProveedores_Click);
             // 
+            // SubMenuInventario
+            // 
+            this.SubMenuInventario.Controls.Add(this.btnModulos);
+            this.SubMenuInventario.Controls.Add(this.button2);
+            this.SubMenuInventario.Controls.Add(this.btnInventarioToners);
+            this.SubMenuInventario.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SubMenuInventario.Location = new System.Drawing.Point(0, 877);
+            this.SubMenuInventario.Name = "SubMenuInventario";
+            this.SubMenuInventario.Size = new System.Drawing.Size(233, 197);
+            this.SubMenuInventario.TabIndex = 38;
+            // 
             // btnModulos
             // 
             this.btnModulos.FlatAppearance.BorderSize = 0;
@@ -388,7 +401,7 @@ namespace CobranzaSP
             this.btnInventario.Name = "btnInventario";
             this.btnInventario.Size = new System.Drawing.Size(233, 65);
             this.btnInventario.TabIndex = 37;
-            this.btnInventario.Text = "Inventario";
+            this.btnInventario.Text = "Inventarios";
             this.btnInventario.UseCompatibleTextRendering = true;
             this.btnInventario.UseVisualStyleBackColor = true;
             this.btnInventario.Click += new System.EventHandler(this.btnInventario_Click);
@@ -410,6 +423,16 @@ namespace CobranzaSP
             this.btnClientes.Text = "Clientes";
             this.btnClientes.UseVisualStyleBackColor = true;
             this.btnClientes.Click += new System.EventHandler(this.btnClientes_Click);
+            // 
+            // SubMenuServicios
+            // 
+            this.SubMenuServicios.Controls.Add(this.btnServiciosEquipos);
+            this.SubMenuServicios.Controls.Add(this.btnServiciosRicoh);
+            this.SubMenuServicios.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SubMenuServicios.Location = new System.Drawing.Point(0, 616);
+            this.SubMenuServicios.Name = "SubMenuServicios";
+            this.SubMenuServicios.Size = new System.Drawing.Size(233, 131);
+            this.SubMenuServicios.TabIndex = 21;
             // 
             // btnServiciosEquipos
             // 
@@ -463,6 +486,19 @@ namespace CobranzaSP
             this.btnServicios.UseCompatibleTextRendering = true;
             this.btnServicios.UseVisualStyleBackColor = true;
             this.btnServicios.Click += new System.EventHandler(this.btnServicios_Click);
+            // 
+            // panelSubMenuCobranza
+            // 
+            this.panelSubMenuCobranza.Controls.Add(this.btnCompras);
+            this.panelSubMenuCobranza.Controls.Add(this.btnCobranza);
+            this.panelSubMenuCobranza.Controls.Add(this.btnCobrado);
+            this.panelSubMenuCobranza.Controls.Add(this.btnGraficas);
+            this.panelSubMenuCobranza.Controls.Add(this.btnRemisiones);
+            this.panelSubMenuCobranza.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSubMenuCobranza.Location = new System.Drawing.Point(0, 223);
+            this.panelSubMenuCobranza.Name = "panelSubMenuCobranza";
+            this.panelSubMenuCobranza.Size = new System.Drawing.Size(233, 328);
+            this.panelSubMenuCobranza.TabIndex = 19;
             // 
             // btnCompras
             // 
@@ -568,6 +604,16 @@ namespace CobranzaSP
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
+            // panel1
+            // 
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel1.Controls.Add(this.panel3);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(233, 158);
+            this.panel1.TabIndex = 17;
+            // 
             // panel3
             // 
             this.panel3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel3.BackgroundImage")));
@@ -577,61 +623,15 @@ namespace CobranzaSP
             this.panel3.Size = new System.Drawing.Size(241, 138);
             this.panel3.TabIndex = 0;
             // 
-            // btnRestaurar
+            // panelCentral
             // 
-            this.btnRestaurar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRestaurar.ErrorImage = null;
-            this.btnRestaurar.Image = ((System.Drawing.Image)(resources.GetObject("btnRestaurar.Image")));
-            this.btnRestaurar.InitialImage = null;
-            this.btnRestaurar.Location = new System.Drawing.Point(1541, 11);
-            this.btnRestaurar.Name = "btnRestaurar";
-            this.btnRestaurar.Size = new System.Drawing.Size(25, 28);
-            this.btnRestaurar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnRestaurar.TabIndex = 4;
-            this.btnRestaurar.TabStop = false;
-            this.btnRestaurar.Visible = false;
-            this.btnRestaurar.Click += new System.EventHandler(this.btnRestaurar_Click);
-            // 
-            // btnMinimizar
-            // 
-            this.btnMinimizar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMinimizar.ErrorImage = null;
-            this.btnMinimizar.Image = ((System.Drawing.Image)(resources.GetObject("btnMinimizar.Image")));
-            this.btnMinimizar.InitialImage = null;
-            this.btnMinimizar.Location = new System.Drawing.Point(1510, 11);
-            this.btnMinimizar.Name = "btnMinimizar";
-            this.btnMinimizar.Size = new System.Drawing.Size(25, 28);
-            this.btnMinimizar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnMinimizar.TabIndex = 3;
-            this.btnMinimizar.TabStop = false;
-            this.btnMinimizar.Click += new System.EventHandler(this.btnMinimizar_Click);
-            // 
-            // btnMaximizar
-            // 
-            this.btnMaximizar.ErrorImage = null;
-            this.btnMaximizar.Image = ((System.Drawing.Image)(resources.GetObject("btnMaximizar.Image")));
-            this.btnMaximizar.InitialImage = null;
-            this.btnMaximizar.Location = new System.Drawing.Point(1541, 11);
-            this.btnMaximizar.Name = "btnMaximizar";
-            this.btnMaximizar.Size = new System.Drawing.Size(25, 28);
-            this.btnMaximizar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnMaximizar.TabIndex = 2;
-            this.btnMaximizar.TabStop = false;
-            this.btnMaximizar.Click += new System.EventHandler(this.btnMaximizar_Click);
-            // 
-            // btnCerrar
-            // 
-            this.btnCerrar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCerrar.ErrorImage = null;
-            this.btnCerrar.Image = ((System.Drawing.Image)(resources.GetObject("btnCerrar.Image")));
-            this.btnCerrar.InitialImage = null;
-            this.btnCerrar.Location = new System.Drawing.Point(1572, 11);
-            this.btnCerrar.Name = "btnCerrar";
-            this.btnCerrar.Size = new System.Drawing.Size(25, 28);
-            this.btnCerrar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnCerrar.TabIndex = 1;
-            this.btnCerrar.TabStop = false;
-            this.btnCerrar.Click += new System.EventHandler(this.btnCerrar_Click);
+            this.panelCentral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(69)))), ((int)(((byte)(82)))));
+            this.panelCentral.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelCentral.Location = new System.Drawing.Point(250, 43);
+            this.panelCentral.Name = "panelCentral";
+            this.panelCentral.Size = new System.Drawing.Size(1350, 977);
+            this.panelCentral.TabIndex = 2;
+            this.panelCentral.Paint += new System.Windows.Forms.PaintEventHandler(this.panelCentral_Paint);
             // 
             // Form1
             // 
@@ -647,16 +647,16 @@ namespace CobranzaSP
             this.Name = "Form1";
             this.Text = "Form1";
             this.panelSuperior.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.btnRestaurar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnMinimizar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnMaximizar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).EndInit();
             this.pLateral.ResumeLayout(false);
             this.SubMenuEquipos.ResumeLayout(false);
             this.SubMenuInventario.ResumeLayout(false);
             this.SubMenuServicios.ResumeLayout(false);
             this.panelSubMenuCobranza.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.btnRestaurar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnMinimizar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnMaximizar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).EndInit();
             this.ResumeLayout(false);
 
         }

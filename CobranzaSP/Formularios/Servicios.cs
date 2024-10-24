@@ -754,7 +754,7 @@ namespace CobranzaSP.Formularios
             tabla = lgRegistroPartes.MostrarPartes(NumeroFolio);
             //Asignamos los registros que optuvimos al datagridview
             dtgPartesUsadas.DataSource = tabla;
-            dtgPartesUsadas.Columns["IdRegistro"].Visible = false;
+            //dtgPartesUsadas.Columns["IdRegistro"].Visible = false;
         }
         private void btnEliminarParte_Click(object sender, EventArgs e)
         {

@@ -9,7 +9,7 @@ namespace CobranzaSP.Modelos
     public class ReporteModuloRestaurado
     {
         public int IdReporte { get; set; }
-        public int IdClave { get; set; }
+        public string Clave { get; set; }
         public int IdModulo { get; set; }
 
         public DateTime Fecha { get; set; }

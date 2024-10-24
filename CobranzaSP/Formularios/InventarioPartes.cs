@@ -76,12 +76,13 @@ namespace CobranzaSP.Formularios
             dtgInventario.DataSource = tabla;
             if (Inventario)
             {
-                dtgInventario.Columns["IdParte"].Visible = false;
+                dtgInventario.Columns["IdNumeroParte"].Visible = false;
+                dtgInventario.Columns["UrlImagen"].Visible = false;
             }
             else
             {
-                dtgInventario.Columns["IdRegistro"].Visible = false;
-                dtgInventario.Columns["IdParte"].Visible = false;
+                dtgInventario.Columns["IdRegistroParte"].Visible = false;
+                dtgInventario.Columns["IdNumeroParte"].Visible = false;
             }
         }
 
@@ -94,8 +95,15 @@ namespace CobranzaSP.Formularios
             erInventarioPartesRicoh.Clear();
 
             ValidarCampo(cboModelos);
+            ValidarCampo(txtNumeroParte);
             ValidarCampo(rtxtDescripcion);
             ValidarCampo(txtCantidadExistencia);
+
+            //if(pcbParte.Tag == "")
+            //{
+            //    erInventarioPartesRicoh.SetError(pcbParte, "Elige una imagen");
+            //}
+
             return Validado;
         }
 
@@ -176,12 +184,13 @@ namespace CobranzaSP.Formularios
             MovimientoParteRicoh nuevoMovimiento = new MovimientoParteRicoh()
             {
                 IdRegistro = Id,
-                IdTipoPersona = NuevaAccion.BuscarIdEntidad(IdMovimiento,cboProveedores.SelectedItem.ToString(), "spObtenerIdEntidad"),
-                IdParte = lgRegistroPartes.BuscarIdParte(cboPartesRicoh.SelectedItem.ToString(), "spObtenerIdParte"),
+                IdTipoPersona = NuevaAccion.BuscarIdEntidad(IdMovimiento, cboProveedores.SelectedItem.ToString(), "spObtenerIdEntidad"),
+                IdParte = lgRegistroPartes.BuscarIdParte(cboPartesRicoh.SelectedItem.ToString(), cboModelo.SelectedItem.ToString()),
                 IdMovimiento = IdMovimiento,
                 Cantidad = int.Parse(txtCantidad.Text),
                 Fecha = dtpFechaRegistro.Value,
-                Folio = txtFolio.Text
+                Folio = txtFolio.Text,
+                UrlImagen = ""
             };
 
             if (EstaModificando)
@@ -197,6 +206,7 @@ namespace CobranzaSP.Formularios
             }
             else
             {
+
                 //Modificar inventario y agregar registro
                 Mensaje = lgRegistroPartes.AgregarRegistroInventario(nuevoMovimiento);
             }
@@ -225,12 +235,18 @@ namespace CobranzaSP.Formularios
         {
             if (!ValidarCamposInventario())
                 return;
+            if (pcbParte.ImageLocation == null)
+            {
+                pcbParte.ImageLocation = "";
+            }
             ParteRicoh ParteNueva = new ParteRicoh()
             {
                 IdParte = Id,
+                NumeroParte = txtNumeroParte.Text,
                 IdModelo = NuevaAccion.BuscarId(cboModelos.SelectedItem.ToString(), "spObtenerIdModeloPartes"),
                 Cantidad = int.Parse(txtCantidadExistencia.Text),
-                Descripcion = rtxtDescripcion.Text
+                Descripcion = rtxtDescripcion.Text,
+                UrlImagen = pcbParte.ImageLocation
             };
 
 
@@ -244,7 +260,17 @@ namespace CobranzaSP.Formularios
                     return;
                 }
             }
+            else
+            {
+                bool FolioRepetido = NuevaAccion.VerificarDuplicados(ParteNueva.NumeroParte, "VerificarNumeroParteDuplicada");
+                if (FolioRepetido)
+                {
+                    MessageBox.Show("El numero de parte ya esta registrado en el inventario de partes!!", "DUPLICADO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LimpiarForm(grpDatosRegistro);
+                    return;
+                }
 
+            }
             string Mensaje = lgInventarioPartes.GuardarParte(ParteNueva);
             MessageBox.Show(Mensaje, "MOVIMIENTO INVENTARIO PARTES RICOH", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -301,7 +327,7 @@ namespace CobranzaSP.Formularios
             }
             IdParte = 0;
             Id = 0;
-            
+
         }
 
         private void btnGenerarReporte_Click(object sender, EventArgs e)
@@ -311,8 +337,9 @@ namespace CobranzaSP.Formularios
 
         private void btnImprimir_Click(object sender, EventArgs e)
         {
-            DateTime Fecha = dtpFecha.Value;
-            lgInventarioPartes.ImprimirInventario(Fecha);
+            bool FormatoBlanco = chkSoloPlantilla.Checked;
+            lgInventarioPartes.ImprimirInventario(FormatoBlanco);
+            chkSoloPlantilla.Checked = false;
         }
         #endregion
 
@@ -334,28 +361,30 @@ namespace CobranzaSP.Formularios
         public void LlenarCamposInventario()
         {
             Id = int.Parse(dtgInventario.CurrentRow.Cells[0].Value.ToString());
-            cboModelos.SelectedItem = dtgInventario.CurrentRow.Cells[1].Value.ToString();
-            rtxtDescripcion.Text = dtgInventario.CurrentRow.Cells[2].Value.ToString();
-            txtCantidadExistencia.Text = dtgInventario.CurrentRow.Cells[3].Value.ToString();
+            txtNumeroParte.Text = dtgInventario.CurrentRow.Cells[1].Value.ToString();
+            cboModelos.SelectedItem = dtgInventario.CurrentRow.Cells[2].Value.ToString();
+            rtxtDescripcion.Text = dtgInventario.CurrentRow.Cells[3].Value.ToString();
+            txtCantidadExistencia.Text = dtgInventario.CurrentRow.Cells[4].Value.ToString();
+            AbrirImagen(dtgInventario.CurrentRow.Cells[5].Value.ToString());
         }
 
         public void LlenarCamposRegistroInventario()
         {
+            Id = int.Parse(dtgInventario.CurrentRow.Cells[0].Value.ToString());
+            IdParte = int.Parse(dtgInventario.CurrentRow.Cells[1].Value.ToString());
+            cboPartesRicoh.SelectedItem = dtgInventario.CurrentRow.Cells[2].Value.ToString();
+            cboModelo.SelectedItem = dtgInventario.CurrentRow.Cells[3].Value.ToString();
             string TipoMovimiento = dtgInventario.CurrentRow.Cells[4].Value.ToString();
             LlenarComboBoxEntidad(TipoMovimiento);
-            Id = int.Parse(dtgInventario.CurrentRow.Cells[0].Value.ToString());
-            cboModelo.SelectedItem = dtgInventario.CurrentRow.Cells[3].Value.ToString();
-            cboPartesRicoh.SelectedItem = dtgInventario.CurrentRow.Cells[2].Value.ToString();
             txtCantidad.Text = dtgInventario.CurrentRow.Cells[5].Value.ToString();
             cboProveedores.SelectedItem = dtgInventario.CurrentRow.Cells[6].Value.ToString();
             dtpFechaRegistro.Value = DateTime.Parse(dtgInventario.CurrentRow.Cells[7].Value.ToString());
             txtFolio.Text = dtgInventario.CurrentRow.Cells[8].Value.ToString();
-            IdParte = int.Parse(dtgInventario.CurrentRow.Cells[9].Value.ToString());
         }
 
         public void LlenarComboBoxEntidad(string TipoMovimiento)
         {
-            if(TipoMovimiento == "Entrada")
+            if (TipoMovimiento == "Entrada")
             {
                 IdMovimiento = 2;
                 LlenarProveedores();
@@ -410,6 +439,7 @@ namespace CobranzaSP.Formularios
             cboPartesRicoh.SelectedIndex = -1;
             Id = 0;
             ControlesDesactivados(false);
+            pcbParte.ImageLocation = "";
             EstaModificando = false;
             IdMovimiento = 2;
         }
@@ -431,7 +461,7 @@ namespace CobranzaSP.Formularios
         #region SeleccionarPartes
         private void cboModelo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string Modelo = (cboModelo.SelectedIndex != -1)?cboModelo.SelectedItem.ToString():" ";
+            string Modelo = (cboModelo.SelectedIndex != -1) ? cboModelo.SelectedItem.ToString() : " ";
             if (Modelo != " ")
             {
                 int IdModelo = NuevaAccion.BuscarId(Modelo, "spObtenerIdModeloPartesRicoh");
@@ -451,6 +481,34 @@ namespace CobranzaSP.Formularios
         private void cboModelos_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnPruebaImagen_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog abrirImagen = new OpenFileDialog();
+
+            if (abrirImagen.ShowDialog() == DialogResult.OK)
+            {
+                AbrirImagen(abrirImagen.FileName);
+            }
+        }
+
+        public void AbrirImagen(string RutaImagen)
+        {
+            pcbParte.ImageLocation = RutaImagen;
+            pcbParte.SizeMode = PictureBoxSizeMode.StretchImage;
+        }
+
+        private void btnGuardarInventario_Click(object sender, EventArgs e)
+        {
+            AbrirForm(new GuardarArchivoInventarioPartes());
+
+            //MessageBox.Show(NuevoInventarioPartes.IdInventarioPartes + "" + NuevoInventarioPartes.Fecha + "\n" + NuevoInventarioPartes.UrlArchivo);
+        }
+
+        private void btnAbrirInventariosPartes_Click(object sender, EventArgs e)
+        {
+            AbrirForm(new InventariosPartesGuardados());
         }
     }
 }
