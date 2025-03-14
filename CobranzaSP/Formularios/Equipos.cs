@@ -47,6 +47,7 @@ namespace CobranzaSP.Formularios
 
             //Llenar combobox
             Formulario.LlenarComboBox(cboClientes, "SeleccionarClientesServicios");
+            //Formulario.LlenarComboBox(cboClientes, "SeleccionarClientes");
             Formulario.LlenarComboBox(cboTipoRenta, "spSeleccionarTipoRenta");
             Formulario.LlenarComboBox(cboMarcas, "SeleccionarMarca");
             Formulario.LlenarComboBox(cboModelos, "SeleccionarModelos");
@@ -93,7 +94,7 @@ namespace CobranzaSP.Formularios
             ValidarCampo(cboModelos, "Seleccione un modelo");
             ValidarCampo(txtSerie, "Ingrese serie de equipo");
             ValidarCampo(cboTipoRenta, "Seleccione el tipo de renta");
-            ValidarCampo(txtPrecio, "Ingrese el monto de la renta del equipo");
+            ValidarCampo(txtPrecioRenta, "Ingrese el monto de la renta del equipo");
             ValidarCampo(txtFechaPago, "Ingrese la fecha de pago");
             ValidarCampo(txtPrecioEquipo, "Ingrese el precio del equipo");
 
@@ -136,7 +137,7 @@ namespace CobranzaSP.Formularios
         private void txtPrecio_KeyPress(object sender, KeyPressEventArgs e)
         {
             Validacion.SoloNumeros(e);
-            if ((e.KeyChar == '.') && (!txtPrecio.Text.Contains(".")))
+            if ((e.KeyChar == '.') && (!txtPrecioRenta.Text.Contains(".")))
             {
                 e.Handled = false;
             }
@@ -167,7 +168,7 @@ namespace CobranzaSP.Formularios
                     Serie = txtSerie.Text,
                     IdSerie = IdSerie,
                     IdRenta = NuevaAccion.BuscarId(cboTipoRenta.SelectedItem.ToString(), "ObtenerIdTipoRenta"),
-                    Precio = double.Parse(txtPrecio.Text.Replace(",", "")),
+                    PrecioRenta = double.Parse(txtPrecioRenta.Text.Replace(",", "")),
                     FechaPago = txtFechaPago.Text,
                     Valor = double.Parse(txtPrecioEquipo.Text)
                 };
@@ -257,7 +258,7 @@ namespace CobranzaSP.Formularios
             cboModelos.SelectedItem = dtgEquipos.CurrentRow.Cells[4].Value.ToString();
             txtSerie.Text = dtgEquipos.CurrentRow.Cells[5].Value.ToString();
             cboTipoRenta.SelectedItem = dtgEquipos.CurrentRow.Cells[6].Value.ToString();
-            txtPrecio.Text = dtgEquipos.CurrentRow.Cells[7].Value.ToString().Replace("$", "");
+            txtPrecioRenta.Text = dtgEquipos.CurrentRow.Cells[7].Value.ToString().Replace("$", "");
             txtFechaPago.Text = dtgEquipos.CurrentRow.Cells[8].Value.ToString();
             txtPrecioEquipo.Text = dtgEquipos.CurrentRow.Cells[9].Value.ToString().Replace("$", "");
             IdSerie = int.Parse(dtgEquipos.CurrentRow.Cells[10].Value.ToString());

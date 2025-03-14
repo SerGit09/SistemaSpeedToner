@@ -32,6 +32,7 @@ namespace CobranzaSP.Formularios
         
         bool Validado = true;
         int IdRegistroParte = 0;
+        int IdServicio = 0;
         string NumeroFolio = "";
         string SerieImpresora = "";
 
@@ -49,6 +50,7 @@ namespace CobranzaSP.Formularios
 
             //Llenar combobox
             Formulario.LlenarComboBox(cboClientes, "SeleccionarClientesServicios");
+            //Formulario.LlenarComboBox(cboClientes, "SeleccionarClientes");
             Formulario.LlenarComboBox(cboMarca, "SeleccionarMarca");
             cboModelos.Items.Add("");
             Formulario.LlenarComboBox(cboFusor, "SeleccionarFusores", 0);
@@ -83,7 +85,6 @@ namespace CobranzaSP.Formularios
             btnEliminar.Enabled = activado;
         }
 
-
         public void MostrarDatosServicios()
         {
             //Limpiamos los datos del datagridview
@@ -91,9 +92,16 @@ namespace CobranzaSP.Formularios
             dtgServicios.Refresh();
             DataTable tabla = new DataTable();
             //Guardamos los registros dependiendo la consulta
-            tabla = nuevaAccion.Mostrar("SeleccionarTodosLosServicios");
+            tabla = nuevaAccion.Mostrar("MostrarReportesUltimoMes");
             //Asignamos los registros que optuvimos al datagridview
             dtgServicios.DataSource = tabla;
+            dtgServicios.Columns["IdSerie"].Visible = false;
+            dtgServicios.Columns["ServicioRealizado"].Visible = false;
+            dtgServicios.Columns["ReporteFalla"].Visible = false;
+            dtgServicios.Columns["Fusor"].Visible = false;
+            dtgServicios.Columns["FusorRetirado"].Visible = false;
+            dtgServicios.Columns["IdTipoReporte"].Visible = false;
+            dtgServicios.Columns["IdServicio"].Visible = false;
         }
         #endregion
 
@@ -202,6 +210,8 @@ namespace CobranzaSP.Formularios
 
         public void VerificarUsoFusor(Servicio servicio)
         {
+            LogicaRegistro AccionRegistro = new LogicaRegistro();
+            bool EsFusorRecuperado;
             if (!chkFusor.Checked)
             {
                 servicio.Fusor = " ";
@@ -211,7 +221,7 @@ namespace CobranzaSP.Formularios
 
             string NombreCliente = cboClientes.SelectedItem.ToString();
 
-            //Restaremos del inventario el fusor que se utilizo en base a su modelo
+            //Se restara del inventario en base a su modelo
 
             servicio.Fusor = cboFusor.SelectedItem.ToString();
             servicio.FusorSaliente = cboFusorRetirado.SelectedItem.ToString();
@@ -219,11 +229,14 @@ namespace CobranzaSP.Formularios
             {
                 return;
             }
-            LogicaRegistro AccionRegistro = new LogicaRegistro();
+
+            //Valida que no se trate de una fusor recuperado
+            EsFusorRecuperado = nuevaAccion.VerificarDuplicados(servicio.Fusor, "VerificarInstalacionFusor");
+
             //Con ayuda de la clave del fusor, podemos obtener a traves de su modelo el idcartucho 
             int IdCartucho = nuevaAccion.BuscarId(servicio.Fusor, "ObtenerModeloFusor");
 
-            RegistroInventario registroFusor = new RegistroInventario()
+            RegistroInventarioToners registroFusor = new RegistroInventarioToners()
             {
                 Cliente = cboClientes.SelectedItem.ToString(),
                 IdMarca = lgServicio.ObtenerMarcaFusor(IdCartucho),
@@ -236,7 +249,7 @@ namespace CobranzaSP.Formularios
             registroFusor.CantidadSalida = (NombreCliente == "SPEED TONER") ? 0 : 1; // La cantidad de salida se establece en 1 si el nombre del cliente no es "SPEED TONER", de lo contrario se mantiene en 0
             registroFusor.CantidadEntrada = (NombreCliente == "SPEED TONER") ? 1 : 0; // La cantidad de entrada se establece en 1 si el nombre del cliente es "SPEED TONER", de lo contrario se mantiene en 0
 
-            string Mensaje = AccionRegistro.AgregarRegistroInventario(registroFusor);
+            string Mensaje = AccionRegistro.AgregarRegistroInventario(registroFusor,EsFusorRecuperado);
             MessageBox.Show(Mensaje, "REGISTRO INVENTARIO", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -266,6 +279,7 @@ namespace CobranzaSP.Formularios
                 Servicio nuevoServicio = new Servicio()
                 {
                     //NumeroFolio = NumeroFolio,
+                    IdServicio = IdServicio,
                     NumeroFolio = txtNumeroFolio.Text,
                     IdCliente = nuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "ObtenerIdCliente"),
                     IdMarca = nuevaAccion.BuscarId(cboMarca.SelectedItem.ToString(), "ObtenerIdMarca"),
@@ -274,9 +288,7 @@ namespace CobranzaSP.Formularios
                     Fecha = dtpFecha.Value,
                     Tecnico = cboTecnico.SelectedItem.ToString(),
                     ServicioRealizado = rtxtServicio.Text,
-                    ReporteFallo = rtxtFallas.Text,
-                    SeDioMantenimiento = false, 
-                    EstaModificando = Modificar
+                    ReporteFallo = rtxtFallas.Text
                 };
                 VerificarNuevoModelo(nuevoServicio);
                 DeterminarTipoDeReporte(nuevoServicio);
@@ -370,7 +382,7 @@ namespace CobranzaSP.Formularios
             try
             {
                 string NumeroFolio = txtNumeroFolio.Text;
-                lgServicio.EliminarRegistro(NumeroFolio, "EliminarServicio");
+                nuevaAccion.Eliminar(IdServicio,"EliminarServicio");
                 MessageBox.Show("Se elimino el registro", "OPERACION EXITOSA", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MostrarDatosServicios();
                 LimpiarForm();
@@ -388,6 +400,7 @@ namespace CobranzaSP.Formularios
             btnGuardar.Enabled = true;
             LimpiarForm();
             Modificar = false;
+            IdServicio = 0;
         }
 
         private void btnBusqueda_Click(object sender, EventArgs e)
@@ -397,56 +410,86 @@ namespace CobranzaSP.Formularios
                 return;
             }
             Modificar = true;
-            string str = txtBusqueda.Text;
+            ObtenerDatosServicioBuscado();
+            
+            txtBusqueda.Text = "";
+        }
+
+        public void ObtenerDatosServicioBuscado()
+        {
             DataTable tblServicio = new DataTable();
 
             tblServicio = nuevaAccion.BuscarPrueba(txtBusqueda.Text, "BuscarServicioFolio");
             btnCancelar.Enabled = true;
 
-            foreach(DataRow fila in tblServicio.Rows)
+            foreach (DataRow fila in tblServicio.Rows)
             {
-                txtNumeroFolio.Text = (fila[0].ToString());
-                cboClientes.SelectedItem = (fila[1].ToString());
-                cboMarca.SelectedItem = (fila[2].ToString());
-                cboModelos.SelectedItem = (fila[3].ToString());
-                int valor = cboNumeroSerie.FindString(fila[4].ToString());
-
-                if(valor > 0)
+                Servicio ServicioBuscado = new Servicio()
                 {
-                    cboNumeroSerie.SelectedItem = fila[4].ToString();
-                }
-                else
-                {
-                    chkSerie.Checked = true;
-                    txtNumeroSerie.Text = fila[4].ToString();
-                }
-                //if (cboNumeroSerie.Text != fila[4].ToString())
-                //{
-                //    chkSerie.Checked = true;
-                //    txtNumeroSerie.Text = fila[4].ToString();
-                //}
-                //else
-                //    cboNumeroSerie.SelectedItem = fila[4].ToString();
-                txtContador.Text = (fila[5].ToString());
-                DateTime FechaRegistro = Convert.ToDateTime((fila[6].ToString()));
-                dtpFecha.Value = FechaRegistro;
-                cboTecnico.SelectedItem = (fila[7].ToString());
-
-
-                string Fusor = fila[8].ToString();
-                if (Fusor != "" && Fusor != " ")
-                {
-                    chkFusor.Checked = true;
-                    cboFusor.SelectedItem = fila[8].ToString();
-                    cboFusorRetirado.SelectedItem = fila[9].ToString();
-                }
-                rtxtServicio.Text = (fila[10].ToString());
-                rtxtFallas.Text = (fila[11].ToString());
-                //Agregamos las opciones dependiendo los registros que nos devolvieron
+                    NumeroFolio = fila[0].ToString(),
+                    Cliente = fila[1].ToString(),
+                    Marca = fila[2].ToString(),
+                    Modelo = fila[3].ToString(),
+                    Serie = fila[4].ToString(),
+                    Contador = int.Parse(fila[5].ToString()),
+                    Fecha = Convert.ToDateTime(fila[6].ToString()),
+                    Tecnico = fila[7].ToString(),
+                    Fusor = fila[8].ToString(),
+                    FusorSaliente = fila[9].ToString(),
+                    ServicioRealizado = fila[10].ToString(),
+                    ReporteFallo = fila[11].ToString(),
+                    IdTipoServicio = int.Parse(fila[12].ToString()),
+                };
+                LlenarFormulario(ServicioBuscado);
             }
             MostrarPartesUsadas(txtNumeroFolio.Text);
-            txtBusqueda.Text = "";
+        }
 
+        public void LlenarFormulario(Servicio ServicioBuscado)
+        {
+            txtNumeroFolio.Text = ServicioBuscado.NumeroFolio;
+            cboClientes.SelectedItem = ServicioBuscado.Cliente;
+            cboMarca.SelectedItem = ServicioBuscado.Marca;
+            cboModelos.SelectedItem = ServicioBuscado.Modelo;
+            int valor = cboNumeroSerie.FindString(ServicioBuscado.Serie);
+
+            if (valor > 0)
+            {
+                cboNumeroSerie.SelectedItem = ServicioBuscado.Serie;
+            }
+            else
+            {
+                chkSerie.Checked = true;
+                txtNumeroSerie.Text = ServicioBuscado.Serie;
+            }
+            txtContador.Text = ServicioBuscado.Contador.ToString();
+            dtpFecha.Value = ServicioBuscado.Fecha;
+            cboTecnico.SelectedItem = ServicioBuscado.Tecnico;
+
+
+            string Fusor = ServicioBuscado.Fusor;
+            if (Fusor != "" && Fusor != " ")
+            {
+                chkFusor.Checked = true;
+                cboFusor.SelectedItem = ServicioBuscado.Fusor;
+                cboFusorRetirado.SelectedItem = ServicioBuscado.FusorSaliente;
+            }
+            rtxtServicio.Text = (ServicioBuscado.ServicioRealizado);
+            rtxtFallas.Text = (ServicioBuscado.ReporteFallo);
+
+            SeleccionarTipoReporte(ServicioBuscado.IdTipoServicio);
+            //Agregamos las opciones dependiendo los registros que nos devolvieron
+        }
+
+        public void SeleccionarTipoReporte(int IdTipoReporte)
+        {
+            switch (IdTipoReporte)
+            {
+                case 1: radServicio.Checked = true; break;
+                case 2: radInstalacion.Checked = true; break;
+                case 3: radRetirado.Checked = true; break;
+                case 4: radMantenimiento.Checked = true; break;
+            }
         }
 
         //Abrir interfaz de reportes
@@ -621,6 +664,9 @@ namespace CobranzaSP.Formularios
 
             rtxtServicio.Text = dtgServicios.CurrentRow.Cells[10].Value.ToString();
             rtxtFallas.Text = dtgServicios.CurrentRow.Cells[11].Value.ToString();
+            int IdTipoServicio = int.Parse(dtgServicios.CurrentRow.Cells[13].Value.ToString());
+            IdServicio = int.Parse(dtgServicios.CurrentRow.Cells[14].Value.ToString());
+            SeleccionarTipoReporte(IdTipoServicio);
         }
 
         private void cboClientes_SelectionChangeCommitted(object sender, EventArgs e)
@@ -671,6 +717,7 @@ namespace CobranzaSP.Formularios
             checkBox1.Checked = false;
             txtNumeroFolio.Focus();
             radServicio.Checked = true;
+            IdServicio = 0;
         }
 
         private void AbrirForm(object formNuevo)

@@ -12,7 +12,6 @@ namespace CobranzaSP.Modelos
         public int IdTipoPersona { get; set; }
 
         public int IdMovimiento { get; set; }
-        public string ClienteProveedor { get; set; }
 
         public DateTime Fecha { get; set; }
 

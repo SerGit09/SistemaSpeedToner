@@ -153,6 +153,7 @@ namespace CobranzaSP.Formularios
                     chkRango.Visible = true; break;
                 case "Cliente":
                     MostrarComboBox("SeleccionarClientesServicios", true);
+                    //MostrarComboBox("SeleccionarClientes", true);
                     grpMarca.Visible = true;//Mostramos opciones de las marcas
                     TipoBusqueda = "Cliente";
                     break;

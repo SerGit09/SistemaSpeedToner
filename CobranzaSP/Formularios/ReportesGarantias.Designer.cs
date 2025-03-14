@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportesGarantias));
             this.pSuperior = new System.Windows.Forms.Panel();
             this.btnCerrar = new System.Windows.Forms.PictureBox();
@@ -38,7 +39,7 @@
             this.btnGenerarReporte = new System.Windows.Forms.Button();
             this.cboOpcionReporte = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.lblOpcion = new System.Windows.Forms.Label();
+            this.lblMarca = new System.Windows.Forms.Label();
             this.lblModelos = new System.Windows.Forms.Label();
             this.dtpFechaFinal = new System.Windows.Forms.DateTimePicker();
             this.dtpFechaInicial = new System.Windows.Forms.DateTimePicker();
@@ -50,10 +51,16 @@
             this.grpModelos = new System.Windows.Forms.GroupBox();
             this.radUnModelo = new System.Windows.Forms.RadioButton();
             this.radTodosModelos = new System.Windows.Forms.RadioButton();
+            this.grpMarcas = new System.Windows.Forms.GroupBox();
+            this.radUnaMarca = new System.Windows.Forms.RadioButton();
+            this.radTodasLasMarcas = new System.Windows.Forms.RadioButton();
+            this.erGarantia = new System.Windows.Forms.ErrorProvider(this.components);
             this.pSuperior.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
             this.grpCliente.SuspendLayout();
             this.grpModelos.SuspendLayout();
+            this.grpMarcas.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.erGarantia)).BeginInit();
             this.SuspendLayout();
             // 
             // pSuperior
@@ -63,7 +70,7 @@
             this.pSuperior.Dock = System.Windows.Forms.DockStyle.Top;
             this.pSuperior.Location = new System.Drawing.Point(0, 0);
             this.pSuperior.Name = "pSuperior";
-            this.pSuperior.Size = new System.Drawing.Size(482, 36);
+            this.pSuperior.Size = new System.Drawing.Size(529, 36);
             this.pSuperior.TabIndex = 1;
             this.pSuperior.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pSuperior_MouseDown);
             // 
@@ -73,7 +80,7 @@
             this.btnCerrar.ErrorImage = null;
             this.btnCerrar.Image = ((System.Drawing.Image)(resources.GetObject("btnCerrar.Image")));
             this.btnCerrar.InitialImage = null;
-            this.btnCerrar.Location = new System.Drawing.Point(454, 3);
+            this.btnCerrar.Location = new System.Drawing.Point(501, 3);
             this.btnCerrar.Name = "btnCerrar";
             this.btnCerrar.Size = new System.Drawing.Size(25, 28);
             this.btnCerrar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -87,7 +94,7 @@
             this.cboModelos.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboModelos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboModelos.FormattingEnabled = true;
-            this.cboModelos.Location = new System.Drawing.Point(96, 45);
+            this.cboModelos.Location = new System.Drawing.Point(90, 45);
             this.cboModelos.Margin = new System.Windows.Forms.Padding(4);
             this.cboModelos.Name = "cboModelos";
             this.cboModelos.Size = new System.Drawing.Size(303, 27);
@@ -105,7 +112,6 @@
             this.radTodosLosClientes.TabStop = true;
             this.radTodosLosClientes.Text = "Todas";
             this.radTodosLosClientes.UseVisualStyleBackColor = true;
-            this.radTodosLosClientes.Visible = false;
             this.radTodosLosClientes.CheckedChanged += new System.EventHandler(this.radTodosLosClientes_CheckedChanged);
             // 
             // rdUnCliente
@@ -118,7 +124,6 @@
             this.rdUnCliente.TabStop = true;
             this.rdUnCliente.Text = "Uno";
             this.rdUnCliente.UseVisualStyleBackColor = true;
-            this.rdUnCliente.Visible = false;
             this.rdUnCliente.CheckedChanged += new System.EventHandler(this.rdUnCliente_CheckedChanged);
             // 
             // cboMarca
@@ -127,7 +132,7 @@
             this.cboMarca.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboMarca.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboMarca.FormattingEnabled = true;
-            this.cboMarca.Location = new System.Drawing.Point(169, 185);
+            this.cboMarca.Location = new System.Drawing.Point(90, 44);
             this.cboMarca.Margin = new System.Windows.Forms.Padding(4);
             this.cboMarca.Name = "cboMarca";
             this.cboMarca.Size = new System.Drawing.Size(303, 27);
@@ -138,13 +143,14 @@
             // 
             // btnGenerarReporte
             // 
+            this.btnGenerarReporte.Enabled = false;
             this.btnGenerarReporte.FlatAppearance.BorderColor = System.Drawing.Color.Crimson;
             this.btnGenerarReporte.FlatAppearance.BorderSize = 2;
             this.btnGenerarReporte.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGenerarReporte.ForeColor = System.Drawing.Color.White;
             this.btnGenerarReporte.Image = ((System.Drawing.Image)(resources.GetObject("btnGenerarReporte.Image")));
             this.btnGenerarReporte.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGenerarReporte.Location = new System.Drawing.Point(355, 383);
+            this.btnGenerarReporte.Location = new System.Drawing.Point(400, 430);
             this.btnGenerarReporte.Name = "btnGenerarReporte";
             this.btnGenerarReporte.Size = new System.Drawing.Size(117, 51);
             this.btnGenerarReporte.TabIndex = 68;
@@ -177,22 +183,22 @@
             this.label1.TabIndex = 66;
             this.label1.Text = "Generar por:";
             // 
-            // lblOpcion
+            // lblMarca
             // 
-            this.lblOpcion.AutoSize = true;
-            this.lblOpcion.ForeColor = System.Drawing.Color.White;
-            this.lblOpcion.Location = new System.Drawing.Point(106, 188);
-            this.lblOpcion.Name = "lblOpcion";
-            this.lblOpcion.Size = new System.Drawing.Size(56, 19);
-            this.lblOpcion.TabIndex = 74;
-            this.lblOpcion.Text = "Marca:";
-            this.lblOpcion.Visible = false;
+            this.lblMarca.AutoSize = true;
+            this.lblMarca.ForeColor = System.Drawing.Color.White;
+            this.lblMarca.Location = new System.Drawing.Point(27, 47);
+            this.lblMarca.Name = "lblMarca";
+            this.lblMarca.Size = new System.Drawing.Size(56, 19);
+            this.lblMarca.TabIndex = 74;
+            this.lblMarca.Text = "Marca:";
+            this.lblMarca.Visible = false;
             // 
             // lblModelos
             // 
             this.lblModelos.AutoSize = true;
             this.lblModelos.ForeColor = System.Drawing.Color.White;
-            this.lblModelos.Location = new System.Drawing.Point(23, 48);
+            this.lblModelos.Location = new System.Drawing.Point(17, 48);
             this.lblModelos.Name = "lblModelos";
             this.lblModelos.Size = new System.Drawing.Size(66, 19);
             this.lblModelos.TabIndex = 75;
@@ -201,14 +207,14 @@
             // 
             // dtpFechaFinal
             // 
-            this.dtpFechaFinal.Location = new System.Drawing.Point(167, 350);
+            this.dtpFechaFinal.Location = new System.Drawing.Point(212, 393);
             this.dtpFechaFinal.Name = "dtpFechaFinal";
             this.dtpFechaFinal.Size = new System.Drawing.Size(303, 27);
             this.dtpFechaFinal.TabIndex = 79;
             // 
             // dtpFechaInicial
             // 
-            this.dtpFechaInicial.Location = new System.Drawing.Point(168, 309);
+            this.dtpFechaInicial.Location = new System.Drawing.Point(213, 352);
             this.dtpFechaInicial.Name = "dtpFechaInicial";
             this.dtpFechaInicial.Size = new System.Drawing.Size(303, 27);
             this.dtpFechaInicial.TabIndex = 78;
@@ -217,7 +223,7 @@
             // 
             this.lblFechaFinal.AutoSize = true;
             this.lblFechaFinal.ForeColor = System.Drawing.Color.White;
-            this.lblFechaFinal.Location = new System.Drawing.Point(131, 356);
+            this.lblFechaFinal.Location = new System.Drawing.Point(176, 399);
             this.lblFechaFinal.Name = "lblFechaFinal";
             this.lblFechaFinal.Size = new System.Drawing.Size(30, 19);
             this.lblFechaFinal.TabIndex = 77;
@@ -227,7 +233,7 @@
             // 
             this.lblFechaInicio.AutoSize = true;
             this.lblFechaInicio.ForeColor = System.Drawing.Color.White;
-            this.lblFechaInicio.Location = new System.Drawing.Point(128, 315);
+            this.lblFechaInicio.Location = new System.Drawing.Point(173, 358);
             this.lblFechaInicio.Name = "lblFechaInicio";
             this.lblFechaInicio.Size = new System.Drawing.Size(34, 19);
             this.lblFechaInicio.TabIndex = 76;
@@ -255,11 +261,12 @@
             this.grpCliente.Controls.Add(this.cboClientes);
             this.grpCliente.Controls.Add(this.radTodosLosClientes);
             this.grpCliente.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.grpCliente.Location = new System.Drawing.Point(70, 98);
+            this.grpCliente.Location = new System.Drawing.Point(73, 86);
             this.grpCliente.Name = "grpCliente";
-            this.grpCliente.Size = new System.Drawing.Size(402, 82);
+            this.grpCliente.Size = new System.Drawing.Size(444, 82);
             this.grpCliente.TabIndex = 83;
             this.grpCliente.TabStop = false;
+            this.grpCliente.Text = "Clientes";
             // 
             // lblCliente
             // 
@@ -278,11 +285,13 @@
             this.grpModelos.Controls.Add(this.radTodosModelos);
             this.grpModelos.Controls.Add(this.lblModelos);
             this.grpModelos.Controls.Add(this.cboModelos);
-            this.grpModelos.Location = new System.Drawing.Point(70, 219);
+            this.grpModelos.ForeColor = System.Drawing.SystemColors.Control;
+            this.grpModelos.Location = new System.Drawing.Point(73, 262);
             this.grpModelos.Name = "grpModelos";
-            this.grpModelos.Size = new System.Drawing.Size(402, 82);
+            this.grpModelos.Size = new System.Drawing.Size(444, 82);
             this.grpModelos.TabIndex = 84;
             this.grpModelos.TabStop = false;
+            this.grpModelos.Text = "Modelos";
             this.grpModelos.Visible = false;
             // 
             // radUnModelo
@@ -296,7 +305,6 @@
             this.radUnModelo.TabStop = true;
             this.radUnModelo.Text = "Uno";
             this.radUnModelo.UseVisualStyleBackColor = true;
-            this.radUnModelo.Visible = false;
             this.radUnModelo.CheckedChanged += new System.EventHandler(this.radUnModelo_CheckedChanged);
             // 
             // radTodosModelos
@@ -310,23 +318,66 @@
             this.radTodosModelos.TabStop = true;
             this.radTodosModelos.Text = "Todas";
             this.radTodosModelos.UseVisualStyleBackColor = true;
-            this.radTodosModelos.Visible = false;
             this.radTodosModelos.CheckedChanged += new System.EventHandler(this.radTodosModelos_CheckedChanged);
+            // 
+            // grpMarcas
+            // 
+            this.grpMarcas.Controls.Add(this.radUnaMarca);
+            this.grpMarcas.Controls.Add(this.radTodasLasMarcas);
+            this.grpMarcas.Controls.Add(this.lblMarca);
+            this.grpMarcas.Controls.Add(this.cboMarca);
+            this.grpMarcas.ForeColor = System.Drawing.SystemColors.Control;
+            this.grpMarcas.Location = new System.Drawing.Point(73, 174);
+            this.grpMarcas.Name = "grpMarcas";
+            this.grpMarcas.Size = new System.Drawing.Size(444, 82);
+            this.grpMarcas.TabIndex = 85;
+            this.grpMarcas.TabStop = false;
+            this.grpMarcas.Text = "Marcas";
+            this.grpMarcas.Visible = false;
+            // 
+            // radUnaMarca
+            // 
+            this.radUnaMarca.AutoSize = true;
+            this.radUnaMarca.ForeColor = System.Drawing.SystemColors.Control;
+            this.radUnaMarca.Location = new System.Drawing.Point(93, 15);
+            this.radUnaMarca.Name = "radUnaMarca";
+            this.radUnaMarca.Size = new System.Drawing.Size(56, 23);
+            this.radUnaMarca.TabIndex = 83;
+            this.radUnaMarca.TabStop = true;
+            this.radUnaMarca.Text = "Uno";
+            this.radUnaMarca.UseVisualStyleBackColor = true;
+            this.radUnaMarca.CheckedChanged += new System.EventHandler(this.radUnaMarca_CheckedChanged);
+            // 
+            // radTodasLasMarcas
+            // 
+            this.radTodasLasMarcas.AutoSize = true;
+            this.radTodasLasMarcas.ForeColor = System.Drawing.SystemColors.Control;
+            this.radTodasLasMarcas.Location = new System.Drawing.Point(155, 15);
+            this.radTodasLasMarcas.Name = "radTodasLasMarcas";
+            this.radTodasLasMarcas.Size = new System.Drawing.Size(70, 23);
+            this.radTodasLasMarcas.TabIndex = 84;
+            this.radTodasLasMarcas.TabStop = true;
+            this.radTodasLasMarcas.Text = "Todas";
+            this.radTodasLasMarcas.UseVisualStyleBackColor = true;
+            this.radTodasLasMarcas.CheckedChanged += new System.EventHandler(this.radTodasLasMarcas_CheckedChanged);
+            // 
+            // erGarantia
+            // 
+            this.erGarantia.ContainerControl = this;
             // 
             // ReportesGarantias
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(57)))), ((int)(((byte)(80)))));
-            this.ClientSize = new System.Drawing.Size(482, 442);
+            this.ClientSize = new System.Drawing.Size(529, 493);
+            this.Controls.Add(this.grpMarcas);
             this.Controls.Add(this.grpModelos);
             this.Controls.Add(this.grpCliente);
             this.Controls.Add(this.dtpFechaFinal);
             this.Controls.Add(this.dtpFechaInicial);
             this.Controls.Add(this.lblFechaFinal);
             this.Controls.Add(this.lblFechaInicio);
-            this.Controls.Add(this.lblOpcion);
-            this.Controls.Add(this.cboMarca);
             this.Controls.Add(this.btnGenerarReporte);
             this.Controls.Add(this.cboOpcionReporte);
             this.Controls.Add(this.label1);
@@ -342,6 +393,9 @@
             this.grpCliente.PerformLayout();
             this.grpModelos.ResumeLayout(false);
             this.grpModelos.PerformLayout();
+            this.grpMarcas.ResumeLayout(false);
+            this.grpMarcas.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.erGarantia)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -358,7 +412,7 @@
         private System.Windows.Forms.Button btnGenerarReporte;
         private System.Windows.Forms.ComboBox cboOpcionReporte;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lblOpcion;
+        private System.Windows.Forms.Label lblMarca;
         private System.Windows.Forms.Label lblModelos;
         private System.Windows.Forms.DateTimePicker dtpFechaFinal;
         private System.Windows.Forms.DateTimePicker dtpFechaInicial;
@@ -370,5 +424,9 @@
         private System.Windows.Forms.GroupBox grpModelos;
         private System.Windows.Forms.RadioButton radUnModelo;
         private System.Windows.Forms.RadioButton radTodosModelos;
+        private System.Windows.Forms.GroupBox grpMarcas;
+        private System.Windows.Forms.RadioButton radUnaMarca;
+        private System.Windows.Forms.RadioButton radTodasLasMarcas;
+        private System.Windows.Forms.ErrorProvider erGarantia;
     }
 }

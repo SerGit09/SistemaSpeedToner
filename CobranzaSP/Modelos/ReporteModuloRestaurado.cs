@@ -11,6 +11,8 @@ namespace CobranzaSP.Modelos
         public int IdReporte { get; set; }
         public string Clave { get; set; }
         public int IdModulo { get; set; }
+        public int NumeroPaginas { get; set; }
+        public int IdClaveModulo { get; set; }
 
         public DateTime Fecha { get; set; }
 

@@ -56,7 +56,7 @@ namespace CobranzaSP.Lógica
             comando.Parameters.AddWithValue("@IdModelo", nuevoEquipo.IdModelo);
             comando.Parameters.AddWithValue("@Serie", nuevoEquipo.Serie);
             comando.Parameters.AddWithValue("@IdRenta", nuevoEquipo.IdRenta);
-            comando.Parameters.AddWithValue("@Precio", nuevoEquipo.Precio);
+            comando.Parameters.AddWithValue("@Precio", nuevoEquipo.PrecioRenta);
             comando.Parameters.AddWithValue("@Fecha_Pago", nuevoEquipo.FechaPago);
             comando.Parameters.AddWithValue("@Valor", nuevoEquipo.Valor);
             comando.Parameters.AddWithValue("@IdSerie", nuevoEquipo.IdSerie);
@@ -78,7 +78,7 @@ namespace CobranzaSP.Lógica
             comando.Parameters.AddWithValue("@IdModelo", nuevoEquipo.IdModelo);
             comando.Parameters.AddWithValue("@IdSerie", nuevoEquipo.IdSerie);
             comando.Parameters.AddWithValue("@Fecha", nuevoEquipo.FechaVenta);
-            comando.Parameters.AddWithValue("@Precio", nuevoEquipo.Precio);
+            comando.Parameters.AddWithValue("@Precio", nuevoEquipo.PrecioRenta);
             comando.Parameters.AddWithValue("@IdCliente", nuevoEquipo.IdCliente);
 
             comando.ExecuteNonQuery();
@@ -283,14 +283,14 @@ namespace CobranzaSP.Lógica
             foreach (DataRow fila in DatosEquiposRenta.Rows)
             {
                 //Guardar cada registro en un objeto
-                ReporteEquipo DatosEquipo = new ReporteEquipo()
+                PdfEquipoRentado DatosEquipo = new PdfEquipoRentado()
                 {
                     Cliente = fila[1].ToString(),
                     Marca = fila[3].ToString(),
                     Modelo = fila[4].ToString(),
                     Serie = fila[5].ToString(),
                     TipoRenta = fila[6].ToString(),
-                    Precio = double.Parse(fila[7].ToString()),
+                    PrecioRenta = double.Parse(fila[7].ToString()),
                     FechaPago = fila[8].ToString()
                 };
 
@@ -319,7 +319,7 @@ namespace CobranzaSP.Lógica
             }
         }
 
-        public void AgregarMarcaAlDocumento(ReporteEquipo DatosReporte)
+        public void AgregarMarcaAlDocumento(PdfEquipoRentado DatosReporte)
         {
             var pe = new Pdf();
             if (!lstMarcas.Contains(DatosReporte.Marca))
@@ -341,7 +341,7 @@ namespace CobranzaSP.Lógica
             }
         }
 
-        public void CrearTablaDatosEquipos(ReporteEquipo reporte)
+        public void CrearTablaDatosEquipos(PdfEquipoRentado reporte)
         {
             tblDatosEquipos = new PdfPTable(4);
             if (NuevoReporte.TipoBusquedaAdicional != "Modelo")
@@ -357,7 +357,7 @@ namespace CobranzaSP.Lógica
             AgregarDatosATabla(reporte);
         }
 
-        public void AgregarDatosATabla(ReporteEquipo DatosEquipo)
+        public void AgregarDatosATabla(PdfEquipoRentado DatosEquipo)
         {
             Pdf pe = new Pdf();
             //if(TipoBusqueda != "Modelo")
@@ -368,7 +368,7 @@ namespace CobranzaSP.Lógica
             }
             PdfPCell clSerieDato = new PdfPCell(new Phrase(DatosEquipo.Serie, pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
             PdfPCell clTipoPagoDato = new PdfPCell(new Phrase(DatosEquipo.TipoRenta, pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
-            PdfPCell clPrecioDato = new PdfPCell(new Phrase("$" + DatosEquipo.Precio, pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
+            PdfPCell clPrecioDato = new PdfPCell(new Phrase("$" + DatosEquipo.PrecioRenta, pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
             PdfPCell clFechaPagoDato = new PdfPCell(new Phrase(DatosEquipo.FechaPago, pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
 
             tblDatosEquipos.AddCell(clSerieDato);
@@ -386,12 +386,12 @@ namespace CobranzaSP.Lógica
 
             foreach (DataRow fila in DatosEquiposRenta.Rows)
             {
-                ReporteEquipo equipo = new ReporteEquipo()
+                PdfEquipoRentado equipo = new PdfEquipoRentado()
                 {
                     Marca = fila[3].ToString(),
                     Modelo = fila[4].ToString(),
                     Serie = fila[5].ToString(),
-                    Precio = double.Parse(fila[7].ToString()),
+                    PrecioRenta = double.Parse(fila[7].ToString()),
                     Cliente = fila[1].ToString()
                 };
 
@@ -399,7 +399,7 @@ namespace CobranzaSP.Lógica
             }
         }
 
-        public void ColocarSerieADocumento(ReporteEquipo equipo)
+        public void ColocarSerieADocumento(PdfEquipoRentado equipo)
         {
             var pe = new Pdf();
 
@@ -426,7 +426,7 @@ namespace CobranzaSP.Lógica
             }
         }
 
-        public void CrearTablaPreciosEquipos(ReporteEquipo reporte)
+        public void CrearTablaPreciosEquipos(PdfEquipoRentado reporte)
         {
             tblDatosEquipos = new PdfPTable(5);
             //if(TipoBusqueda != "Modelo")
@@ -448,7 +448,7 @@ namespace CobranzaSP.Lógica
             PdfPCell clTitulo = new PdfPCell(new Phrase(celda, pdf.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = colspan };
             tblDatosEquipos.AddCell(clTitulo);
         }
-        public void AgregarModelosATabla(ReporteEquipo equipo)
+        public void AgregarModelosATabla(PdfEquipoRentado equipo)
         {
             var pe = new Pdf();
 
@@ -459,7 +459,7 @@ namespace CobranzaSP.Lógica
             }
             PdfPCell clCliente = new PdfPCell(new Phrase(equipo.Cliente, pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 2 };
             PdfPCell clSerie = new PdfPCell(new Phrase(equipo.Serie, pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 2 };
-            PdfPCell clPrecio = new PdfPCell(new Phrase("$" + String.Format("{0:n2}", equipo.Precio), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
+            PdfPCell clPrecio = new PdfPCell(new Phrase("$" + String.Format("{0:n2}", equipo.PrecioRenta), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
 
             tblDatosEquipos.AddCell(clCliente);
             tblDatosEquipos.AddCell(clSerie);

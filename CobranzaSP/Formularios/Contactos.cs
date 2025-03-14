@@ -172,6 +172,7 @@ namespace CobranzaSP.Formularios
             {
                 IdCorreo = this.IdCorreo,
                 IdCliente = NuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "BuscarIdCliente"),
+                //IdCliente = NuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "ObtenerIdCliente"),
                 Correo = txtCorreo.Text
             };
 

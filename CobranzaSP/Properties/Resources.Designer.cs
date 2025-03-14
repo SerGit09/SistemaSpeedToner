@@ -61,6 +61,39 @@ namespace CobranzaSP.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a .
+        /// </summary>
+        internal static string estilos {
+            get {
+                return ResourceManager.GetString("estilos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a &lt;!DOCTYPE html&gt;
+        ///&lt;html&gt;
+        ///&lt;head&gt;
+        ///    &lt;title&gt;Hello, World!&lt;/title&gt;
+        ///    &lt;link href=&quot;estilos.css&quot;/&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;table border=&quot;1&quot; style=&quot;width:100%&quot;&gt;
+        ///        &lt;tr&gt;
+        ///            &lt;td style=&quot;width:20%&quot;&gt;&lt;/td&gt;
+        ///            &lt;td style=&quot;width:60%&quot;&gt;
+        ///                &lt;table&gt;
+        ///                    &lt;tr&gt;&lt;td&gt;I.S.C. RAVEL LOPEZ BAULLON.&lt;/td&gt;&lt;/tr&gt;
+        ///                    &lt;tr&gt;&lt;td&gt;LEONA VICARIO # 1709.NUEVO LAREDO, TAMPS. C.P. 88060&lt;/td&gt;&lt;/tr&gt;
+        ///                    &lt;tr&gt;&lt;td&gt;TEL.: (867) 712-0964 ID 52*11*20245&lt;/td&gt;&lt;/tr&gt;
+        ///    [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string EstructuraRemision {
+            get {
+                return ResourceManager.GetString("EstructuraRemision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap LogoSpeedToner {

@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace CobranzaSP.Modelos
 {
-    internal class Remision:Factura
+    internal class Remision:DocumentoCobranza
     {
         public int NumeroFolio { get; set; }
 
         public int DiasCredito { get; set; }
+
+        public int IdTipoFactura {  get; set; }
     }
 }

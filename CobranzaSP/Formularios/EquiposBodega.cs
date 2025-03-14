@@ -31,7 +31,7 @@ namespace CobranzaSP.Formularios
         LogicaEquiposBodega lgEquipoBodega = new LogicaEquiposBodega();
         LogicaServicio lgServicio = new LogicaServicio();
         FuncionesFormularios Formulario = new FuncionesFormularios();
-        ReporteEquipo nuevoEquipoRentado;
+        Equipo nuevoEquipoRentado;
         int IdEquipo = 0;
         int IdSerie = 0;
         bool EstaModificando = false;
@@ -312,12 +312,12 @@ namespace CobranzaSP.Formularios
             IdSerie = int.Parse(dtgEquipos.CurrentRow.Cells[8].Value.ToString());
 
 
-            nuevoEquipoRentado = new ReporteEquipo()
+            nuevoEquipoRentado = new Equipo()
             {
                 Marca = dtgEquipos.CurrentRow.Cells[1].Value.ToString(),
                 Modelo = dtgEquipos.CurrentRow.Cells[2].Value.ToString(),
                 Serie = txtSerie.Text,
-                Precio = double.Parse(txtPrecio.Text),
+                PrecioRenta = double.Parse(txtPrecio.Text),
                 IdSerie = IdSerie
             };
 

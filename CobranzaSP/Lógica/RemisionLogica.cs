@@ -16,8 +16,10 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Bibliography;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
+using iTextSharp.tool.xml;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 
 namespace CobranzaSP.Lógica
 {
@@ -34,16 +36,20 @@ namespace CobranzaSP.Lógica
         PdfPTable tblRemisiones;
         Document document;
         string Cliente = "";
+        double Total;
+        string Reporte = "";
 
         public string AgregarRemision(Remision nuevaRemision, string sp, bool agregandoNueva)
         {
             int respuesta = 0;
             string mensaje = "";
+            string movimiento = "modificado";
             bool RemisionDuplicada = false;
             comando.Connection = conexion.AbrirConexion();
             //Verificamos si estamos agregando alguna remision
             if (agregandoNueva)
             {
+                movimiento = "agregado";
                 RemisionDuplicada = NuevaAccion.VerificarDuplicados(nuevaRemision.NumeroFolio, "VerificarRemisionDuplicada");
                 if (RemisionDuplicada)
                 {
@@ -56,19 +62,14 @@ namespace CobranzaSP.Lógica
 
             comando.Parameters.AddWithValue("@NumeroFolio", nuevaRemision.NumeroFolio);
             comando.Parameters.AddWithValue("@FechaPago", nuevaRemision.FechaPago);
+            comando.Parameters.AddWithValue("@Fecha", nuevaRemision.Fecha);
             comando.Parameters.AddWithValue("@DiasCredito", nuevaRemision.DiasCredito);
             comando.Parameters.AddWithValue("@Cantidad", nuevaRemision.Cantidad);
             comando.Parameters.AddWithValue("@IdCliente", nuevaRemision.IdCliente);
+            comando.Parameters.AddWithValue("@IdTipoFactura", nuevaRemision.IdTipoFactura);
 
             respuesta = comando.ExecuteNonQuery();
-            if (agregandoNueva)
-            {
-                mensaje = (respuesta > 0) ? "Registro agregado correctamente" : "Algo ha salido mal, no agrego el registro";
-            }
-            else
-            {
-                mensaje = (respuesta > 0) ? "Registro modificado correctamente" : "Algo ha salido mal, no se modifico el registro";
-            }
+            mensaje = (respuesta > 0) ? "Registro " + movimiento + " correctamente" : "Algo ha salido mal, no agrego el registro";
             comando.Parameters.Clear();
             conexion.CerrarConexion();
             return mensaje;
@@ -232,25 +233,45 @@ namespace CobranzaSP.Lógica
         {
             DatosObtenidos = true;
             Cliente = NuevoReporte.Cliente;
+            tblDatosReporte = new DataTable();
+            Reporte = NuevoReporte.TipoBusqueda;
             switch (NuevoReporte.TipoBusqueda)
             {
-                case "SALDOS POR CLIENTE": DatosReporteRemisiones(NuevoReporte, "DatosReporteRemisionesSaldosPendientes"); break;
-                case "RANGO DE FECHA": DatosReporteRemisiones(NuevoReporte, "DatosReporteRemisiones"); break;
+                case "SALDOS POR CLIENTE": DatosReporteRemisionesPendientes(NuevoReporte); break;
+                case "RANGO DE FECHA": DatosReporteRemisiones(NuevoReporte); break;
             }
 
             return DatosObtenidos;
         }
 
-        public void DatosReporteRemisiones(Reporte NuevoReporte, string StoreProcedure)
+        public void DatosReporteRemisiones(Reporte NuevoReporte)
         {
-            tblDatosReporte.Clear();
             comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = StoreProcedure;
+            comando.CommandText = "DatosReporteRemisiones";
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.Clear();
             comando.Parameters.AddWithValue("@Cliente", NuevoReporte.Cliente);
             comando.Parameters.AddWithValue("@FechaInicio", NuevoReporte.FechaInicio);
             comando.Parameters.AddWithValue("@FechaFinal", NuevoReporte.FechaFinal);
+            tblDatosReporte.Load(comando.ExecuteReader());
+            comando.Dispose();
+            if (tblDatosReporte.Rows.Count == 0)
+            {
+                DatosObtenidos = false;
+                return;
+            }
+
+            //Comenzamos a generar el reporte
+            Pdf(NuevoReporte);
+        }
+
+        public void DatosReporteRemisionesPendientes(Reporte NuevoReporte)
+        {
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "DatosReporteRemisionesSaldosPendientes";
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.Clear();
+            comando.Parameters.AddWithValue("@Cliente", NuevoReporte.Cliente);
             tblDatosReporte.Load(comando.ExecuteReader());
             comando.Dispose();
             if (tblDatosReporte.Rows.Count == 0)
@@ -288,11 +309,11 @@ namespace CobranzaSP.Lógica
             Paragraph titulo = new Paragraph(NombreReporte, pe.FuenteTitulo) { Alignment = Element.ALIGN_CENTER };
             document.Add(titulo);
 
-            
-
-
-            Paragraph Fechas = new Paragraph("DEL " + NuevoReporte.FechaInicio.ToString("dd/MM/yyyy") + " AL " + NuevoReporte.FechaFinal.ToString("dd/MM/yyyy"), pe.FuenteFecha) { Alignment = Element.ALIGN_CENTER };
-            document.Add(Fechas);
+            if (NuevoReporte.TipoBusqueda == "RANGO DE FECHA")
+            {
+                Paragraph Fechas = new Paragraph("DEL " + NuevoReporte.FechaInicio.ToString("dd/MM/yyyy") + " AL " + NuevoReporte.FechaFinal.ToString("dd/MM/yyyy"), pe.FuenteFecha) { Alignment = Element.ALIGN_CENTER };
+                document.Add(Fechas);
+            }
 
             document.Add(new Paragraph("\n"));
 
@@ -346,25 +367,30 @@ namespace CobranzaSP.Lógica
                     cCliente = new PdfPCell(new Phrase(fila[0].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 2 };
                     tblRemisiones.AddCell(cCliente);
                 }
-                PdfPCell cRemision = new PdfPCell(new Phrase(fila[1].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f};
-                DateTime FechaCreacion= DateTime.Parse(fila[2].ToString());
-                PdfPCell cFechaCreacion = new PdfPCell(new Phrase(FechaCreacion.ToString("dd/MM/yyyy"), pe.FuenteParrafo)) { BorderWidth = .5f};
-                PdfPCell cImporte = new PdfPCell(new Phrase("$" + String.Format("{0:n2}", double.Parse(fila[3].ToString())), pe.FuenteParrafo)) { BorderWidth = .5f};
+                PdfPCell cRemision = new PdfPCell(new Phrase(fila[1].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f };
+                DateTime FechaCreacion = DateTime.Parse(fila[2].ToString());
+                PdfPCell cFechaCreacion = new PdfPCell(new Phrase(FechaCreacion.ToString("dd/MM/yyyy"), pe.FuenteParrafo)) { BorderWidth = .5f };
+                PdfPCell cImporte = new PdfPCell(new Phrase("$" + String.Format("{0:n2}", double.Parse(fila[3].ToString())), pe.FuenteParrafo)) { BorderWidth = .5f };
                 Total += double.Parse(fila[3].ToString());
-                if (fila[4].ToString() != "")
-                {
-                    DateTime Fecha = DateTime.Parse(fila[4].ToString());
-                    cFechaPago = new PdfPCell(new Phrase(Fecha.ToString("dd/MM/yyyy"), pe.FuenteParrafo)) { BorderWidth = .5f };
-                }
-                else
-                {
-                    cFechaPago = new PdfPCell(new Phrase(fila[4].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f };
-                }
-                
                 tblRemisiones.AddCell(cRemision);
                 tblRemisiones.AddCell(cFechaCreacion);
                 tblRemisiones.AddCell(cImporte);
-                tblRemisiones.AddCell(cFechaPago);
+
+                if (Reporte != "SALDOS POR CLIENTE")
+                {
+                    if (fila[4].ToString() != "")
+                    {
+                        DateTime Fecha = DateTime.Parse(fila[4].ToString());
+                        cFechaPago = new PdfPCell(new Phrase(Fecha.ToString("dd/MM/yyyy"), pe.FuenteParrafo)) { BorderWidth = .5f };
+                    }
+                    else
+                    {
+                        cFechaPago = new PdfPCell(new Phrase(fila[4].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f };
+                    }
+
+                    tblRemisiones.AddCell(cFechaPago);
+                }
+
             }
             ColocarTotal(Total);
             document.Add(tblRemisiones);
@@ -374,24 +400,35 @@ namespace CobranzaSP.Lógica
         {
             var pe = new Pdf();
             PdfPCell cCampoVacio;
-            int Espacios = (Cliente == "")? 3:1;
+
+            int Espacios = (Cliente == "") ? 3 : 1;
             cCampoVacio = new PdfPCell(new Phrase("", pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = Espacios };
-            PdfPCell cCampoTotal = new PdfPCell(new Phrase("TOTAL", pe.FuenteParrafoBold)) { BorderWidth = .5f};
-            PdfPCell cTotal = new PdfPCell(new Phrase(String.Format("{0:n2}",Total), pe.FuenteParrafoBold)) { BorderWidth = .5f };
-            PdfPCell cCampoVacio2 = new PdfPCell(new Phrase("", pe.FuenteParrafo)) { BorderWidth = .5f };
-
-
+            PdfPCell cCampoTotal = new PdfPCell(new Phrase("TOTAL", pe.FuenteParrafoBold)) { BorderWidth = .5f };
+            PdfPCell cTotal = new PdfPCell(new Phrase(String.Format("{0:n2}", Total), pe.FuenteParrafoBold)) { BorderWidth = .5f };
             tblRemisiones.AddCell(cCampoVacio);
             tblRemisiones.AddCell(cCampoTotal);
             tblRemisiones.AddCell(cTotal);
-            tblRemisiones.AddCell(cCampoVacio2);
+            if (Reporte != "SALDOS POR CLIENTE")
+            {
+                PdfPCell cCampoVacio2 = new PdfPCell(new Phrase("", pe.FuenteParrafo)) { BorderWidth = .5f };
+                tblRemisiones.AddCell(cCampoVacio2);
+            }
         }
 
         public void CrearTablaRemisiones()
         {
-            tblRemisiones = (this.Cliente != "")
+            if (Reporte == "SALDOS POR CLIENTE")
+            {
+                tblRemisiones = (this.Cliente != "")
+                ? new PdfPTable(3) { WidthPercentage = 100 }
+                : new PdfPTable(5) { WidthPercentage = 100 };
+            }
+            else
+            {
+                tblRemisiones = (this.Cliente != "")
                 ? new PdfPTable(4) { WidthPercentage = 100 }
                 : new PdfPTable(6) { WidthPercentage = 100 };
+            }
             var pe = new Pdf();
             PdfPCell clCliente;
 
@@ -400,17 +437,73 @@ namespace CobranzaSP.Lógica
                 clCliente = new PdfPCell(new Phrase("CLIENTE", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 2 };
                 tblRemisiones.AddCell(clCliente);
             }
-            
-            PdfPCell clRemision = new PdfPCell(new Phrase("REMISION", pe.FuenteParrafoBold)) { BorderWidth = .5f};
+
+            PdfPCell clRemision = new PdfPCell(new Phrase("REMISION", pe.FuenteParrafoBold)) { BorderWidth = .5f };
             PdfPCell clFechaCreacion = new PdfPCell(new Phrase("FECHA REMISION", pe.FuenteParrafoBold)) { BorderWidth = .5f };
             PdfPCell clImporte = new PdfPCell(new Phrase("IMPORTE", pe.FuenteParrafoBold)) { BorderWidth = .5f };
-            PdfPCell clFechaPago = new PdfPCell(new Phrase("FECHA DE PAGO", pe.FuenteParrafoBold)) { BorderWidth = .5f };
-            
             tblRemisiones.AddCell(clRemision);
             tblRemisiones.AddCell(clFechaCreacion);
             tblRemisiones.AddCell(clImporte);
-            tblRemisiones.AddCell(clFechaPago);
+
+            if (Reporte != "SALDOS POR CLIENTE")
+            {
+                PdfPCell clFechaPago = new PdfPCell(new Phrase("FECHA DE PAGO", pe.FuenteParrafoBold)) { BorderWidth = .5f };
+                tblRemisiones.AddCell(clFechaPago);
+            }
         }
+
+        #region RemisionEspecial
+
+        public void GenerarRemisionEspecial(InformacionRemision NuevaRemision)
+        {
+            //Ruta de archivo
+            string RutaArchivo = ConfiguracionPdf.RutaReportesRemisiones;
+            string NombreArchivo = RutaArchivo + "IFL " + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+
+            //Configuraciones iniciales del PDF
+            FileStream fs = new FileStream(NombreArchivo, FileMode.Create);
+            document = new Document(PageSize.LETTER);
+            document.SetMargins(25f, 25f, 25f, 25f);
+            //Colocamos el pdf en horizontal
+            document.SetPageSize(iTextSharp.text.PageSize.LETTER);
+            PdfWriter pw = PdfWriter.GetInstance(document, fs);
+
+            var pe = new Pdf();
+            pe.ColocarFormatoSuperior = false;
+            pw.PageEvent = pe;
+
+            //Generar el pdf a partir de un HTML
+            string paginahtml_texto = Properties.Resources.EstructuraRemision.ToString();
+            paginahtml_texto = paginahtml_texto.Replace("@Folio", NuevaRemision.Folio.ToString());
+            paginahtml_texto = paginahtml_texto.Replace("@Fecha", NuevaRemision.Fecha.ToString("d/MMM/yyyy", new System.Globalization.CultureInfo("es-ES")).Replace(".", "").ToUpper());
+            paginahtml_texto = paginahtml_texto.Replace("@TablaProductos", NuevaRemision.TablaProductos);
+            paginahtml_texto = paginahtml_texto.Replace("@Total", String.Format("{0:c}", NuevaRemision.Total));
+
+
+            Conversion NuevaConversion = new Conversion();
+            string TotalConLetra = NuevaConversion.enletras(NuevaRemision.Total.ToString());
+
+            paginahtml_texto = paginahtml_texto.Replace("@CantidadConLetra", TotalConLetra);
+
+
+            document.Open();
+
+
+
+
+            //document.Add(new Paragraph(paginahtml_texto));
+
+            using (StringReader sr = new StringReader(paginahtml_texto))
+            {
+                XMLWorkerHelper.GetInstance().ParseXHtml(pw, document, sr);
+            }
+
+            document.Close();
+            pe.AbrirPdf(NombreArchivo);
+
+        }
+
+        #endregion
         #endregion
 
     }

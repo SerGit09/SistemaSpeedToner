@@ -143,7 +143,7 @@
             // 
             // txtDato
             // 
-            this.txtDato.Location = new System.Drawing.Point(209, 83);
+            this.txtDato.Location = new System.Drawing.Point(209, 84);
             this.txtDato.Name = "txtDato";
             this.txtDato.Size = new System.Drawing.Size(304, 27);
             this.txtDato.TabIndex = 23;

@@ -7,11 +7,9 @@ using System.Linq;
 using System.Text;
 using CobranzaSP.Lógica;
 using CobranzaSP.Modelos;
-using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 
 namespace CobranzaSP.Formularios
 {
@@ -26,7 +24,11 @@ namespace CobranzaSP.Formularios
         CD_Conexion cn = new CD_Conexion();
         AccionesLógica NuevaAccion = new AccionesLógica();
         CuentasPagadasLogica AccionCuentasPagadas = new CuentasPagadasLogica();
+        FuncionesFormularios Formulario = new FuncionesFormularios();
         int Id = 0;
+        bool MesElegido = false;
+        int Mes;
+        int Year;
 
         #region Inicio
         public void InicioAplicacion()
@@ -39,7 +41,9 @@ namespace CobranzaSP.Formularios
             dtpAño.CustomFormat = "yyyy";
             dtpAño.ShowUpDown = true;
             //dtpAño.CustomFormat("yyyy");
-            btnGuardar.Enabled = false;
+            HabilitarBotones(false);
+
+            Formulario.LlenarComboBox(cboTipoFactura, "SeleccionarTiposFacturas", 0);
         }
 
         public void PropiedadesDtgCobranza()
@@ -114,10 +118,11 @@ namespace CobranzaSP.Formularios
         private void btnMostrar_Click(object sender, EventArgs e)
         {
             //VALIDAR QUE DICHO MES CONTENGA REGISTROS
-            int Mes = cboMeses.SelectedIndex + 1;
-            int Año = int.Parse(dtpAño.Value.Year.ToString());
-            MostrarDatosMesElegido(Mes, Año);
-            lblCobrado.Text = AccionCuentasPagadas.ActualizarCobranzaMesEspecifico(Mes, Año);
+            Mes = cboMeses.SelectedIndex + 1;
+            Year = int.Parse(dtpAño.Value.Year.ToString());
+            MostrarDatosMesElegido(Mes, Year);
+            lblCobrado.Text = AccionCuentasPagadas.ActualizarCobranzaMesEspecifico(Mes, Year);
+            MesElegido= true;
         }
 
         private void btnBusqueda_Click(object sender, EventArgs e)
@@ -153,7 +158,8 @@ namespace CobranzaSP.Formularios
                 CuentaPagada nuevaCuentaPagada = new CuentaPagada()
                 {
                     Id = Id,
-                    FechaPago = dtpFechaPago.Value
+                    FechaPago = dtpFechaPago.Value,
+                    IdTipoFactura = NuevaAccion.BuscarId(cboTipoFactura.SelectedItem.ToString(), "BuscarIdTipoFactura")
                 };
 
                 if (MessageBox.Show("¿Esta seguro la fecha de pago?", "CONFIRME LA MODIFICACION", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
@@ -164,9 +170,19 @@ namespace CobranzaSP.Formularios
                 }
 
                 AccionCuentasPagadas.ModificarCuentaPagada(nuevaCuentaPagada);
-                MessageBox.Show("Fecha de pago modificada correctamente");
+                MessageBox.Show("FACTURA MODIFICADA CORRECTAMENTE");
                 ReiniciarControles();
-                MostrarDatosCuentasPagadas();
+
+                if (MesElegido)
+                {
+                    MostrarDatosMesElegido(Mes, Year);
+                    lblCobrado.Text = AccionCuentasPagadas.ActualizarCobranzaMesEspecifico(Mes, Year);
+                }
+                else
+                {
+                    MostrarDatosCuentasPagadas();
+                }
+                
             }
             catch (Exception ex)
             {
@@ -178,18 +194,28 @@ namespace CobranzaSP.Formularios
         #region MetodosLocales
         public void ReiniciarControles()
         {
-            btnGuardar.Enabled = false;
+            HabilitarBotones(false);
             dtpFechaPago.Value = DateTime.Now;
             Id = 0;
+            cboTipoFactura.Enabled = false;
+        }
+
+        public void HabilitarBotones(bool EstaHabilitado)
+        {
+            btnGuardar.Enabled = EstaHabilitado;
+            btnEliminar.Enabled = EstaHabilitado;
+            btnCancelar.Enabled = EstaHabilitado;
         }
         #endregion
 
         #region Eventos
         private void dtgPagado_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            btnGuardar.Enabled = true;
+            HabilitarBotones(true);
+            cboTipoFactura.Enabled = true;
             Id = int.Parse(dtgPagado.CurrentRow.Cells[0].Value.ToString());
             dtpFechaPago.Value = DateTime.Parse(dtgPagado.CurrentRow.Cells[5].Value.ToString());
+            cboTipoFactura.SelectedItem = dtgPagado.CurrentRow.Cells[7].Value.ToString();
         }
         #endregion
 
@@ -197,6 +223,33 @@ namespace CobranzaSP.Formularios
         {
             ReportesCuentasPagadas forma = new ReportesCuentasPagadas();
             forma.Show();
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show("¿Esta seguro de eliminar la factura?", "CONFIRME LA ELIMINACION", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    MessageBox.Show("!!Eliminacion cancelada!!", "CANCELADO", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    ReiniciarControles();
+                    return;
+                }
+                NuevaAccion.Eliminar(Id, "EliminarFacturaPagada");
+                MessageBox.Show("Se ha eliminado la factura correctamente", "ELIMINACION CONFIRMADA", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MostrarDatosCuentasPagadas();
+                //ActualizarTotalCobrado();
+                ReiniciarControles();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            ReiniciarControles();
         }
     }
 }

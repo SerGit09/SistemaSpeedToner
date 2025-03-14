@@ -52,10 +52,12 @@ namespace CobranzaSP.Lógica
             comando.Parameters.AddWithValue("@NumeroFactura", NuevoFusor.NumeroFactura);
             comando.Parameters.AddWithValue("@IdProveedor", NuevoFusor.IdProveedor);
             comando.Parameters.AddWithValue("@FechaFactura", NuevoFusor.FechaFactura);
-            comando.Parameters.AddWithValue("@Costo", NuevoFusor.Cantidad);
+            comando.Parameters.AddWithValue("@Costo", NuevoFusor.Precio);
             comando.Parameters.AddWithValue("@DiasGarantia", NuevoFusor.DiasGarantia);
             comando.Parameters.AddWithValue("@Estado", NuevoFusor.Estado);
             comando.Parameters.AddWithValue("@IdCartucho", NuevoFusor.IdCartucho);
+            comando.Parameters.AddWithValue("@IdTipoFusor", NuevoFusor.IdTipoFusor);
+            comando.Parameters.AddWithValue("@FechaLlegada", NuevoFusor.FechaLlegada);
             respuesta = comando.ExecuteNonQuery();
             string Mensaje = (respuesta > 0) ? "Fusor se " + AccionRealizada + " correctamente" : "Algo salio mal, no se " + AccionRealizada + " el registro";
 
@@ -76,17 +78,17 @@ namespace CobranzaSP.Lógica
 
             //Con ayuda de la clave del fusor, podemos obtener a traves de su modelo el idcartucho
             LogicaServicio logicaServicio = new LogicaServicio();
-            RegistroInventario registroFusor = new RegistroInventario()
+            RegistroInventarioToners registroFusor = new RegistroInventarioToners()
             {
                 Cliente = NuevoFusor.Proveedor,
                 IdMarca = logicaServicio.ObtenerMarcaFusor(NuevoFusor.IdCartucho),
                 IdCartucho = NuevoFusor.IdCartucho,
                 CantidadSalida = 0,
                 CantidadEntrada = 1,
-                Fecha = DateTime.Now,
+                Fecha = NuevoFusor.FechaLlegada,
                 NumeroSerie = NuevoFusor.SerieS
             };
-            string Mensaje = AccionRegistro.AgregarRegistroInventario(registroFusor);
+            string Mensaje = AccionRegistro.AgregarRegistroInventario(registroFusor, false);
             MessageBox.Show(Mensaje, "REGISTRO INVENTARIO", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

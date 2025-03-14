@@ -42,7 +42,7 @@
             this.chkCliente = new System.Windows.Forms.CheckBox();
             this.cboMarca = new System.Windows.Forms.ComboBox();
             this.cboBusqueda = new System.Windows.Forms.ComboBox();
-            this.cboClienteEspecifico = new System.Windows.Forms.ComboBox();
+            this.cboCliente = new System.Windows.Forms.ComboBox();
             this.erRegistro = new System.Windows.Forms.ErrorProvider(this.components);
             this.panelSuperior.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
@@ -191,19 +191,19 @@
             this.cboBusqueda.Visible = false;
             this.cboBusqueda.SelectedIndexChanged += new System.EventHandler(this.cboBusqueda_SelectedIndexChanged_1);
             // 
-            // cboClienteEspecifico
+            // cboCliente
             // 
-            this.cboClienteEspecifico.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboClienteEspecifico.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cboClienteEspecifico.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboClienteEspecifico.FormattingEnabled = true;
-            this.cboClienteEspecifico.Location = new System.Drawing.Point(157, 149);
-            this.cboClienteEspecifico.Margin = new System.Windows.Forms.Padding(4);
-            this.cboClienteEspecifico.Name = "cboClienteEspecifico";
-            this.cboClienteEspecifico.Size = new System.Drawing.Size(365, 27);
-            this.cboClienteEspecifico.Sorted = true;
-            this.cboClienteEspecifico.TabIndex = 23;
-            this.cboClienteEspecifico.Visible = false;
+            this.cboCliente.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboCliente.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboCliente.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboCliente.FormattingEnabled = true;
+            this.cboCliente.Location = new System.Drawing.Point(157, 149);
+            this.cboCliente.Margin = new System.Windows.Forms.Padding(4);
+            this.cboCliente.Name = "cboCliente";
+            this.cboCliente.Size = new System.Drawing.Size(365, 27);
+            this.cboCliente.Sorted = true;
+            this.cboCliente.TabIndex = 23;
+            this.cboCliente.Visible = false;
             // 
             // erRegistro
             // 
@@ -215,7 +215,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(69)))), ((int)(((byte)(82)))));
             this.ClientSize = new System.Drawing.Size(629, 375);
-            this.Controls.Add(this.cboClienteEspecifico);
+            this.Controls.Add(this.cboCliente);
             this.Controls.Add(this.cboBusqueda);
             this.Controls.Add(this.cboMarca);
             this.Controls.Add(this.chkCliente);
@@ -254,7 +254,7 @@
         private System.Windows.Forms.CheckBox chkCliente;
         private System.Windows.Forms.ComboBox cboMarca;
         private System.Windows.Forms.ComboBox cboBusqueda;
-        private System.Windows.Forms.ComboBox cboClienteEspecifico;
+        private System.Windows.Forms.ComboBox cboCliente;
         private System.Windows.Forms.ErrorProvider erRegistro;
     }
 }

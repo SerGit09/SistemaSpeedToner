@@ -10,6 +10,7 @@ using iTextSharp.text.pdf;
 using iTextSharp.text;
 using System.IO;
 using CobranzaSP.Formularios;
+using System.Windows.Forms;
 
 namespace CobranzaSP.Lógica
 {
@@ -26,8 +27,10 @@ namespace CobranzaSP.Lógica
         double TotalFacturas = 0;
         double TotalSaldo = 0;
         double TotalGeneralFacturas = 0;
+        TotalesPorTipoFactura NuevoTotalFacturas;
+        TotalesGeneralesFacturacion NuevoTotalGeneralFacturacion;
 
-        public bool ObtenerDatosReporteFacturas(ReporteFactura NuevoReporte)
+        public bool ObtenerDatosReporteFacturas(Reporte NuevoReporte)
         {
             bool DatosObtenidos = true;
             tblDatosReporte.Clear();
@@ -50,7 +53,7 @@ namespace CobranzaSP.Lógica
             return DatosObtenidos;
         }
 
-        public bool ObtenerDatosReporteFacturasPromesaPago(ReporteFactura NuevoReporte)
+        public bool ObtenerDatosReporteFacturasPromesaPago(Reporte NuevoReporte)
         {
             bool DatosObtenidos = true;
             tblDatosReporte.Clear();
@@ -59,6 +62,30 @@ namespace CobranzaSP.Lógica
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.Clear();
             comando.Parameters.AddWithValue("@Cliente", NuevoReporte.Cliente);
+            tblDatosReporte.Load(comando.ExecuteReader());
+            comando.Dispose();
+
+            if (tblDatosReporte.Rows.Count == 0)
+            {
+                return DatosObtenidos = false;
+            }
+
+            //Comenzamos a generar el reporte
+            Pdf(NuevoReporte);
+            return DatosObtenidos;
+        }
+
+        public bool ObtenerDatosReporteTiposFacturas(Reporte NuevoReporte)
+        {
+            bool DatosObtenidos = true;
+            tblDatosReporte.Clear();
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "ObtenerDatosReporteTiposFacturas";
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.Clear();
+            comando.Parameters.AddWithValue("@Cliente", NuevoReporte.Cliente);
+            comando.Parameters.AddWithValue("@FechaInicio", NuevoReporte.FechaInicio);
+            comando.Parameters.AddWithValue("@FechaFinal", NuevoReporte.FechaFinal);
             tblDatosReporte.Load(comando.ExecuteReader());
             comando.Dispose();
 
@@ -91,7 +118,7 @@ namespace CobranzaSP.Lógica
             return DatosObtenidos;
         }
 
-        public void Pdf(ReporteFactura NuevoReporte)
+        public void Pdf(Reporte NuevoReporte)
         {
             string RutaArchivo = ConfiguracionPdf.RutaReportesFacturas;
             string NombreArchivo = RutaArchivo + "ReporteFactura" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
@@ -114,7 +141,156 @@ namespace CobranzaSP.Lógica
             Paragraph titulo = new Paragraph(NombreReporte, pe.FuenteTitulo) { Alignment = Element.ALIGN_CENTER };
             document.Add(titulo);
 
-            foreach(DataRow fila in tblDatosReporte.Rows)
+            if(NuevoReporte.TipoBusqueda == "TIPOS FACTURAS")
+            {
+                Paragraph Fechas = new Paragraph("DEL " + NuevoReporte.FechaInicio.ToString("dd/MM/yyyy") + " AL " + NuevoReporte.FechaFinal.ToString("dd/MM/yyyy"), pe.FuenteFecha) { Alignment = Element.ALIGN_CENTER };
+                document.Add(Fechas);
+                document.Add(new Chunk("\n"));
+            }
+
+            switch (NuevoReporte.TipoBusqueda)
+            {
+                case "TIPOS FACTURAS":CrearReporteTiposFacturas();break;
+                default:CrearReporteFacturas(NuevoReporte); break;
+            }
+            
+            document.Close();
+
+
+            //Abrimos el pdf 
+            pe.AbrirPdf(NombreArchivo);
+        }
+
+        public void CrearReporteTiposFacturas()
+        {
+            ReiniciarTotalesFacturas();
+            CrearTablaTotalesTiposFacturas();
+
+            NuevoTotalGeneralFacturacion = new TotalesGeneralesFacturacion()
+            {
+                TotalGeneralRenta = 0,
+                TotalGeneralServicios = 0,
+                TotalGeneralToner = 0
+            };
+
+            foreach (DataRow fila in tblDatosReporte.Rows)
+            {
+                PdfTipoFactura DatosTipoFactura = new PdfTipoFactura()
+                {
+                    IdTipoFactura = int.Parse(fila[0].ToString()),
+                    Cliente = fila[1].ToString(),
+                    Cantidad = double.Parse(fila[2].ToString())
+                };
+                AgregarClienteAlDocumento(DatosTipoFactura);
+            }
+            AgregarTotalesATabla(NuevoTotalFacturas.Cliente);
+            AgregarTotalesGeneralesATabla();
+            lstClientes.Clear();
+            //Se agrega el total general
+            document.Add(tblFacturas);
+        }
+
+        public void ReiniciarTotalesFacturas()
+        {
+            NuevoTotalFacturas = new TotalesPorTipoFactura()
+            {
+                Cliente = "",
+                TotalRenta = 0,
+                TotalGeneral = 0,
+                TotalToner = 0,
+                TotalServicios = 0,
+            };
+        }
+
+        public void AgregarClienteAlDocumento(PdfTipoFactura DatosTipoFactura)
+        {
+            Pdf pe = new Pdf();
+            if (!lstClientes.Contains(DatosTipoFactura.Cliente))
+            {
+                if (lstClientes.Count > 0)
+                {
+                    AgregarTotalesATabla(NuevoTotalFacturas.Cliente);
+                    ReiniciarTotalesFacturas();
+                }
+                NuevoTotalFacturas.Cliente = DatosTipoFactura.Cliente;
+                lstClientes.Add(DatosTipoFactura.Cliente);
+                AgregarTotalesFacturas(DatosTipoFactura);
+            }
+            else
+            {
+                AgregarTotalesFacturas(DatosTipoFactura);
+            }
+        }
+
+        public void CrearTablaTotalesTiposFacturas()
+        {
+            Pdf pdf = new Pdf();
+            tblFacturas = new PdfPTable(5) { HorizontalAlignment = Element.ALIGN_LEFT, WidthPercentage = 100, PaddingTop = 10f };
+
+            //Encabezados
+            PdfPCell clCliente = new PdfPCell(new Phrase("CLIENTE", pdf.FuenteParrafoBold)) { BorderWidth = .5f,Colspan =2 };
+            PdfPCell clTotalToner = new PdfPCell(new Phrase("TONER", pdf.FuenteParrafoBold)) { BorderWidth = .5f };
+            PdfPCell clTotalServicios = new PdfPCell(new Phrase("SERVICIOS TÉCNICOS", pdf.FuenteParrafoBold)) { BorderWidth = .5f };
+            PdfPCell clTotalRenta = new PdfPCell(new Phrase("RENTA", pdf.FuenteParrafoBold)) { BorderWidth = .5f };
+
+            tblFacturas.AddCell(clCliente);
+            tblFacturas.AddCell(clTotalToner);
+            tblFacturas.AddCell(clTotalServicios);
+            tblFacturas.AddCell(clTotalRenta);
+        }
+
+        public void AgregarTotalesFacturas(PdfTipoFactura DatosTipoFactura)
+        {
+            NuevoTotalFacturas.TotalGeneral += DatosTipoFactura.Cantidad;
+            switch (DatosTipoFactura.IdTipoFactura)
+            {
+                case 1:
+                    NuevoTotalFacturas.TotalToner = DatosTipoFactura.Cantidad;
+                    NuevoTotalGeneralFacturacion.TotalGeneralToner += DatosTipoFactura.Cantidad;
+                        ; break;
+                case 2: 
+                    NuevoTotalFacturas.TotalServicios = DatosTipoFactura.Cantidad;
+                    NuevoTotalGeneralFacturacion.TotalGeneralServicios += DatosTipoFactura.Cantidad;
+                    break;
+                case 3: 
+                    NuevoTotalFacturas.TotalRenta = DatosTipoFactura.Cantidad;
+                    NuevoTotalGeneralFacturacion.TotalGeneralRenta += DatosTipoFactura.Cantidad;
+                    break;
+            }
+        }
+
+        public void AgregarTotalesATabla(string Cliente)
+        {
+            var pe = new Pdf();
+            
+            PdfPCell clCliente = new PdfPCell(new Phrase( Cliente,pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 2 };
+            PdfPCell clTotalToner = new PdfPCell(new Phrase("$" + String.Format("{0:n2}", NuevoTotalFacturas.TotalToner), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+            PdfPCell clTotalServicios = new PdfPCell(new Phrase("$" + String.Format("{0:n2}", NuevoTotalFacturas.TotalServicios), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+            PdfPCell clTotalRenta = new PdfPCell(new Phrase("$" + String.Format("{0:n2}", NuevoTotalFacturas.TotalRenta), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+
+            tblFacturas.AddCell(clCliente);
+            tblFacturas.AddCell(clTotalToner);
+            tblFacturas.AddCell(clTotalServicios);
+            tblFacturas.AddCell(clTotalRenta);
+        }
+
+        public void AgregarTotalesGeneralesATabla()
+        {
+            var pe = new Pdf();
+            PdfPCell clCliente = new PdfPCell(new Phrase("TOTALES", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 2 };
+            PdfPCell clTotalToner = new PdfPCell(new Phrase("$" + String.Format("{0:n2}", NuevoTotalGeneralFacturacion.TotalGeneralToner), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+            PdfPCell clTotalServicios = new PdfPCell(new Phrase("$" + String.Format("{0:n2}", NuevoTotalGeneralFacturacion.TotalGeneralServicios), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+            PdfPCell clTotalRenta = new PdfPCell(new Phrase("$" + String.Format("{0:n2}", NuevoTotalGeneralFacturacion.TotalGeneralRenta), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+
+            tblFacturas.AddCell(clCliente);
+            tblFacturas.AddCell(clTotalToner);
+            tblFacturas.AddCell(clTotalServicios);
+            tblFacturas.AddCell(clTotalRenta);
+        }
+
+        public void CrearReporteFacturas(Reporte NuevoReporte)
+        {
+            foreach (DataRow fila in tblDatosReporte.Rows)
             {
                 DatosPdfFactura DatosFactura = new DatosPdfFactura()
                 {
@@ -133,16 +309,12 @@ namespace CobranzaSP.Lógica
             AgregarTotalFacturas();
             document.Add(tblFacturas);
             ColocarTotalGeneral(NuevoReporte);
+
             lstClientes.Clear();
             TotalFacturas = 0;
             TotalSaldo = 0;
-            
+
             TotalGeneralFacturas = 0;
-            document.Close();
-
-
-            //Abrimos el pdf 
-            pe.AbrirPdf(NombreArchivo);
         }
 
         public void ColocarFechaPromesaPago(DatosPdfFactura DatosFactura, string FechaPromesaPago)
@@ -157,10 +329,10 @@ namespace CobranzaSP.Lógica
             }
         }
 
-        public string ColocarNombreReporte(ReporteFactura NuevoReporte)
+        public string ColocarNombreReporte(Reporte NuevoReporte)
         {
             StringBuilder Titulo = new StringBuilder("REPORTE ");
-            if (NuevoReporte.Cliente != "")
+            if (NuevoReporte.Cliente != "" && NuevoReporte.TipoBusqueda != "TIPOS FACTURAS")
             {
                 Titulo.Append(NuevoReporte.TipoBusqueda).Append("\n").Append(NuevoReporte.Cliente);
             }
@@ -297,7 +469,7 @@ namespace CobranzaSP.Lógica
             tblFacturas.AddCell(clCantidadSaldo);
         }
 
-        public void ColocarTotalGeneral(ReporteFactura NuevoReporte)
+        public void ColocarTotalGeneral(Reporte NuevoReporte)
         {
             Pdf pe = new Pdf();
 

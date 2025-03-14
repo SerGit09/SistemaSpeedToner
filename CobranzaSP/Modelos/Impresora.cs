@@ -9,8 +9,10 @@ namespace CobranzaSP.Modelos
     public class Impresora
     {
         public int IdMarca { get; set; }
+        public string Marca { get; set; }
 
         public int IdModelo { get; set; }
+        public string Modelo { get; set; }
 
         public string Serie { get; set; }
         public int IdSerie { get; set; }
@@ -19,8 +21,5 @@ namespace CobranzaSP.Modelos
         public double Valor { get; set; }
 
         public DateTime FechaVenta { get; set; }
-
-
-
     }
 }

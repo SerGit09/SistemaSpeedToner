@@ -30,14 +30,17 @@ namespace CobranzaSP
         LogicaReportesModulosRestaurados lgReportesModulos = new LogicaReportesModulosRestaurados();
         bool Validado;
         int IdReporte = 0;
+        int IdClaveModulo = 0;
         int IdRegistro = 0;
+        int IdModeloImpresora = 0;
         //Servira para el momento de eliminar una parte
         int IdParte = 0;
+        bool EstaModificando = false;
 
         #region Inicio
         public void InicioAplicacion()
         {
-            Formulario.LlenarComboBox(cboModulos, "spSeleccionarModulos", 1);
+            Formulario.LlenarComboBox(cboModeloImpresora, "spSeleccionarModelosModulos");
             //lgRegistroPartes.LlenarComboBoxPartes(cboPartesRicoh, "MP-4002");
             Formulario.PropiedadesDtg(dtgReportes);
             Formulario.PropiedadesDtg(dtgPartesUsadas);
@@ -59,6 +62,7 @@ namespace CobranzaSP
             dtgReportes.DataSource = tabla;
             dtgReportes.Columns["IdReporte"].Visible = false;
             dtgReportes.Columns["ServicioRealizado"].Visible = false;
+            dtgReportes.Columns["IdClaveModulo"].Visible = false;
         }
 
         private void ControlesDesactivadosInicialmente(bool activado)
@@ -85,6 +89,8 @@ namespace CobranzaSP
             ValidarCampo(txtNumeroFolio, "Coloque el numero de folio del reporte");
             ValidarCampo(cboModulos, "Seleccione un modulo");
             ValidarCampo(cboClaves, "Seleccione una clave de modulo");
+            ValidarCampo(txtContador, "Ingrese contador de páginas");
+            ValidarCampo(cboModeloImpresora, "Seleccione un modelo de impresora");
 
             return Validado;
         }
@@ -132,8 +138,9 @@ namespace CobranzaSP
         {
             if(cboModulos.SelectedIndex != 0)
             {
-                int IdModulo = lgModuloCliente.BuscarIdModulo(cboModulos.SelectedItem.ToString(), 1);
-                Formulario.LlenarComboBox(cboClaves, "SeleccionarClavesBodega", IdModulo);
+                int IdModulo = lgModuloCliente.BuscarIdModulo(cboModulos.SelectedItem.ToString(), IdModeloImpresora);
+                //Formulario.LlenarComboBox(cboClaves, "SeleccionarClavesBodega", IdModulo);
+                Formulario.LlenarComboBox(cboClaves, "sp_SeleccionarClavesModulos", IdModulo);
 
                 //Dependiendo el modulo elejido se seleccionaran las partes correspondientes a ese modulo
                 Formulario.LlenarComboBox(cboPartesRicoh, "SeleccionarPartesDeModulo", IdModulo);
@@ -154,12 +161,14 @@ namespace CobranzaSP
                 IdReporte = IdReporte,
                 FolioReporte = txtNumeroFolio.Text,
                 Fecha = dtpFecha.Value,
-                IdModulo = lgModuloCliente.BuscarIdModulo(cboModulos.SelectedItem.ToString(), 1),
+                NumeroPaginas = int.Parse(txtContador.Text),
+                IdModulo = lgModuloCliente.BuscarIdModulo(cboModulos.SelectedItem.ToString(), IdModeloImpresora),
                 Clave = cboClaves.SelectedItem.ToString(),
                 ServicioRealizado = rtxtServicio.Text
             };
+            ColocarIdClaveModulo(ReporteModulo);
 
-            if(ReporteModulo.IdReporte > 0)
+            if(EstaModificando)
             {
                 if (MessageBox.Show("¿Esta seguro de modificar el reporte?", "CONFIRME LA MODIFICACION", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 {
@@ -171,17 +180,37 @@ namespace CobranzaSP
 
             //MessageBox.Show(Modulo.IdReporte + "\n" + Modulo.FolioReporte + "\n" + Modulo.Fecha + "\n" + Modulo.IdModulo + "\n" + Modulo.IdClave);
             MessageBox.Show(lgReportesModulos.GuardarReporte(ReporteModulo),"REGISTRO DE REPORTE",MessageBoxButtons.OK, MessageBoxIcon.Information);
-            LimpiarForm();
+            ReiniciarOpciones();
             MostrarReportes();
         }
 
+        public void ColocarIdClaveModulo(ReporteModuloRestaurado ReporteModulo)
+        {
+            if(EstaModificando)
+            {
+                ReporteModulo.IdClaveModulo = IdClaveModulo;
+            }
+            else
+            {
+                ReporteModulo.IdClaveModulo = NuevaAccion.BuscarId(cboClaves.SelectedItem.ToString(), "ObtenerIdClaveModulo");
+            }
+        }
+
         private void btnCancelarReporte_Click(object sender, EventArgs e)
+        {
+            ReiniciarOpciones();
+        }
+
+        public void ReiniciarOpciones()
         {
             LimpiarForm();
             ControlesDesactivadosInicialmente(false);
 
             dtgPartesUsadas.DataSource = null;
             dtgPartesUsadas.Refresh();
+            IdReporte = 0;
+            IdClaveModulo = 0;
+            EstaModificando = false;
         }
 
         private void btnEliminarReporte_Click(object sender, EventArgs e)
@@ -219,6 +248,7 @@ namespace CobranzaSP
         {
             LimpiarForm();
             ControlesDesactivadosInicialmente(true);
+            EstaModificando = true;
 
             IdReporte = int.Parse(dtgReportes.CurrentRow.Cells[0].Value.ToString());
             txtNumeroFolio.Text = dtgReportes.CurrentRow.Cells[1].Value.ToString();
@@ -226,6 +256,8 @@ namespace CobranzaSP
             cboModulos.SelectedItem = dtgReportes.CurrentRow.Cells[3].Value.ToString();
             cboClaves.SelectedItem = dtgReportes.CurrentRow.Cells[4].Value.ToString();
             rtxtServicio.Text = dtgReportes.CurrentRow.Cells[5].Value.ToString();
+            txtContador.Text = dtgReportes.CurrentRow.Cells[6].Value.ToString();
+            IdClaveModulo = int.Parse(dtgReportes.CurrentRow.Cells[7].Value.ToString());
 
             MostrarPartesUsadas(txtNumeroFolio.Text);
         }
@@ -243,7 +275,7 @@ namespace CobranzaSP
                 }
             }
 
-            cboModulos.SelectedIndex = 0;
+            //cboModulos.SelectedIndex = 0;
 
             //Validar que no este vacio
             if (cboClaves.Items.Count != 0)
@@ -358,5 +390,19 @@ namespace CobranzaSP
         }
         #endregion
 
+        private void btnReportes_Click(object sender, EventArgs e)
+        {
+            ReportesServicioModulos NuevoReporte = new ReportesServicioModulos();
+            NuevoReporte.Show();
+        }
+
+        private void cboModeloImpresora_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboModeloImpresora.SelectedItem.ToString() != " ")
+            {
+                IdModeloImpresora = NuevaAccion.BuscarId(cboModeloImpresora.SelectedItem.ToString(), "spObtenerIdModeloModulo");
+                Formulario.LlenarComboBox(cboModulos, "spSeleccionarModulos", IdModeloImpresora);
+            }
+        }
     }
 }

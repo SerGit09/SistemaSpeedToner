@@ -16,15 +16,17 @@ namespace CobranzaSP
 {
     public partial class InventariosPartesGuardados : Form
     {
-        public InventariosPartesGuardados()
+        public InventariosPartesGuardados(int IdTipoInventario)
         {
             InitializeComponent();
+            this.IdTipoInventario = IdTipoInventario;
             Inicio();
         }
         AccionesLógica NuevaAccion = new AccionesLógica();
         FuncionesFormularios Formulario = new FuncionesFormularios();
         string UrlArchivo = "";
         int IdArchivoInventarioPartes = 0;
+        int IdTipoInventario;
 
         #region PanelSuperior
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -47,24 +49,25 @@ namespace CobranzaSP
         public void Inicio()
         {
             Formulario.PropiedadesDtg(dtgInventariosPartes);
-            Mostrar("MostrarInventariosGuardadosPartes");
+            Mostrar();
 
             btnAbrirArchivo.Enabled = false;
             btnEliminar.Enabled = false;
         }
 
-        public void Mostrar(string sp)
+        public void Mostrar()
         {
             //Limpiamos los datos del datagridview
             dtgInventariosPartes.DataSource = null;
             dtgInventariosPartes.Refresh();
             DataTable tabla = new DataTable();
             //Guardamos los registros dependiendo la consulta
-            tabla = NuevaAccion.Mostrar(sp);
+            tabla = NuevaAccion.MostrarArchivosInventario("MostrarInventariosGuardados", IdTipoInventario);
             //Asignamos los registros que optuvimos al datagridview
             dtgInventariosPartes.DataSource = tabla;
             dtgInventariosPartes.Columns["UrlArchivo"].Visible = false;
-            dtgInventariosPartes.Columns["IdInventarioPartes"].Visible = false;
+            dtgInventariosPartes.Columns["IdTipoInventario"].Visible = false;
+            dtgInventariosPartes.Columns["IdArchivoInventario"].Visible = false;
         }
         #endregion
 
@@ -91,7 +94,7 @@ namespace CobranzaSP
 
 
             string Mensaje = NuevaAccion.Eliminar(IdArchivoInventarioPartes, "EliminarArchivoInventarioPartes");
-            Mostrar("MostrarInventariosGuardadosPartes");
+            Mostrar();
             MessageBox.Show(Mensaje, "ELIMINACION DE REGISTRO", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             IdArchivoInventarioPartes = 0;
@@ -106,7 +109,7 @@ namespace CobranzaSP
             btnEliminar.Enabled = true;
 
             IdArchivoInventarioPartes = int.Parse(dtgInventariosPartes.CurrentRow.Cells[0].Value.ToString());
-            UrlArchivo = dtgInventariosPartes.CurrentRow.Cells[2].Value.ToString();
+            UrlArchivo = dtgInventariosPartes.CurrentRow.Cells[3].Value.ToString();
         }
     }
 }

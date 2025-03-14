@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CobranzaSP.Modelos
 {
-    public class Garantia : RegistroInventario
+    public class Garantia : RegistroInventarioToners
     {
         public int IdCliente { get; set; }
 
@@ -15,6 +15,5 @@ namespace CobranzaSP.Modelos
 
         public string Marca { get; set; }
 
-        public string Modelo { get; set;}
     }
 }

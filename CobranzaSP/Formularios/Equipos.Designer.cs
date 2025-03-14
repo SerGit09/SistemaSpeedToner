@@ -40,7 +40,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.txtFechaPago = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.txtPrecio = new System.Windows.Forms.TextBox();
+            this.txtPrecioRenta = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.cboTipoRenta = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -72,7 +72,7 @@
             this.grpDatos.Controls.Add(this.label10);
             this.grpDatos.Controls.Add(this.txtFechaPago);
             this.grpDatos.Controls.Add(this.label8);
-            this.grpDatos.Controls.Add(this.txtPrecio);
+            this.grpDatos.Controls.Add(this.txtPrecioRenta);
             this.grpDatos.Controls.Add(this.label6);
             this.grpDatos.Controls.Add(this.cboTipoRenta);
             this.grpDatos.Controls.Add(this.label7);
@@ -151,13 +151,13 @@
             this.label8.TabIndex = 43;
             this.label8.Text = "Fecha Pago:";
             // 
-            // txtPrecio
+            // txtPrecioRenta
             // 
-            this.txtPrecio.Location = new System.Drawing.Point(409, 173);
-            this.txtPrecio.Name = "txtPrecio";
-            this.txtPrecio.Size = new System.Drawing.Size(135, 27);
-            this.txtPrecio.TabIndex = 7;
-            this.txtPrecio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPrecio_KeyPress);
+            this.txtPrecioRenta.Location = new System.Drawing.Point(409, 173);
+            this.txtPrecioRenta.Name = "txtPrecioRenta";
+            this.txtPrecioRenta.Size = new System.Drawing.Size(135, 27);
+            this.txtPrecioRenta.TabIndex = 7;
+            this.txtPrecioRenta.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPrecio_KeyPress);
             // 
             // label6
             // 
@@ -465,7 +465,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtFechaPago;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox txtPrecio;
+        private System.Windows.Forms.TextBox txtPrecioRenta;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cboTipoRenta;
         private System.Windows.Forms.Label label7;

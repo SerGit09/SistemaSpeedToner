@@ -55,8 +55,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabRegistros = new System.Windows.Forms.TabPage();
             this.grpDatosRegistro = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.radSalida = new System.Windows.Forms.RadioButton();
+            this.radEntrada = new System.Windows.Forms.RadioButton();
             this.txtFolio = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.lblFolio = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.cboPartesRicoh = new System.Windows.Forms.ComboBox();
             this.btnGenerarReporte = new System.Windows.Forms.Button();
@@ -370,8 +373,11 @@
             // 
             // grpDatosRegistro
             // 
+            this.grpDatosRegistro.Controls.Add(this.label15);
+            this.grpDatosRegistro.Controls.Add(this.radSalida);
+            this.grpDatosRegistro.Controls.Add(this.radEntrada);
             this.grpDatosRegistro.Controls.Add(this.txtFolio);
-            this.grpDatosRegistro.Controls.Add(this.label5);
+            this.grpDatosRegistro.Controls.Add(this.lblFolio);
             this.grpDatosRegistro.Controls.Add(this.label3);
             this.grpDatosRegistro.Controls.Add(this.cboPartesRicoh);
             this.grpDatosRegistro.Controls.Add(this.btnGenerarReporte);
@@ -386,36 +392,71 @@
             this.grpDatosRegistro.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.grpDatosRegistro.Location = new System.Drawing.Point(11, 5);
             this.grpDatosRegistro.Name = "grpDatosRegistro";
-            this.grpDatosRegistro.Size = new System.Drawing.Size(793, 166);
+            this.grpDatosRegistro.Size = new System.Drawing.Size(793, 198);
             this.grpDatosRegistro.TabIndex = 1;
             this.grpDatosRegistro.TabStop = false;
             this.grpDatosRegistro.Text = "Datos";
             this.grpDatosRegistro.Enter += new System.EventHandler(this.grpDatosRegistro_Enter);
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.Color.White;
+            this.label15.Location = new System.Drawing.Point(27, 130);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(91, 19);
+            this.label15.TabIndex = 55;
+            this.label15.Text = "Movimiento";
+            // 
+            // radSalida
+            // 
+            this.radSalida.AutoSize = true;
+            this.radSalida.Location = new System.Drawing.Point(211, 129);
+            this.radSalida.Name = "radSalida";
+            this.radSalida.Size = new System.Drawing.Size(69, 23);
+            this.radSalida.TabIndex = 54;
+            this.radSalida.TabStop = true;
+            this.radSalida.Text = "Salida";
+            this.radSalida.UseVisualStyleBackColor = true;
+            this.radSalida.CheckedChanged += new System.EventHandler(this.radSalida_CheckedChanged);
+            // 
+            // radEntrada
+            // 
+            this.radEntrada.AutoSize = true;
+            this.radEntrada.Location = new System.Drawing.Point(124, 129);
+            this.radEntrada.Name = "radEntrada";
+            this.radEntrada.Size = new System.Drawing.Size(81, 23);
+            this.radEntrada.TabIndex = 53;
+            this.radEntrada.TabStop = true;
+            this.radEntrada.Text = "Entrada";
+            this.radEntrada.UseVisualStyleBackColor = true;
+            this.radEntrada.CheckedChanged += new System.EventHandler(this.radEntrada_CheckedChanged);
+            // 
             // txtFolio
             // 
-            this.txtFolio.Location = new System.Drawing.Point(89, 121);
+            this.txtFolio.Location = new System.Drawing.Point(465, 31);
             this.txtFolio.Name = "txtFolio";
             this.txtFolio.Size = new System.Drawing.Size(293, 27);
             this.txtFolio.TabIndex = 4;
             // 
-            // label5
+            // lblFolio
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(28, 124);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 19);
-            this.label5.TabIndex = 52;
-            this.label5.Text = "Folio:";
+            this.lblFolio.AutoSize = true;
+            this.lblFolio.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFolio.ForeColor = System.Drawing.Color.White;
+            this.lblFolio.Location = new System.Drawing.Point(410, 34);
+            this.lblFolio.Name = "lblFolio";
+            this.lblFolio.Size = new System.Drawing.Size(49, 19);
+            this.lblFolio.TabIndex = 52;
+            this.lblFolio.Text = "Folio:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(28, 87);
+            this.label3.Location = new System.Drawing.Point(27, 95);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(51, 19);
             this.label3.TabIndex = 50;
@@ -427,7 +468,7 @@
             this.cboPartesRicoh.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboPartesRicoh.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboPartesRicoh.FormattingEnabled = true;
-            this.cboPartesRicoh.Location = new System.Drawing.Point(89, 87);
+            this.cboPartesRicoh.Location = new System.Drawing.Point(88, 95);
             this.cboPartesRicoh.Margin = new System.Windows.Forms.Padding(4);
             this.cboPartesRicoh.Name = "cboPartesRicoh";
             this.cboPartesRicoh.Size = new System.Drawing.Size(293, 27);
@@ -442,7 +483,7 @@
             this.btnGenerarReporte.ForeColor = System.Drawing.Color.White;
             this.btnGenerarReporte.Image = ((System.Drawing.Image)(resources.GetObject("btnGenerarReporte.Image")));
             this.btnGenerarReporte.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGenerarReporte.Location = new System.Drawing.Point(619, 92);
+            this.btnGenerarReporte.Location = new System.Drawing.Point(614, 130);
             this.btnGenerarReporte.Name = "btnGenerarReporte";
             this.btnGenerarReporte.Size = new System.Drawing.Size(133, 56);
             this.btnGenerarReporte.TabIndex = 35;
@@ -456,7 +497,7 @@
             this.lblTipoPersona.AutoSize = true;
             this.lblTipoPersona.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTipoPersona.ForeColor = System.Drawing.Color.White;
-            this.lblTipoPersona.Location = new System.Drawing.Point(404, 23);
+            this.lblTipoPersona.Location = new System.Drawing.Point(398, 68);
             this.lblTipoPersona.Name = "lblTipoPersona";
             this.lblTipoPersona.Size = new System.Drawing.Size(87, 19);
             this.lblTipoPersona.TabIndex = 44;
@@ -468,7 +509,7 @@
             this.cboProveedores.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboProveedores.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboProveedores.FormattingEnabled = true;
-            this.cboProveedores.Location = new System.Drawing.Point(498, 18);
+            this.cboProveedores.Location = new System.Drawing.Point(492, 63);
             this.cboProveedores.Margin = new System.Windows.Forms.Padding(4);
             this.cboProveedores.Name = "cboProveedores";
             this.cboProveedores.Size = new System.Drawing.Size(268, 27);
@@ -477,7 +518,7 @@
             // 
             // txtCantidad
             // 
-            this.txtCantidad.Location = new System.Drawing.Point(498, 55);
+            this.txtCantidad.Location = new System.Drawing.Point(504, 125);
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(93, 27);
             this.txtCantidad.TabIndex = 6;
@@ -488,7 +529,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(414, 58);
+            this.label7.Location = new System.Drawing.Point(420, 128);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(77, 19);
             this.label7.TabIndex = 39;
@@ -500,7 +541,7 @@
             this.cboModelo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboModelo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboModelo.FormattingEnabled = true;
-            this.cboModelo.Location = new System.Drawing.Point(89, 52);
+            this.cboModelo.Location = new System.Drawing.Point(88, 60);
             this.cboModelo.Margin = new System.Windows.Forms.Padding(4);
             this.cboModelo.Name = "cboModelo";
             this.cboModelo.Size = new System.Drawing.Size(293, 27);
@@ -513,7 +554,7 @@
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(16, 55);
+            this.label12.Location = new System.Drawing.Point(15, 63);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(66, 19);
             this.label12.TabIndex = 36;
@@ -521,7 +562,7 @@
             // 
             // dtpFechaRegistro
             // 
-            this.dtpFechaRegistro.Location = new System.Drawing.Point(89, 20);
+            this.dtpFechaRegistro.Location = new System.Drawing.Point(88, 28);
             this.dtpFechaRegistro.Name = "dtpFechaRegistro";
             this.dtpFechaRegistro.Size = new System.Drawing.Size(293, 27);
             this.dtpFechaRegistro.TabIndex = 1;
@@ -531,7 +572,7 @@
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(28, 26);
+            this.label9.Location = new System.Drawing.Point(27, 34);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(55, 19);
             this.label9.TabIndex = 6;
@@ -664,7 +705,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cboPartesRicoh;
         private System.Windows.Forms.TextBox txtFolio;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblFolio;
         private System.Windows.Forms.GroupBox grpReporteInventario;
         private System.Windows.Forms.Button btnNuevoModelo;
         private System.Windows.Forms.PictureBox pcbParte;
@@ -674,5 +715,8 @@
         private System.Windows.Forms.Button btnGuardarInventario;
         private System.Windows.Forms.Button btnAbrirInventariosPartes;
         private System.Windows.Forms.CheckBox chkSoloPlantilla;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.RadioButton radSalida;
+        private System.Windows.Forms.RadioButton radEntrada;
     }
 }

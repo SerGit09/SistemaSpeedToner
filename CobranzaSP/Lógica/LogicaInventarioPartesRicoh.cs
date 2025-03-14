@@ -70,28 +70,14 @@ namespace CobranzaSP.Lógica
             comando.CommandText = "spAgregarRelacionModeloParte";
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.Clear();
-            comando.Parameters.AddWithValue("@IdModelo", NuevoModelo.IdModelo);
-            comando.Parameters.AddWithValue("@IdModeloParte", NuevoModelo.IdModeloParte);
+            comando.Parameters.AddWithValue("@IdModeloParte", NuevoModelo.IdModelo);
+            comando.Parameters.AddWithValue("@IdModeloImpresora", NuevoModelo.IdModeloParte);
             comando.ExecuteNonQuery();
 
             comando.Parameters.Clear();
             conexion.CerrarConexion();
         }
 
-        public void GuardarArchivoInventarioPartes(InventarioPartesDatos NuevoInventarioPartes)
-        {
-            comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = "GuardarArchivoInventarioPartes";
-            comando.CommandType = CommandType.StoredProcedure;
-            comando.Parameters.Clear();
-            comando.Parameters.AddWithValue("@IdInventarioPartes", NuevoInventarioPartes.IdInventarioPartes);
-            comando.Parameters.AddWithValue("@Fecha", NuevoInventarioPartes.Fecha);
-            comando.Parameters.AddWithValue("@UrlArchivo", NuevoInventarioPartes.UrlArchivo);
-            comando.ExecuteNonQuery();
-
-            comando.Parameters.Clear();
-            conexion.CerrarConexion();
-        }
 
         #region Pdf
         #endregion
@@ -112,7 +98,7 @@ namespace CobranzaSP.Lógica
             comando.Connection = conexion.AbrirConexion();
             comando.CommandText = "spReporteInventarioPartes";
             comando.Parameters.Clear();
-            //comando.Parameters.AddWithValue("@Fecha", FechaElegida);
+            comando.Parameters.AddWithValue("@FormatoBlanco", FormatoBlanco);
 
             comando.CommandType = CommandType.StoredProcedure;
             tblDatosInventario.Load(comando.ExecuteReader());

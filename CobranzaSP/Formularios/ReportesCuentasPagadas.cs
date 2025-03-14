@@ -99,7 +99,7 @@ namespace CobranzaSP.Formularios
                 return;
             }
 
-            ReporteFactura NuevoReporte = new ReporteFactura()
+            Reporte NuevoReporte = new Reporte()
             {
                 Cliente = (rdUnCliente.Checked) ? cboClientes.SelectedItem.ToString() : "",
                 FechaInicio = dtpFechaInicial.Value,

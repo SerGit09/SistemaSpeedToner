@@ -105,9 +105,19 @@ namespace CobranzaSP.Formularios
             {
                 case "SALDOS POR CLIENTE":
                     grpCliente.Visible = true;
+                    OcultarFechas(false);
                     radTodosLosClientes.Checked = true;
                     break;
+                default:OcultarFechas(true);break;
             }
+        }
+
+        public void OcultarFechas(bool Mostrar)
+        {
+            lblFechaInicio.Visible = Mostrar;
+            lblFechaFinal.Visible = Mostrar;
+            dtpFechaInicial.Visible = Mostrar;
+            dtpFechaFinal.Visible = Mostrar;
         }
 
         public void ReiniciarOpciones()

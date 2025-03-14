@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CobranzaSP.Modelos
 {
-    public class Fusor: Factura
+    public class Fusor
     {
         public int IdFusor { get; set; }
 
@@ -15,13 +15,17 @@ namespace CobranzaSP.Modelos
         public string SerieS { get; set; }
 
         public string Estado { get; set; }
+        public string NumeroFactura { get; set; }
         public string Proveedor { get; set; }
         public int IdProveedor { get; set; }
 
         public int DiasGarantia { get; set; }
 
-        public string Modelo { get; set; }
         public int IdCartucho { get; set; }
+        public double Precio { get; set; }
+        public int IdTipoFusor { get; set; }
+        public DateTime FechaLlegada { get; set; }
+        public DateTime FechaFactura { get; set; }
 
     }
 }

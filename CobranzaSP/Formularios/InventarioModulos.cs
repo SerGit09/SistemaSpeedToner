@@ -169,14 +169,13 @@ namespace CobranzaSP.Formularios
         {
             EstaModificando = false;
             ControlesDesactivados(false);
-            LimpiarForm(grpDatosRegistro);
             LimpiarForm(grpDatosInventario);
             Id = 0;
             cboModelo.SelectedIndex = 0;
             cboModulos.SelectedIndex = 0;
         }
 
-        private void btnImprimir_Click(object sender, EventArgs e)
+        private void btnImprimir_Click_1(object sender, EventArgs e)
         {
             lgInventarioModulo.ImprimirInventario();
         }
@@ -217,19 +216,7 @@ namespace CobranzaSP.Formularios
 
 
         #region Eventos
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (tabControl1.SelectedTab == tabInventario)
-            {
-                Inventario = true;
-                //Mostrar el inventario
-            }
-            else
-            {
-                Inventario = false;
-                //Mostrar movimientos de inventario
-            }
-        }
+        
 
         private void dtgModulos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -276,7 +263,7 @@ namespace CobranzaSP.Formularios
 
 
 
-        private void cboModelo_SelectedIndexChanged(object sender, EventArgs e)
+        private void cboModelo_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (cboModelo.SelectedItem.ToString() != " ")
             {
@@ -298,6 +285,30 @@ namespace CobranzaSP.Formularios
         private void cboMarcas_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void AbrirForm(object formNuevo)
+        {
+            //Declaramos la forma
+            Form fh = formNuevo as Form;
+
+            //Mostramos la forma 
+            fh.Show();
+        }
+
+        private void btnGuardarInventario_Click(object sender, EventArgs e)
+        {
+            AbrirForm(new GuardarArchivoInventarioPartes(3));
+        }
+
+        private void btnAbrirInventariosPartes_Click(object sender, EventArgs e)
+        {
+            AbrirForm(new InventariosPartesGuardados(3));
+        }
+
+        private void cboModulos_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            
         }
     }
 }

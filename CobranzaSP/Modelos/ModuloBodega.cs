@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace CobranzaSP.Modelos
 {
-    public class ModuloBodega
+    public class ModuloBodega:ModuloRicoh
     {
         public int Id { get; set; }
-        public int IdModelo { get; set; }
-
-        public int IdModulo{ get; set; }
-
-        public string Clave { get; set; }
 
     }
 }

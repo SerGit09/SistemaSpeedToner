@@ -38,7 +38,15 @@ namespace CobranzaSP.Lógica
 
         public void ImprimirInventario()
         {
-            //Primero obtenemos de la base de datos nuestro inventario 
+            string NombreArchivo = CrearPDF(DateTime.Now);
+            var pe = new Pdf();
+
+            //Abrimos el pdf
+            pe.AbrirPdf(NombreArchivo);
+        }
+
+        public string CrearPDF(DateTime FechaCreacion)
+        {
             ObtenerDatosInventario();
 
             //string NombreArchivo = @"C:\Users\Cobranza\Documents\Reportes\" + "ReporteServicio" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
@@ -96,25 +104,27 @@ namespace CobranzaSP.Lógica
                     iTextSharp.text.pdf.draw.LineSeparator LineaSeparacion = new iTextSharp.text.pdf.draw.LineSeparator() { Offset = 2f };
                     document.Add(new Chunk(LineaSeparacion));
                     //Limpiamos la tabla
-                    
+
                     tblClaves = new PdfPTable(1);
                     //Lo guardamos en la lista y lo mostramos en el documento
                     lstModulos.Add(Modulo);
                     Cantidad = 1;
-                    
 
-                    if(NuevoReporte.Cantidad > 0)
+
+                    CrearTablaModulo(NuevoReporte);
+                    //Agregamos la tabla al documento
+                    document.Add(tblModulo);
+
+                    if (NuevoReporte.Cantidad > 0)
                     {
-                        CrearTablaModulo(NuevoReporte);
-                        //Agregamos la tabla al documento
-                        document.Add(tblModulo);
-
                         Paragraph lineBreak = new Paragraph("\n");
                         document.Add(lineBreak);
                         //Agregamos las claves
                         CrearTablaClaves(NuevoReporte);
+
                     }
-                    
+
+
                     //Limpiamos la tabla
                     tblModulo = new PdfPTable(3);
                 }
@@ -131,11 +141,11 @@ namespace CobranzaSP.Lógica
             lstModulos.Clear();
             Inventario.Close();
             document.Close();
-
-            //Abrimos el pdf
-            pe.AbrirPdf(NombreArchivo);
             conexion.CerrarConexion();
-        }
+
+            return NombreArchivo;
+        } 
+
 
         public void CrearTablaModulo(ReporteInventarioModulo NuevoReporte)
         {
@@ -162,7 +172,7 @@ namespace CobranzaSP.Lógica
         public void CrearTablaClaves(ReporteInventarioModulo NuevoReporte)
         {
             Pdf pe = new Pdf();
-            PdfPCell clTituloClave = new PdfPCell(new Phrase("CLAVE", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 , HorizontalAlignment = Element.ALIGN_CENTER };
+            PdfPCell clTituloClave = new PdfPCell(new Phrase("FOLIOS", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1, HorizontalAlignment = Element.ALIGN_CENTER };
             tblClaves.AddCell(clTituloClave);
             AgregarClaveATabla(NuevoReporte.Clave);
         }

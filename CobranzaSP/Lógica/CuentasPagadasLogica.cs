@@ -78,13 +78,14 @@ namespace CobranzaSP.Lógica
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.AddWithValue("@Id", CuentaPagada.Id);
             comando.Parameters.AddWithValue("@FechaPago", CuentaPagada.FechaPago);
+            comando.Parameters.AddWithValue("@IdTipoFactura", CuentaPagada.IdTipoFactura);
             comando.ExecuteNonQuery();
 
             comando.Parameters.Clear();
         }
 
         #region Reportes
-        public bool ObtenerDatosReporteCuentasPagadas(ReporteFactura NuevoReporte)
+        public bool ObtenerDatosReporteCuentasPagadas(Reporte NuevoReporte)
         {
             bool DatosObtenidos = true;
             tblDatosCuentasPagadas.Clear();
@@ -109,7 +110,7 @@ namespace CobranzaSP.Lógica
             return DatosObtenidos;
         }
 
-        public void Pdf(ReporteFactura NuevoReporte)
+        public void Pdf(Reporte NuevoReporte)
         {
             string RutaArchivo = ConfiguracionPdf.RutaReportesFacturasPagadas;
             string NombreArchivo = RutaArchivo + "ReporteFactura" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
@@ -141,7 +142,7 @@ namespace CobranzaSP.Lógica
 
             foreach (DataRow fila in tblDatosCuentasPagadas.Rows)
             {
-                DatosPdfCuentaPagada DatosCuentaPagada = new DatosPdfCuentaPagada()
+                CuentaPagada DatosCuentaPagada = new CuentaPagada()
                 {
                     Cliente = fila[0].ToString(),
                     Factura = fila[1].ToString(),
@@ -168,7 +169,7 @@ namespace CobranzaSP.Lógica
             pe.AbrirPdf(NombreArchivo);
         }
 
-        public string ColocarNombreReporte(ReporteFactura NuevoReporte)
+        public string ColocarNombreReporte(Reporte NuevoReporte)
         {
             StringBuilder Titulo = new StringBuilder("CUENTAS PAGADAS");
             if (NuevoReporte.Cliente != "")
@@ -179,7 +180,7 @@ namespace CobranzaSP.Lógica
             return Titulo.ToString();
         }
 
-        public void AgregarClienteAlDocumento(DatosPdfCuentaPagada DatosCuentaPagada)
+        public void AgregarClienteAlDocumento(CuentaPagada DatosCuentaPagada)
         {
             Pdf pe = new Pdf();
             if (!lstClientes.Contains(DatosCuentaPagada.Cliente))
@@ -227,7 +228,7 @@ namespace CobranzaSP.Lógica
             tblCuentasPagadas.AddCell(clEncabezadoDocumento);
         }
 
-        public void AgregarDatosATablaFacturas(DatosPdfCuentaPagada DatosCuentaPagada)
+        public void AgregarDatosATablaFacturas(CuentaPagada DatosCuentaPagada)
         {
             var pe = new Pdf();
             PdfPCell clFactura = new PdfPCell(new Phrase(DatosCuentaPagada.Factura, pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };

@@ -15,7 +15,5 @@ namespace CobranzaSP.Modelos
         public DateTime FechaVencimiento { get; set; }
 
         public double Saldo { get; set; }
-
-        public int IdCliente { get; set; }
     }
 }

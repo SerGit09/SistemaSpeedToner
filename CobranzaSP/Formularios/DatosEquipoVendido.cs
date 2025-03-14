@@ -17,14 +17,14 @@ namespace CobranzaSP.Formularios
 {
     public partial class DatosEquipoVendido : Form
     {
-        public DatosEquipoVendido(ReporteEquipo EquipoVendido, int IdEquipo, EquiposBodega equipo)
+        public DatosEquipoVendido(Equipo EquipoVendido, int IdEquipo, EquiposBodega equipo)
         {
             InitializeComponent();
             InicioAplicacion();
             cboMarcas.SelectedItem = EquipoVendido.Marca;
             cboModelos.SelectedItem = EquipoVendido.Modelo;
             txtSerie.Text = EquipoVendido.Serie;
-            txtPrecioEquipo.Text = EquipoVendido.Precio.ToString();
+            txtPrecioEquipo.Text = EquipoVendido.PrecioRenta.ToString();
             this.IdEquipo = IdEquipo;
             this.IdSerie = EquipoVendido.IdSerie;
             this.equipo = equipo;
@@ -46,6 +46,7 @@ namespace CobranzaSP.Formularios
             Formulario.LlenarComboBox(cboMarcas, "SeleccionarMarca");
             Formulario.LlenarComboBox(cboModelos, "SeleccionarModelos");
             Formulario.LlenarComboBox(cboClientes, "SeleccionarClientesServicios");
+            //Formulario.LlenarComboBox(cboClientes, "SeleccionarClientes");
 
 
             //Deshabilitamos escritura en combobox
@@ -104,7 +105,7 @@ namespace CobranzaSP.Formularios
                     IdMarca = NuevaAccion.BuscarId(cboMarcas.SelectedItem.ToString(), "ObtenerIdMarca"),
                     IdModelo = NuevaAccion.BuscarId(cboModelos.SelectedItem.ToString(), "ObtenerIdModelo"),
                     Serie = txtSerie.Text,
-                    Precio = double.Parse(txtPrecioEquipo.Text.Replace(",", "")),
+                    PrecioRenta = double.Parse(txtPrecioEquipo.Text.Replace(",", "")),
                     FechaVenta = dtpFecha.Value,
                     IdSerie = this.IdSerie
                 };

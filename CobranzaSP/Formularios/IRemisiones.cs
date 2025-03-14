@@ -1,5 +1,6 @@
 ﻿using CobranzaSP.Lógica;
 using CobranzaSP.Modelos;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,6 +23,7 @@ namespace CobranzaSP.Formularios
         }
         bool Remision = true;
         bool Modificando = false;
+        bool Validado;
         int IdVentaMostrador = 0;
         CD_Conexion cn = new CD_Conexion();
         AccionesLógica NuevaAccion = new AccionesLógica();
@@ -35,6 +37,8 @@ namespace CobranzaSP.Formularios
             PropiedadesDtgCobranza(dtgRemisiones);
             LlenarComboBox(cboClientes, "SeleccionarClientes", 0);
             MostrarDatos(dtgRemisiones, "MostrarRemisiones");
+            LlenarComboBox(cboTipoFactura, "SeleccionarTiposFacturas", 0);
+
             radRemisiones.Checked= true;
         }
 
@@ -42,9 +46,15 @@ namespace CobranzaSP.Formularios
         {
             lblDiasCredito.Visible = mostrar;
             lblRemisiones.Visible = mostrar;
+            lblFecha.Visible = mostrar;
+            dtpFecha.Visible = mostrar;
             txtFolio.Visible = mostrar;
             txtDiasCredito.Visible = mostrar;
             Remision = mostrar;
+
+            //Tipo Factura
+            cboTipoFactura.Visible = mostrar;
+            lblTipoFactura.Visible = mostrar;
         }
 
         public void BotonesDesactivados(bool activado)
@@ -119,38 +129,52 @@ namespace CobranzaSP.Formularios
         public bool ValidarRemision()
         {
             erRemisiones.Clear();
-            bool Validado = true;
-            if (Remision)
-            {
-                if (txtFolio.Text == "")
-                {
-                    erRemisiones.SetError(txtFolio, "Ingrese Folio"); 
-                    Validado = false;
-                }
-                    
-                if (txtDiasCredito.Text == "")
-                {
-                    erRemisiones.SetError(txtDiasCredito, "Ingrese Dias");
-                    Validado = false;
-                }
-                    
-            }
+            Validado = true;
 
-            if (txtCantidad.Text == "")
-            {
-                erRemisiones.SetError(txtCantidad, "Ingrese Cantidad"); 
-                Validado = false;
-            }
-                
-            if(cboClientes.Text == " ")
-            {
-                erRemisiones.SetError(cboClientes, "Ingrese cliente"); 
-                Validado = false;
-            }
-                
+            ValidarCampo(txtFolio, "Ingrese Folio de Factura");
+            ValidarCampo(txtDiasCredito, "Ingrese días de crédito");
+            ValidarCampo(cboTipoFactura, "Seleccione un tipo de remisión");
+            ValidarVentaMostrador();
 
             return Validado;
         }
+
+        public bool ValidarVentaMostrador()
+        {
+            if (!Remision)
+            {
+                erRemisiones.Clear();
+                Validado = true;
+            }
+
+            ValidarCampo(txtCantidad, "Ingrese cantidad");
+            ValidarCampo(cboClientes, "Seleccione un cliente");
+            return Validado;
+        }
+
+
+
+        public void ValidarCampo(Control c, string Mensaje)
+        {
+            if (c is TextBox || c is RichTextBox)
+            {
+                if (string.IsNullOrEmpty(c.Text))
+                {
+                    erRemisiones.SetError(c, Mensaje);
+                    Validado = false;
+                }
+            }
+            else if (c is ComboBox)
+            {
+                ComboBox combo = (ComboBox)c;
+                if (combo.SelectedIndex == -1 || combo.SelectedIndex == 0)
+                {
+                    erRemisiones.SetError(c, Mensaje);
+                    Validado = false;
+                }
+            }
+        }
+
         private void txtFolio_KeyPress(object sender, KeyPressEventArgs e)
         {
             Validacion.SoloLetrasYNumeros(e);
@@ -174,9 +198,6 @@ namespace CobranzaSP.Formularios
         {
             try
             {
-                if (!ValidarRemision())
-                    return;
-
                 if (Remision)
                 {
                     GuardarRemision();
@@ -196,6 +217,9 @@ namespace CobranzaSP.Formularios
 
         public void GuardarRemision()
         {
+            if (!ValidarRemision())
+                return;
+
             string Mensaje;
             Remision nuevaRemision = new Remision()
             {
@@ -203,6 +227,9 @@ namespace CobranzaSP.Formularios
                 DiasCredito = int.Parse(txtDiasCredito.Text),
                 Cantidad = double.Parse(txtCantidad.Text),
                 IdCliente = NuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "BuscarIdCliente"),
+                IdTipoFactura = NuevaAccion.BuscarId(cboTipoFactura.SelectedItem.ToString(), "BuscarIdTipoFactura"),
+                //IdCliente = NuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "ObtenerIdCliente"),
+                Fecha = dtpFecha.Value,
                 FechaPago = dtpFechaRemision.Value
             };
 
@@ -226,6 +253,10 @@ namespace CobranzaSP.Formularios
 
         public void GuardarVentaMostrador()
         {
+            if (!ValidarVentaMostrador())
+            {
+                return;
+            }
             string Mensaje;
             VentaMostrador nuevaVenta = new VentaMostrador()
             {
@@ -258,6 +289,7 @@ namespace CobranzaSP.Formularios
                 CuentaPagada nuevaCuentaPagada = new CuentaPagada()
                 {
                     IdCliente = NuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "BuscarIdCliente"),
+                    IdTipoFactura = NuevaAccion.BuscarId(cboTipoFactura.SelectedItem.ToString(), "BuscarIdTipoFactura"),
                     Factura = txtFolio.Text,
                     Cantidad = double.Parse(txtCantidad.Text.Replace(",", "")),
                     FechaFactura = dtpFechaRemision.Value
@@ -334,7 +366,9 @@ namespace CobranzaSP.Formularios
             cboClientes.SelectedItem = dtgRemisiones.CurrentRow.Cells[1].Value.ToString();
             txtDiasCredito.Text = dtgRemisiones.CurrentRow.Cells[2].Value.ToString();
             txtCantidad.Text = dtgRemisiones.CurrentRow.Cells[3].Value.ToString().Replace("$", "");
-            dtpFechaRemision.Value = DateTime.Parse(dtgRemisiones.CurrentRow.Cells[4].Value.ToString());
+            dtpFecha.Value = DateTime.Parse(dtgRemisiones.CurrentRow.Cells[4].Value.ToString());
+            dtpFechaRemision.Value = DateTime.Parse(dtgRemisiones.CurrentRow.Cells[5].Value.ToString());
+            cboTipoFactura.SelectedItem = dtgRemisiones.CurrentRow.Cells[6].Value.ToString();
         }
         #endregion
 
@@ -350,6 +384,11 @@ namespace CobranzaSP.Formularios
 
             //Mostramos la forma 
             fh.Show();
+        }
+
+        private void btnGenerarRemision_Click(object sender, EventArgs e)
+        {
+            AbrirForm(new FormatoRemision());
         }
     }
 }

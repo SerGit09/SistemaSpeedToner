@@ -15,7 +15,7 @@ namespace CobranzaSP.Formularios
         FuncionesFormularios funcion = new FuncionesFormularios();
         AccionesLógica NuevaAccion = new AccionesLógica();
         LogicaModulosCliente lgModuloCliente = new LogicaModulosCliente();
-        Modulo_Cliente NuevoModulo = new Modulo_Cliente();
+        RegistroModulo NuevoModulo = new RegistroModulo();
 
         Servicio DatosServicio = new Servicio();
 
@@ -26,7 +26,7 @@ namespace CobranzaSP.Formularios
         string NumeroReporte = "";
         string Modelo = "";
         int Contador = 0;
-        bool CambioModulo = false;
+        bool EsCambioModulo = false;
         bool BuscandoFolio = false;
         bool Validado;
 
@@ -67,41 +67,10 @@ namespace CobranzaSP.Formularios
             //Posicionar forma en el centro
             this.StartPosition = FormStartPosition.CenterScreen;
             ClaveAnterior = "";
+            cboClaves.Enabled = false;
         }
 
-        //Constructor al querer modificar modulo de un cliente
-        public ModuloNuevo(Servicios_Ricoh servicioRicoh, string Modelo, Modulo_Cliente NuevoModulo, string Serie, string Folio, int Contador, bool EstaModificando, bool RetirarModulo, bool BuscandoFolio)
-        {
-            InitializeComponent();
-            //Asignamos la instancia que ya tenemos de los servicios ricoh, esto para poder manipular funciones en tiempo real
-            this.servicioRicoh = servicioRicoh;
-
-            //Agregamos los parametros a nuestras variables que no seran de utilidad
-            this.Serie = Serie;
-            this.EstaModificando = EstaModificando;
-            this.Modelo = DeterminarModeloModulo(Modelo);
-            this.Contador = Contador;
-            this.NumeroReporte = Folio;
-            this.NuevoModulo = NuevoModulo;
-            InicioAplicacion();
-            this.StartPosition = FormStartPosition.CenterScreen;
-            LlenarDatosModulo();
-
-            //Habrá un cambio de modulo
-            CambioModulo = RetirarModulo;
-            ModuloSeleccionado = true;
-            VerificarRetiroModulo(RetirarModulo);
-            txtClaveRetirada.Enabled = false;
-
-            //Deshabilitamos cambiar de modelo y modulo
-            //cboModelo.Enabled = false;
-            cboModulos.Enabled = false;
-            this.BuscandoFolio = BuscandoFolio;
-            //chkCambioClave.Visible = true;
-            //cboModelo.SelectedItem= this.Modelo;
-        }
-
-        public ModuloNuevo(Servicios_Ricoh servicioRicoh, Modulo_Cliente NuevoModulo, Servicio DatosServicio, bool EstaModificando, bool RetirarModulo, bool BuscandoFolio)
+        public ModuloNuevo(Servicios_Ricoh servicioRicoh, RegistroModulo NuevoModulo, Servicio DatosServicio, bool EstaModificando, bool RetirarModulo, bool BuscandoFolio)
         {
             InitializeComponent();
             //asignamos la instancia que ya tenemos de los servicios ricoh, esto para poder manipular funciones en tiempo real
@@ -118,35 +87,12 @@ namespace CobranzaSP.Formularios
             LlenarDatosModulo();
 
             //Habrá un cambio de modulo
-            CambioModulo = RetirarModulo;
+            EsCambioModulo = RetirarModulo;
             ModuloSeleccionado = true;
             VerificarRetiroModulo(RetirarModulo);
             txtClaveRetirada.Enabled = false;
             cboModulos.Enabled = false;
             this.BuscandoFolio = BuscandoFolio;
-        }
-
-        //Constructor para cuando se quiera instalar y retirar algun modulo sin tener que seleccionar previamente uno
-        public ModuloNuevo(Servicios_Ricoh servicioRicoh, string Modelo, string Serie, string Folio, int Contador, bool EstaModificando, bool RetirarModulo)
-        {
-            InitializeComponent();
-            //Instancia de servico ricoh, usar metodos en tiempo real
-            this.servicioRicoh = servicioRicoh;
-
-            this.Modelo = DeterminarModeloModulo(Modelo);
-            this.Serie = Serie;
-            this.EstaModificando = EstaModificando;
-            this.NumeroReporte = Folio;
-            this.Contador = Contador;
-            InicioAplicacion();
-            this.StartPosition = FormStartPosition.CenterScreen;
-            CambioModulo = RetirarModulo;
-            VerificarRetiroModulo(RetirarModulo);
-            txtClaveRetirada.Enabled = !EstaModificando;
-            ModuloSeleccionado = EstaModificando;
-
-            //Habilitamos para poder seleccionar el tipo de modulo
-            cboModulos.Enabled = true;
         }
 
         public void VerificarRetiroModulo(bool RetiroDeModulo)
@@ -157,10 +103,9 @@ namespace CobranzaSP.Formularios
                 if (ModuloSeleccionado)
                 {
                     //En base al modulo que hayamos seleccionado, obtendremos las claves disponibles en bodega
-                    NuevoModulo.IdModelo = NuevaAccion.BuscarId(DatosServicio.Modelo, "spObtenerIdModeloModulo");
-                    int IdModulo = lgModuloCliente.BuscarIdModulo(cboModulos.SelectedItem.ToString(), NuevoModulo.IdModelo);
+                    
                     //int IdModulo = NuevaAccion.BuscarId(cboModulos.SelectedItem.ToString(), "ObtenerIdModuloCliente");
-                    funcion.LlenarComboBox(cboClaves, "SeleccionarModuloBodega", IdModulo);
+                    LlenarClavesModulos();
                 }
 
                 //Se esta retirando modulos no modificando por lo tanto se agergaran 2 nuevos registros(retiro de modulo e instalacion de modulo)
@@ -183,10 +128,9 @@ namespace CobranzaSP.Formularios
         //Utilizado cuando se va a modificar un modulo en la observacion o de la clave
         public void LlenarDatosModulo()
         {
-            Id = NuevoModulo.Id;
+            Id = NuevoModulo.IdRegistroModulo;
             //cboModelo.SelectedItem = NuevoModulo.Modelo;
             cboModulos.SelectedItem = NuevoModulo.Modulo;
-            txtClave.Text = NuevoModulo.Clave;
             //txtPaginas.Text = NuevoModulo.Paginas.ToString();
             ClaveAnterior = NuevoModulo.Clave;
             rtxtObsrevacion.Text = NuevoModulo.Observacion;
@@ -199,6 +143,14 @@ namespace CobranzaSP.Formularios
             //Llenar los modulos correspondientes dependiendo el modelo del equipo
             int IdModelo = NuevaAccion.BuscarId(DatosServicio.Modelo, "spObtenerIdModeloModulo");
             funcion.LlenarComboBox(cboModulos, "spSeleccionarModulos", IdModelo);
+            
+        }
+
+        public void LlenarClavesModulos()
+        {
+            NuevoModulo.IdModelo = NuevaAccion.BuscarId(DatosServicio.Modelo, "spObtenerIdModeloModulo");
+            int IdModulo = lgModuloCliente.BuscarIdModulo(cboModulos.SelectedItem.ToString(), NuevoModulo.IdModelo);
+            funcion.LlenarComboBox(cboClaves, "SeleccionarModuloBodega", IdModulo);
         }
         #endregion
 
@@ -215,6 +167,11 @@ namespace CobranzaSP.Formularios
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         #endregion
 
         #region Validaciones
@@ -224,15 +181,15 @@ namespace CobranzaSP.Formularios
             Validado = true;
             erModulo.Clear();
             ValidarCampo(cboModulos, "Seleccione un modulo");
-
-            if (CambioModulo)
-            {
-                ValidarCampo(cboClaves, "Seleccione una clave del inventario");
-            }
-            else
-            {
-                ValidarCampo(txtClave, "Escriba una clave para el modulo");
-            }
+            ValidarCampo(cboClaves, "Seleccione una clave del inventario");
+            //if (EsCambioModulo)
+            //{
+            //    ValidarCampo(cboClaves, "Seleccione una clave del inventario");
+            //}
+            //else
+            //{
+            //    ValidarCampo(txtClave, "Escriba una clave para el modulo");
+            //}
 
 
             return Validado;
@@ -260,10 +217,6 @@ namespace CobranzaSP.Formularios
         }
         #endregion
         #region Botones
-        private void btnCerrar_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
 
         #region AgregarModificar
         private void btnAgregarModulo_Click(object sender, EventArgs e)
@@ -274,26 +227,21 @@ namespace CobranzaSP.Formularios
             try
             {
                 string Resultado;
-                Modulo_Cliente NuevoModulo = new Modulo_Cliente()
+                RegistroModulo NuevoModulo = new RegistroModulo()
                 {
-                    Id = Id,
-                    //IdModelo = NuevaAccion.BuscarId(this.Modelo, "spObtenerIdModeloModulo"),
-                    //Reporte = NumeroReporte,
-                    //Serie = Serie,
-                    //Paginas = Contador,
+                    IdRegistroModulo = Id,
                     IdModelo = NuevaAccion.BuscarId(this.DatosServicio.Modelo, "ObtenerIdModeloModulo"),
                     Reporte = this.DatosServicio.NumeroFolio,
                     Serie = this.DatosServicio.Serie,
                     Paginas = this.DatosServicio.Contador,
-                    Clave = (CambioModulo) ? cboClaves.SelectedItem.ToString() : txtClave.Text,
+                    Clave = cboClaves.SelectedItem.ToString(),
                     ClaveAnterior = ClaveAnterior,
                     Observacion = rtxtObsrevacion.Text
                 };
-                ColocarClaveModulo(NuevoModulo);
 
-                if (CambioModulo)
+                if (EsCambioModulo)
                 {
-                    ColocarClaveAnterior(NuevoModulo);
+                    GuardarClaveAnterior(NuevoModulo);
                 }
 
                 NuevoModulo.IdModulo = lgModuloCliente.BuscarIdModulo(cboModulos.SelectedItem.ToString(), NuevoModulo.IdModelo);
@@ -311,7 +259,7 @@ namespace CobranzaSP.Formularios
                     {
                         //Al añadir una observacion se agregara un nuevo registro al historial
                         NuevoModulo.Estado = "ACTUALIZADO";
-                        NuevoModulo.Id = 0;
+                        NuevoModulo.IdRegistroModulo = 0;
                         lgModuloCliente.RegistrarModulo(NuevoModulo, "AgregarEstadoModuloEquipo");
 
                         //Eliminamos la clave para que al guardar el reporte no se actualice nuevamente la clave a la cual se agrego una observacion
@@ -333,43 +281,38 @@ namespace CobranzaSP.Formularios
                 }
                 else//Agregamos al catalogo
                 {
-                    if (CambioModulo)
+                    //Verificamos si hay cambio de modulo
+                    if (EsCambioModulo)
                     {
                         //Retiramos el modulo
                         CambiarModulo(NuevoModulo);
                     }
-                    ////Comprobar si no hubo retiro de modulo
-                    //if (ComprobarCambioModulo(NuevoModulo))
-                    //{
-                    //    //Agregamos el modulo que se esta retirando
-                    //    ModificarHistorialModulos(NuevoModulo);
-                    //    NuevoModulo.Id = 0;
-                    //}
                     else
                     {
-                        //Verificar que no tenga el modulo ya instalado
+                        //Validar que ya tenga dicho modulo instalado
                         bool ModuloAsignado = lgModuloCliente.VerificarModuloAsignado(NuevoModulo.Serie, NuevoModulo.IdModulo);
                         if (ModuloAsignado)
                         {
                             MessageBox.Show("¡¡ESTE EQUIPO YA CUENTA CON UN MODULO ASIGNADO!!", "MODULO ASIGNADO", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-
-                        //Validar que la clave no se encuentre en otro equipo
-                        bool ClaveAsignada = lgModuloCliente.VerificarClaveDuplicada(NuevoModulo.Clave);
-                        if (ClaveAsignada)
-                        {
-                            MessageBox.Show("CLAVE ASIGNADA EN EL EQUIPO " + lgModuloCliente.ObtenerSerieClaveRepetida(NuevoModulo.Clave), "!CLAVE YA EXISTE EN OTRO EQUIPO!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
                     }
+
+                    //Validar que la clave del modulo no se encuentre en otro equipo
+                    bool ClaveAsignada = lgModuloCliente.VerificarClaveDuplicada(NuevoModulo.Clave);
+                    if (ClaveAsignada)
+                    {
+                        MessageBox.Show("CLAVE ASIGNADA EN EL EQUIPO " + lgModuloCliente.ObtenerSerieClaveRepetida(NuevoModulo.Clave), "!CLAVE YA EXISTE EN OTRO EQUIPO!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
 
                     NuevoModulo.Estado = "INSTALADO";
                     //Agregamos la clave a la lista
                     LogicaModulosCliente.ClavesObservaciones.Add(NuevoModulo.Clave);
                     Resultado = lgModuloCliente.RegistrarModulo(NuevoModulo, "AgregarEstadoModuloEquipo");
                     MessageBox.Show(Resultado, "REGISTRO MODULO EN EQUIPO DE CLIENTE", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    if (CambioModulo)
+                    if (EsCambioModulo)
                     {
                         servicioRicoh.MostrarModulosCliente(DatosServicio.Serie, false);
                         //Cambiaremos el modulo al nuevo que se instalo
@@ -385,7 +328,6 @@ namespace CobranzaSP.Formularios
                 //Actualizamos en el formulario de servicios ricoh
 
                 servicioRicoh.ReiniciarCapturaModulo();
-                //Reiniciar();
             }
             catch (Exception ex)
             {
@@ -395,31 +337,9 @@ namespace CobranzaSP.Formularios
             this.Close();
         }
 
-        //Metodo que nos permitira saber cuando se retire o actualice un modulo, o en dado cado de que se instale uno
-        public void ColocarClaveModulo(Modulo_Cliente NuevoModulo)
-        {
-            //if (ModuloSeleccionado)
-            //{
-            //    if (EstaModificando)
-            //    {
-            //        NuevoModulo.Clave = txtClave.Text;
-            //        return;
-            //    }
-            //    NuevoModulo.Clave = cboClaves.SelectedItem.ToString();
-            //}
-            //else
-            //{
-            //    NuevoModulo.Clave = txtClave.Text;
-            //}
-        }
 
-        public void ColocarClaveAnterior(Modulo_Cliente NuevoModulo)
+        public void GuardarClaveAnterior(RegistroModulo NuevoModulo)
         {
-            //if (!ModuloSeleccionado)
-            //{
-            //    NuevoModulo.ClaveAnterior = txtClaveRetirada.Text;
-            //    ClaveAnterior = txtClaveRetirada.Text;
-            //}
             NuevoModulo.ClaveAnterior = txtClaveRetirada.Text;
             ClaveAnterior = txtClaveRetirada.Text;
         }
@@ -431,48 +351,29 @@ namespace CobranzaSP.Formularios
         #region RetiroDeModulo
         public void MostrarControlesCambioClave(bool mostrar)
         {
-            cboClaves.Visible = ModuloSeleccionado;
-            txtClave.Visible = !ModuloSeleccionado;
+            //txtClave.Visible = !ModuloSeleccionado;
             txtClaveRetirada.Visible = mostrar;
             lblAnteriorClave.Visible = mostrar;
-            CambioModulo = mostrar;
+            EsCambioModulo = mostrar;
             txtClaveRetirada.Text = NuevoModulo.Clave;
         }
 
-
-        public bool ComprobarCambioModulo(Modulo_Cliente NuevoModulo)
-        {
-            //Posiblemente algunas cosas esten de más
-            if (ClaveAnterior != NuevoModulo.Clave && CambioModulo)
-            {
-                MessageBox.Show("Se instalo " + NuevoModulo.Clave + " y se retiro " + ClaveAnterior);
-                NuevoModulo.ClaveAnterior = ClaveAnterior;
-                EliminarClaveDeLista(ClaveAnterior);
-                CambioModulo = true;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public void CambiarModulo(Modulo_Cliente NuevoModulo)
+        public void CambiarModulo(RegistroModulo NuevoModulo)
         {
             MessageBox.Show("Se instalo " + NuevoModulo.Clave + " y se retiro " + ClaveAnterior);
             NuevoModulo.ClaveAnterior = ClaveAnterior;
             EliminarClaveDeLista(ClaveAnterior);
-            CambioModulo = true;
+            EsCambioModulo = true;
 
             //Agregamos el modulo que se esta retirando al historial
             lgModuloCliente.RetirarModulo(NuevoModulo, ModuloSeleccionado);
             NuevoModulo.Estado = "INSTALADO";
-            NuevoModulo.Id = 0;
+            NuevoModulo.IdRegistroModulo = 0;
         }
 
         public void EliminarClaveDeLista(string Clave)
         {
-            ModuloEquipo ModuloAEliminar = LogicaModulosCliente.ModulosEquipo.FirstOrDefault(Modulo => Modulo.Clave == Clave);
+            ModuloRicoh ModuloAEliminar = LogicaModulosCliente.ModulosEquipo.FirstOrDefault(Modulo => Modulo.Clave == Clave);
 
             if (ModuloAEliminar != null)
             {
@@ -486,7 +387,12 @@ namespace CobranzaSP.Formularios
         #region Eventos
         private void cboModulos_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if(cboModulos.SelectedItem.ToString() != " ")
+            {
+                cboClaves.Enabled = true;
+                btnAgregarModuloBodega.Enabled = true;
+                LlenarClavesModulos();
+            }
         }
 
         private void ModuloNuevo_Load(object sender, EventArgs e)
@@ -498,5 +404,14 @@ namespace CobranzaSP.Formularios
 
         #endregion
 
+        private void btnAgregarModuloBodega_Click(object sender, EventArgs e)
+        {
+            if (!EstaModificando)
+            {
+                NuevoModulo.Modulo = cboModulos.SelectedItem.ToString();
+            }
+            AgregarModuloRicohBodega ModuloABodega = new AgregarModuloRicohBodega(this,DatosServicio.Modelo, NuevoModulo.Modulo);
+            ModuloABodega.Show();
+        }
     }
 }

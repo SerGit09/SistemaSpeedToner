@@ -60,6 +60,7 @@ namespace CobranzaSP.Formularios
         public void InicioAplicacion()
         {
             FuncionFormulario.LlenarComboBox(cboClientes, "SeleccionarClientesServicios");
+            //FuncionFormulario.LlenarComboBox(cboClientes, "SeleccionarClientes");
             FuncionFormulario.LlenarComboBox(cboMarcas, "SeleccionarMarca");
             //FuncionFormulario.LlenarComboBox(cboModelos, "SeleccionarCartuchos", 0);
         }

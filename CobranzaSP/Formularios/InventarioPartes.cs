@@ -29,7 +29,7 @@ namespace CobranzaSP.Formularios
         LogicaInventarioPartesRicoh lgInventarioPartes = new LogicaInventarioPartesRicoh();
         LogicaRegistroInventarioRicoh lgRegistroPartes = new LogicaRegistroInventarioRicoh();
         //Objeto que nos servirá para poder tener capturado en dado caso de una modificacion
-        RegistroInventario RegistroAnterior;
+        RegistroInventarioToners RegistroAnterior;
         AccionesLógica NuevaAccion = new AccionesLógica();
 
         bool Inventario = true;
@@ -37,7 +37,7 @@ namespace CobranzaSP.Formularios
         int Id = 0;
         //Servira para el momento de eliminar un registro de parte
         int IdParte = 0;
-        int IdMovimiento = 2;
+        int IdMovimiento;
         bool BuscandoRegistro = false;
         bool Validado;
 
@@ -51,6 +51,7 @@ namespace CobranzaSP.Formularios
             Formulario.LlenarComboBox(cboModelo, "spSeleccionarModelosPartes");
             Formulario.LlenarComboBox(cboProveedores, "SeleccionarProveedores");
             ControlesDesactivados(false);
+            radEntrada.Checked = true;
         }
 
         public void RecargarModelosPartes()
@@ -114,8 +115,13 @@ namespace CobranzaSP.Formularios
 
             ValidarCampo(cboModelo);
             ValidarCampo(cboPartesRicoh);
+
+            if (radEntrada.Checked)
+            {
+
             ValidarCampo(txtFolio);
             ValidarCampo(cboProveedores);
+            }
             ValidarCampo(txtCantidad);
 
             return Validado;
@@ -184,14 +190,17 @@ namespace CobranzaSP.Formularios
             MovimientoParteRicoh nuevoMovimiento = new MovimientoParteRicoh()
             {
                 IdRegistro = Id,
-                IdTipoPersona = NuevaAccion.BuscarIdEntidad(IdMovimiento, cboProveedores.SelectedItem.ToString(), "spObtenerIdEntidad"),
                 IdParte = lgRegistroPartes.BuscarIdParte(cboPartesRicoh.SelectedItem.ToString(), cboModelo.SelectedItem.ToString()),
                 IdMovimiento = IdMovimiento,
                 Cantidad = int.Parse(txtCantidad.Text),
                 Fecha = dtpFechaRegistro.Value,
-                Folio = txtFolio.Text,
+                Folio = (radEntrada.Checked)?txtFolio.Text:"",
                 UrlImagen = ""
             };
+            ColocarIdTipoPersona(nuevoMovimiento);
+            MessageBox.Show(nuevoMovimiento.IdRegistro + "\n" + nuevoMovimiento.IdTipoPersona + "\n" + nuevoMovimiento.IdParte
+                + "\n" + nuevoMovimiento.IdMovimiento + "\n" + nuevoMovimiento.Cantidad + nuevoMovimiento.Fecha + "\n" +
+                nuevoMovimiento.Folio + nuevoMovimiento.UrlImagen);
 
             if (EstaModificando)
             {
@@ -206,7 +215,6 @@ namespace CobranzaSP.Formularios
             }
             else
             {
-
                 //Modificar inventario y agregar registro
                 Mensaje = lgRegistroPartes.AgregarRegistroInventario(nuevoMovimiento);
             }
@@ -217,18 +225,14 @@ namespace CobranzaSP.Formularios
 
         public void ColocarIdTipoPersona(MovimientoParteRicoh nuevoMovimiento)
         {
-            //if (radSalida.Checked)
-            //{
-            //    nuevoMovimiento.IdTipoPersona = NuevaAccion.BuscarId(cboTipoPersona.SelectedItem.ToString(), "ObtenerIdCliente");
-            //}
-            //else
-            //{
-            //    nuevoMovimiento.IdTipoPersona = NuevaAccion.BuscarId(cboTipoPersona.SelectedItem.ToString(), "ObtenerIdProveedor");
-            //    if (chkCliente.Checked)
-            //    {
-            //        nuevoMovimiento.IdTipoPersona = NuevaAccion.BuscarId(cboTipoPersona.SelectedItem.ToString(), "ObtenerIdCliente");
-            //    }
-            //}
+            if (radEntrada.Checked)
+            {
+                nuevoMovimiento.IdTipoPersona = NuevaAccion.BuscarIdEntidad(IdMovimiento, cboProveedores.SelectedItem.ToString(), "spObtenerIdEntidad");
+            }
+            else
+            {
+                nuevoMovimiento.IdTipoPersona = NuevaAccion.BuscarIdEntidad(IdMovimiento, "SPEED TONER", "spObtenerIdEntidad");
+            }
         }
 
         public void CapturaAInventario()
@@ -372,8 +376,8 @@ namespace CobranzaSP.Formularios
         {
             Id = int.Parse(dtgInventario.CurrentRow.Cells[0].Value.ToString());
             IdParte = int.Parse(dtgInventario.CurrentRow.Cells[1].Value.ToString());
-            cboPartesRicoh.SelectedItem = dtgInventario.CurrentRow.Cells[2].Value.ToString();
             cboModelo.SelectedItem = dtgInventario.CurrentRow.Cells[3].Value.ToString();
+            cboPartesRicoh.SelectedItem = dtgInventario.CurrentRow.Cells[2].Value.ToString();
             string TipoMovimiento = dtgInventario.CurrentRow.Cells[4].Value.ToString();
             LlenarComboBoxEntidad(TipoMovimiento);
             txtCantidad.Text = dtgInventario.CurrentRow.Cells[5].Value.ToString();
@@ -501,14 +505,35 @@ namespace CobranzaSP.Formularios
 
         private void btnGuardarInventario_Click(object sender, EventArgs e)
         {
-            AbrirForm(new GuardarArchivoInventarioPartes());
+            //Se envia un 2 por parametro para saber que es el inventario de partes
+            AbrirForm(new GuardarArchivoInventarioPartes(2));
 
             //MessageBox.Show(NuevoInventarioPartes.IdInventarioPartes + "" + NuevoInventarioPartes.Fecha + "\n" + NuevoInventarioPartes.UrlArchivo);
         }
 
         private void btnAbrirInventariosPartes_Click(object sender, EventArgs e)
         {
-            AbrirForm(new InventariosPartesGuardados());
+            AbrirForm(new InventariosPartesGuardados(2));
+        }
+
+        private void radEntrada_CheckedChanged(object sender, EventArgs e)
+        {
+            IdMovimiento = 2;
+            MostrarCamposEntradas(true);
+        }
+
+        private void radSalida_CheckedChanged(object sender, EventArgs e)
+        {
+            IdMovimiento = 1;
+            MostrarCamposEntradas(false);
+        }
+
+        public void MostrarCamposEntradas(bool Mostrar)
+        {
+            lblTipoPersona.Visible = Mostrar;
+            cboProveedores.Visible = Mostrar;
+            lblFolio.Visible = Mostrar;
+            txtFolio.Visible = Mostrar;
         }
     }
 }

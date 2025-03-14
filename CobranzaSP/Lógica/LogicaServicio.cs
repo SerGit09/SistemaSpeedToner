@@ -23,8 +23,9 @@ namespace CobranzaSP.Lógica
             comando.CommandType = CommandType.StoredProcedure;
 
             //Preguntamos que accion realizaremos en la base de datos para posteriormente mostrale al usuario la accion que realizo
-            AccionRealizada = (nuevoServicio.EstaModificando) ? "modifico" : "agrego";
+            AccionRealizada = (nuevoServicio.IdServicio > 0) ? "modifico" : "agrego";
 
+            comando.Parameters.AddWithValue("@IdServicio", nuevoServicio.IdServicio);
             comando.Parameters.AddWithValue("@NumeroFolio", nuevoServicio.NumeroFolio);
             comando.Parameters.AddWithValue("@IdCliente", nuevoServicio.IdCliente);
             comando.Parameters.AddWithValue("IdMarca", nuevoServicio.IdMarca);
@@ -38,7 +39,6 @@ namespace CobranzaSP.Lógica
             comando.Parameters.AddWithValue("@ServicioRealizado", nuevoServicio.ServicioRealizado);
             comando.Parameters.AddWithValue("@ReporteFalla", nuevoServicio.ReporteFallo);
             comando.Parameters.AddWithValue("@IdTipoReporte", nuevoServicio.IdTipoServicio);
-            comando.Parameters.AddWithValue("@EstaModificando", nuevoServicio.EstaModificando);
             comando.Parameters.AddWithValue("@IdSerie", nuevoServicio.IdSerie);
 
             respuesta = comando.ExecuteNonQuery();
@@ -47,19 +47,6 @@ namespace CobranzaSP.Lógica
             comando.Parameters.Clear();
             conexion.CerrarConexion();
             return Mensaje;
-        }
-
-        //Unicamente se creo este metodo eliminar en servicio debido a que su Id es de tipo varchar
-        public void EliminarRegistro(string Id, string sp)
-        {
-            comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = sp;
-            comando.CommandType = CommandType.StoredProcedure;
-            comando.Parameters.AddWithValue("@Id", Id);
-            comando.ExecuteNonQuery();
-            comando.Parameters.Clear();
-
-            conexion.CerrarConexion();
         }
 
         public void AñadirModelo(string Modelo, int IdMarca)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CobranzaSP.Modelos
 {
-    internal class DatosPdfFactura:Cobranza
+    internal class DatosPdfFactura:Factura
     {
         public string NombreCliente { get; set; }
 

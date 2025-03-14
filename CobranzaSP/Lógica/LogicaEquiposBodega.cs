@@ -104,16 +104,19 @@ namespace CobranzaSP.Lógica
             string NombreReporte = ColocarNombreReporte();
             Paragraph titulo = new Paragraph(NombreReporte, pe.FuenteTitulo) { Alignment = Element.ALIGN_CENTER };
             document.Add(titulo);
+
+            Paragraph FechaRealizacion = new Paragraph("FECHA: " + DateTime.Now.ToString("dd/MM/yyyy"), pe.FuenteTitulo) { Alignment = Element.ALIGN_CENTER };
+            document.Add(FechaRealizacion);
             document.Add(new Chunk("\n"));
 
             while (reporte.Read())
             {
-                ReporteEquipoBodega equipo = new ReporteEquipoBodega()
+                EquipoBodega equipo = new EquipoBodega()
                 {
                     Marca = reporte[0].ToString(),
                     Modelo = reporte[1].ToString(),
                     Serie = reporte[2].ToString(),
-                    Precio = reporte[3].ToString(),
+                    Precio = double.Parse(reporte[3].ToString()),
                     Estado = reporte[4].ToString(),
                     Notas = reporte[5].ToString(),
                     FechaDeLlegada = DateTime.Parse(reporte[6].ToString())
@@ -150,7 +153,7 @@ namespace CobranzaSP.Lógica
             return NombreReporte;
         }
 
-        public void ColocarSerieADocumento(ReporteEquipoBodega equipo, Document document)
+        public void ColocarSerieADocumento(EquipoBodega equipo, Document document)
         {
             var pe = new Pdf();
 
@@ -197,7 +200,7 @@ namespace CobranzaSP.Lógica
             tblModelos.AddCell(clFechaLlegada);
         }
 
-        public void AgregarModelosATabla(ReporteEquipoBodega equipo)
+        public void AgregarModelosATabla(EquipoBodega equipo)
         {
             var pe = new Pdf();
 

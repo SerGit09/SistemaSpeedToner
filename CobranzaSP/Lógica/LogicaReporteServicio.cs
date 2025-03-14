@@ -228,8 +228,6 @@ namespace CobranzaSP.Lógica
             //reporte.Close();
             document.Close();
             NumeroReportes = 0;
-
-
             //Abrimos el pdf 
             pe.AbrirPdf(NombreArchivo);
         }

@@ -44,8 +44,6 @@
             this.cboModulos = new System.Windows.Forms.ComboBox();
             this.lblOpcionReporte = new System.Windows.Forms.Label();
             this.lblModulo = new System.Windows.Forms.Label();
-            this.lblClaves = new System.Windows.Forms.Label();
-            this.cboClaves = new System.Windows.Forms.ComboBox();
             this.erReporte = new System.Windows.Forms.ErrorProvider(this.components);
             this.txtClaveModulo = new System.Windows.Forms.TextBox();
             this.grpCliente = new System.Windows.Forms.GroupBox();
@@ -58,11 +56,15 @@
             this.radTodosModelos = new System.Windows.Forms.RadioButton();
             this.lblModelos = new System.Windows.Forms.Label();
             this.cboModelos = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cboModelosModulos = new System.Windows.Forms.ComboBox();
+            this.grpModulos = new System.Windows.Forms.GroupBox();
             this.pSuperior.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.erReporte)).BeginInit();
             this.grpCliente.SuspendLayout();
             this.grpModelos.SuspendLayout();
+            this.grpModulos.SuspendLayout();
             this.SuspendLayout();
             // 
             // pSuperior
@@ -93,7 +95,7 @@
             // 
             this.chkRango.AutoSize = true;
             this.chkRango.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkRango.Location = new System.Drawing.Point(237, 371);
+            this.chkRango.Location = new System.Drawing.Point(238, 422);
             this.chkRango.Name = "chkRango";
             this.chkRango.Size = new System.Drawing.Size(125, 23);
             this.chkRango.TabIndex = 28;
@@ -110,7 +112,7 @@
             this.btnGenerarReporte.ForeColor = System.Drawing.Color.White;
             this.btnGenerarReporte.Image = ((System.Drawing.Image)(resources.GetObject("btnGenerarReporte.Image")));
             this.btnGenerarReporte.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGenerarReporte.Location = new System.Drawing.Point(421, 474);
+            this.btnGenerarReporte.Location = new System.Drawing.Point(428, 527);
             this.btnGenerarReporte.Name = "btnGenerarReporte";
             this.btnGenerarReporte.Size = new System.Drawing.Size(117, 51);
             this.btnGenerarReporte.TabIndex = 27;
@@ -121,7 +123,7 @@
             // 
             // dtpFechaFinal
             // 
-            this.dtpFechaFinal.Location = new System.Drawing.Point(236, 441);
+            this.dtpFechaFinal.Location = new System.Drawing.Point(237, 492);
             this.dtpFechaFinal.Name = "dtpFechaFinal";
             this.dtpFechaFinal.Size = new System.Drawing.Size(303, 27);
             this.dtpFechaFinal.TabIndex = 26;
@@ -129,7 +131,7 @@
             // 
             // dtpFechaInicial
             // 
-            this.dtpFechaInicial.Location = new System.Drawing.Point(237, 400);
+            this.dtpFechaInicial.Location = new System.Drawing.Point(238, 451);
             this.dtpFechaInicial.Name = "dtpFechaInicial";
             this.dtpFechaInicial.Size = new System.Drawing.Size(303, 27);
             this.dtpFechaInicial.TabIndex = 25;
@@ -139,7 +141,7 @@
             // 
             this.lblFechaFinal.AutoSize = true;
             this.lblFechaFinal.ForeColor = System.Drawing.Color.White;
-            this.lblFechaFinal.Location = new System.Drawing.Point(137, 445);
+            this.lblFechaFinal.Location = new System.Drawing.Point(138, 496);
             this.lblFechaFinal.Name = "lblFechaFinal";
             this.lblFechaFinal.Size = new System.Drawing.Size(93, 19);
             this.lblFechaFinal.TabIndex = 24;
@@ -150,7 +152,7 @@
             // 
             this.lblFechaInicio.AutoSize = true;
             this.lblFechaInicio.ForeColor = System.Drawing.Color.White;
-            this.lblFechaInicio.Location = new System.Drawing.Point(128, 406);
+            this.lblFechaInicio.Location = new System.Drawing.Point(129, 457);
             this.lblFechaInicio.Name = "lblFechaInicio";
             this.lblFechaInicio.Size = new System.Drawing.Size(102, 19);
             this.lblFechaInicio.TabIndex = 23;
@@ -170,7 +172,6 @@
             this.cboOpcionElegida.Sorted = true;
             this.cboOpcionElegida.TabIndex = 21;
             this.cboOpcionElegida.Visible = false;
-            this.cboOpcionElegida.SelectedIndexChanged += new System.EventHandler(this.cboOpcionElegida_SelectedIndexChanged);
             // 
             // cboOpcionReporte
             // 
@@ -202,13 +203,12 @@
             this.cboModulos.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboModulos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboModulos.FormattingEnabled = true;
-            this.cboModulos.Location = new System.Drawing.Point(209, 297);
+            this.cboModulos.Location = new System.Drawing.Point(174, 62);
             this.cboModulos.Margin = new System.Windows.Forms.Padding(4);
             this.cboModulos.Name = "cboModulos";
-            this.cboModulos.Size = new System.Drawing.Size(322, 27);
+            this.cboModulos.Size = new System.Drawing.Size(303, 27);
             this.cboModulos.Sorted = true;
             this.cboModulos.TabIndex = 59;
-            this.cboModulos.Visible = false;
             this.cboModulos.SelectedIndexChanged += new System.EventHandler(this.cboModulos_SelectedIndexChanged);
             // 
             // lblOpcionReporte
@@ -226,37 +226,11 @@
             // 
             this.lblModulo.AutoSize = true;
             this.lblModulo.ForeColor = System.Drawing.Color.White;
-            this.lblModulo.Location = new System.Drawing.Point(128, 300);
+            this.lblModulo.Location = new System.Drawing.Point(97, 65);
             this.lblModulo.Name = "lblModulo";
             this.lblModulo.Size = new System.Drawing.Size(67, 19);
             this.lblModulo.TabIndex = 62;
             this.lblModulo.Text = "Modulo:";
-            this.lblModulo.Visible = false;
-            // 
-            // lblClaves
-            // 
-            this.lblClaves.AutoSize = true;
-            this.lblClaves.ForeColor = System.Drawing.Color.White;
-            this.lblClaves.Location = new System.Drawing.Point(142, 336);
-            this.lblClaves.Name = "lblClaves";
-            this.lblClaves.Size = new System.Drawing.Size(53, 19);
-            this.lblClaves.TabIndex = 64;
-            this.lblClaves.Text = "Clave:";
-            this.lblClaves.Visible = false;
-            // 
-            // cboClaves
-            // 
-            this.cboClaves.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboClaves.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cboClaves.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboClaves.FormattingEnabled = true;
-            this.cboClaves.Location = new System.Drawing.Point(209, 333);
-            this.cboClaves.Margin = new System.Windows.Forms.Padding(4);
-            this.cboClaves.Name = "cboClaves";
-            this.cboClaves.Size = new System.Drawing.Size(322, 27);
-            this.cboClaves.Sorted = true;
-            this.cboClaves.TabIndex = 63;
-            this.cboClaves.Visible = false;
             // 
             // erReporte
             // 
@@ -400,20 +374,56 @@
             this.cboModelos.TabIndex = 54;
             this.cboModelos.Visible = false;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(44, 27);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(123, 19);
+            this.label2.TabIndex = 87;
+            this.label2.Text = "Modelo Modulo:";
+            // 
+            // cboModelosModulos
+            // 
+            this.cboModelosModulos.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboModelosModulos.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboModelosModulos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboModelosModulos.FormattingEnabled = true;
+            this.cboModelosModulos.Location = new System.Drawing.Point(174, 24);
+            this.cboModelosModulos.Margin = new System.Windows.Forms.Padding(4);
+            this.cboModelosModulos.Name = "cboModelosModulos";
+            this.cboModelosModulos.Size = new System.Drawing.Size(303, 27);
+            this.cboModelosModulos.Sorted = true;
+            this.cboModelosModulos.TabIndex = 86;
+            this.cboModelosModulos.SelectedIndexChanged += new System.EventHandler(this.cboModelosModulos_SelectedIndexChanged);
+            // 
+            // grpModulos
+            // 
+            this.grpModulos.Controls.Add(this.label2);
+            this.grpModulos.Controls.Add(this.cboModelosModulos);
+            this.grpModulos.Controls.Add(this.lblModulo);
+            this.grpModulos.Controls.Add(this.cboModulos);
+            this.grpModulos.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.grpModulos.Location = new System.Drawing.Point(28, 291);
+            this.grpModulos.Name = "grpModulos";
+            this.grpModulos.Size = new System.Drawing.Size(505, 112);
+            this.grpModulos.TabIndex = 88;
+            this.grpModulos.TabStop = false;
+            this.grpModulos.Text = "Modulos";
+            this.grpModulos.Visible = false;
+            // 
             // ReporteServiciosRicoh
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(57)))), ((int)(((byte)(80)))));
-            this.ClientSize = new System.Drawing.Size(548, 542);
+            this.ClientSize = new System.Drawing.Size(548, 590);
+            this.Controls.Add(this.grpModulos);
             this.Controls.Add(this.grpModelos);
             this.Controls.Add(this.grpCliente);
             this.Controls.Add(this.txtClaveModulo);
-            this.Controls.Add(this.lblClaves);
-            this.Controls.Add(this.cboClaves);
-            this.Controls.Add(this.lblModulo);
             this.Controls.Add(this.lblOpcionReporte);
-            this.Controls.Add(this.cboModulos);
             this.Controls.Add(this.chkRango);
             this.Controls.Add(this.btnGenerarReporte);
             this.Controls.Add(this.dtpFechaFinal);
@@ -436,6 +446,8 @@
             this.grpCliente.PerformLayout();
             this.grpModelos.ResumeLayout(false);
             this.grpModelos.PerformLayout();
+            this.grpModulos.ResumeLayout(false);
+            this.grpModulos.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -457,8 +469,6 @@
         private System.Windows.Forms.ComboBox cboModulos;
         private System.Windows.Forms.Label lblOpcionReporte;
         private System.Windows.Forms.Label lblModulo;
-        private System.Windows.Forms.Label lblClaves;
-        private System.Windows.Forms.ComboBox cboClaves;
         private System.Windows.Forms.ErrorProvider erReporte;
         private System.Windows.Forms.TextBox txtClaveModulo;
         private System.Windows.Forms.GroupBox grpCliente;
@@ -471,5 +481,8 @@
         private System.Windows.Forms.RadioButton radTodosModelos;
         private System.Windows.Forms.Label lblModelos;
         private System.Windows.Forms.ComboBox cboModelos;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cboModelosModulos;
+        private System.Windows.Forms.GroupBox grpModulos;
     }
 }

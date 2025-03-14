@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello, World!</title>
+    <link href="estilos.css" />
+    <style>
+        img {
+            width: 100%;
+        }
+
+        p {
+            padding: 0;
+            margin: 0;
+        }
+
+        .letra-negrita{
+            font-weight: bold;
+        }
+
+        table{
+            width:100%;
+            border-collapse: collapse;
+        }
+
+        .border-columna-derecha{
+            border-right: black 1px solid;
+        }
+
+        .tabla-principal {
+            border: 1px;
+        }
+
+
+            .informacion-empresa tr td {
+                text-align: center;
+            }
+
+        .descripcion-empresa td {
+            width: 100%;
+            text-align: center;
+        }
+
+        .informacion-remision {
+            margin-top: 10px;
+            border: 1px solid #000;
+        }
+
+            .informacion-remision td {
+                padding: 5px;
+            }
+
+        .informacion-productos {
+            margin-top: 15px;
+            border: 1px solid #000;
+        }
+
+        .titulos-tabla{
+            background-color: #D8D8D8;
+            text-align: center;
+        }
+
+        .titulos-tabla th{
+            padding: 5px;
+        }
+
+        .texto-centrado{
+            text-align:center;
+        }
+
+        .texto-derecha{
+            text-align:right;
+        }
+
+        .cantidad-en-letras{
+            margin-top:10px;
+            border: 1px solid #000;
+        }
+
+        .cantidad-en-letras td{
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <table class="tabla-principal">
+        <tr>
+            <td style="width:25%">
+                <img src="C:\Users\DELL PC\Pictures\LogoSpeedToner.png" />
+            </td>
+            <td style="width:50%" align="center">
+                <table class="informacion-empresa">
+                    <tr><td class="letra-negrita">I.S.C. RAVEL LOPEZ BAULLON.</td></tr>
+                    <tr><td>LEONA VICARIO # 1709.NUEVO LAREDO, TAMPS. C.P. 88060</td></tr>
+                    <tr><td>TEL.: (867) 712-0964 ID 52*11*20245</td></tr>
+                </table>
+            </td>
+            <td style="width:25%">
+                <img src="C:\Users\DELL PC\Pictures\LogoSpeedToner.png" />
+            </td>
+        </tr>
+
+        <tr class="descripcion-empresa">
+            <td colspan="3" class="letra-negrita">REMANUFACTURA PROFESIONAL DE CARTUCHOS LASER Y DE TINTA ASESORIA, VENTA Y REPARACION DE EQUIPO DE COMPUTO</td>
+        </tr>
+    </table>
+
+    <br />
+
+    <table class="informacion-remision">
+        <tr><td colspan="2">Nombre: INTERNATIONAL FORWARDER OF LAREDO, INC.</td></tr>
+        <tr>
+            <td>Direccion: 505 NAFTA BLVD</td>
+            <td style="text-align: right;">Folio : @Folio</td>
+        </tr>
+        <tr>
+            <td>Ciudad: LAREDO TX</td>
+            <td style="text-align: right;">Fecha: @Fecha</td>
+        </tr>
+        <tr><td colspan="2">R.F.C:</td></tr>
+    </table>
+
+    <table class="informacion-productos">
+        <thead class="titulos-tabla">
+            <tr>
+                <th colspan="1">CANTIDAD</th>
+                <th colspan="3">CONCEPTO</th>
+                <th colspan="1">PRECIO</th>
+                <th colspan="1">IMPORTE</th>
+            </tr>
+        </thead>
+        <tbody>
+            @TablaProductos
+
+            <tr>
+                <td></td>
+                <td colspan="3">e-mail: sistemas@speedtoner.com.mx</td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td colspan="3"></td>
+                <td class="texto-centrado">Total</td>
+                <td class="texto-derecha">@Total</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <table class="cantidad-en-letras">
+        <tr>
+            <td class="border-columna-derecha">CANTIDAD CON LETRA</td>
+            <td>@CantidadConLetra DOLARES 00/100 U.S.D</td>
+        </tr>
+    </table>
+
+</body>
+</html>

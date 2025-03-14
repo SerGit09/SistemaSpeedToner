@@ -23,9 +23,12 @@ namespace CobranzaSP.Lógica
         private CD_Conexion conexion = new CD_Conexion();
         SqlCommand comando = new SqlCommand();
         PdfPTable tblInventarioRegistrosSalidas;
+        DataTable tblDatosFusor;
+        DataTable tblDatosInventarioToners;
         LogicaRegistro lgRegistro = new LogicaRegistro();
         SqlDataReader Inventario;
         SqlDataReader Totales;
+        Document document;
 
 
         public string RegistrarInventario(InventarioDatos nuevoCartucho)
@@ -46,6 +49,7 @@ namespace CobranzaSP.Lógica
             comando.Parameters.AddWithValue("@CantidadOficina", nuevoCartucho.CantidadOficina);
             comando.Parameters.AddWithValue("@Fecha", nuevoCartucho.Fecha);
             comando.Parameters.AddWithValue("@Precio", nuevoCartucho.Precio);
+            comando.Parameters.AddWithValue("@IdTipoArticulo", nuevoCartucho.IdTipoArticulo);
             Mensaje = "TONER SE" + Accion + "CORRECTAMENTE";
             comando.ExecuteNonQuery();
 
@@ -54,20 +58,36 @@ namespace CobranzaSP.Lógica
             return Mensaje;
         }
 
-        public DataTable MostrarFiltroCartucho(string sp, string Marca)
+        public int ValidarFusorRecuperado(DatosReporteInventarioToners reporteInventario, DateTime Fecha)
         {
-            DataTable tabla = new DataTable();
-            SqlDataReader leer;
+            int IdTipoFusor = 0;
+            tblDatosFusor = new DataTable();
             comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = sp;
+            comando.CommandText = "ValidarTipoFusor";
             comando.CommandType = CommandType.StoredProcedure;
-            comando.Parameters.AddWithValue("@Marca", Marca);
-            leer = comando.ExecuteReader();
-            tabla.Load(leer);
             comando.Parameters.Clear();
+
+            comando.Parameters.AddWithValue("@IdCartucho", reporteInventario.IdCartucho);
+            comando.Parameters.AddWithValue("@Fecha", Fecha);
+            tblDatosFusor.Load(comando.ExecuteReader());
+
+            if (tblDatosFusor.Rows.Count != 0)
+            {
+                foreach (DataRow fila in tblDatosFusor.Rows)
+                {
+                    IdTipoFusor = int.Parse(fila[0].ToString());
+
+                    //Verifica si es un fusor recuperado el que se utilizo 
+                    if(IdTipoFusor == 3)
+                    {
+                        //Si lo es, no lo cuenta como saida valida
+                        reporteInventario.CantidadSalida -= 1;
+                    }
+                }
+            }
+
             conexion.CerrarConexion();
-            leer.Close();
-            return tabla;
+            return IdTipoFusor;
         }
 
         public void ImprimirInventario(DateTime FechaElegida)
@@ -81,14 +101,15 @@ namespace CobranzaSP.Lógica
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.Clear();
             comando.Parameters.AddWithValue("@Fecha", FechaActual);
-            Inventario = comando.ExecuteReader();
+            tblDatosInventarioToners = new DataTable();
+            tblDatosInventarioToners.Load(comando.ExecuteReader());
 
             string RutaArchivo = ConfiguracionPdf.RutaReportesInventarioToners;
             string NombreArchivo = RutaArchivo + "Inventario" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             //string NombreArchivo = @"C:\Users\DELL PC\Documents\" + "Inventaarioooo" + DateTime.Now.ToString("dd-MM-yyyy") + ".pdf";
             //string NombreArchivo = @"\\Desktop-de0cg86\archivos compartidos\Reportes\" + "Reporte" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
             FileStream fs = new FileStream(NombreArchivo, FileMode.Create);
-            Document document = new Document(PageSize.LETTER);
+            document = new Document(PageSize.LETTER);
             document.SetMargins(25f, 25f, 25f, 25f);
             document.SetPageSize(iTextSharp.text.PageSize.LETTER);
             PdfWriter pw = PdfWriter.GetInstance(document, fs);
@@ -133,22 +154,40 @@ namespace CobranzaSP.Lógica
             tblInventario.AddCell(clCantidadSalida);
             tblInventario.AddCell(clCantidadEntrada);
 
-            while (Inventario.Read())
+            foreach (DataRow fila in tblDatosInventarioToners.Rows)
             {
-                PdfPCell clModeloDato;
-                if (Inventario[1].ToString().StartsWith("RM1-") || Inventario[1].ToString().StartsWith("D01SE"))
+                DatosReporteInventarioToners reporteInventario = new DatosReporteInventarioToners()
                 {
-                    clModeloDato = new PdfPCell(new Phrase(Inventario[1].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 2 };
+                    Marca = fila[0].ToString(),
+                    Modelo = fila[1].ToString(),
+                    CantidadOficina = fila[2].ToString(),
+                    CantidadEntrada = int.Parse(fila[4].ToString()),
+                    CantidadSalida = int.Parse(fila[3].ToString()),
+                    IdTipoArticulo = int.Parse(fila[5].ToString()),
+                    IdCartucho = int.Parse(fila[6].ToString())
+                };
+
+                PdfPCell clModeloDato;
+                //if (Inventario[1].ToString().StartsWith("RM1-") || Inventario[1].ToString().StartsWith("D01SE"))
+                if (reporteInventario.IdTipoArticulo == 2 || reporteInventario.IdTipoArticulo == 3)
+                {
+                    clModeloDato = new PdfPCell(new Phrase(reporteInventario.Modelo, pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 2 };
                 }
                 else
                 {
-                    clModeloDato = new PdfPCell(new Phrase(Inventario[0].ToString() + " " + Inventario[1].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 2 };
+                    clModeloDato = new PdfPCell(new Phrase(reporteInventario.Marca + " " + reporteInventario.Modelo, pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 2 };
+                }
+
+                //Validar que se trate de un fusor y haya tenido salida
+                if(reporteInventario.IdTipoArticulo == 3 && reporteInventario.CantidadSalida > 0)
+                {
+                    ValidarFusorRecuperado(reporteInventario, FechaElegida);
                 }
 
                 //PdfPCell clCantidadOficinaDato = new PdfPCell(new Phrase(Inventario[1].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
-                PdfPCell clCantidadOficinaDato = new PdfPCell(new Phrase(ComprobarValoresO(Inventario[2].ToString()), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
-                PdfPCell clCantidadSalidaDato = new PdfPCell(new Phrase(Inventario[3].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
-                PdfPCell clCantidadEntradaDato = new PdfPCell(new Phrase(Inventario[4].ToString(), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
+                PdfPCell clCantidadOficinaDato = new PdfPCell(new Phrase(ComprobarValoresO(reporteInventario.CantidadOficina.ToString()), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
+                PdfPCell clCantidadSalidaDato = new PdfPCell(new Phrase(ComprobarValoresO(reporteInventario.CantidadSalida.ToString()), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
+                PdfPCell clCantidadEntradaDato = new PdfPCell(new Phrase(ComprobarValoresO(reporteInventario.CantidadEntrada.ToString()), pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 1 };
 
                 tblInventario.AddCell(clModeloDato);
                 tblInventario.AddCell(clCantidadOficinaDato);
@@ -158,30 +197,25 @@ namespace CobranzaSP.Lógica
 
             //Añadimos la tabla al documento
             document.Add(tblInventario);
-            Inventario.Close();
 
-            //Agregamos un salto de página
+            //Agregamos un salto de página para colocar los registros
             document.NewPage();
-            AgregarMovimientosRegistro(document, FechaElegida);
+            AgregarMovimientosRegistro(FechaElegida);
 
             //Abrimos el pdf
             pe.AbrirPdf(NombreArchivo);
             conexion.CerrarConexion();
         }
 
-        public void AgregarMovimientosRegistro(Document document, DateTime Fecha)
+        public void AgregarMovimientosRegistro(DateTime Fecha)
         {
             var pe = new Pdf();
 
             pe.ColocarFormatosSuperiores(document);
 
-            //tblInventarioRegistrosSalidas = new PdfPTable(4);
-            //bool BusquedaCliente = (Parametro == "CLIENTE") ? true : false;
-
-
             Paragraph Fechas = new Paragraph("DE: " + Fecha.ToString("dd/MM/yyyy") + " AL: " + Fecha.ToString("dd/MM/yyyy"), pe.FuenteFecha) { Alignment = Element.ALIGN_CENTER };
             document.Add(Fechas);
-            ReporteRegistroInventario ReporteRegistro = new ReporteRegistroInventario()
+            ReporteRegistroInventarioToners ReporteRegistro = new ReporteRegistroInventarioToners()
             {
                 ParametroBusqueda = "",
                 TipoBusqueda = "",
@@ -191,17 +225,17 @@ namespace CobranzaSP.Lógica
             document.Add(TituloReporte);
             lgRegistro.tblInventarioRegistrosSalidas = new PdfPTable(5);//QUITAR EN CASO DE QUE NO QUEDE
 
-            ReporteRegistroInventario NuevoReporte = new ReporteRegistroInventario()
+            ReporteRegistroInventarioToners NuevoReporte = new ReporteRegistroInventarioToners()
             {
                 FechaInicio = Fecha,
                 FechaFinal = Fecha,
-                ParametroBusqueda = ""
+                ParametroBusqueda = "",
+                Cliente = ""
             };
 
             //Validar existencia de movimientos de toners
             if (!lgRegistro.ObtenerDatosReporteRegistroInventario(NuevoReporte))
             {
-                Inventario.Close();
                 document.Close();
                 return;
             }
@@ -210,7 +244,7 @@ namespace CobranzaSP.Lógica
             {
                 //DateTime fechaActual = Convert.ToDateTime(Inventario[5].ToString());
                 DateTime fechaActual = Convert.ToDateTime(lgRegistro.Inventario[5].ToString());
-                ReporteRegistro nuevoReporteRegistro = new ReporteRegistro()
+                PdfRegistroInventarioToners nuevoReporteRegistro = new PdfRegistroInventarioToners()
                 {
                     FechaActual = fechaActual.ToString("dd/MM/yyyy"),
                     Marca = lgRegistro.Inventario[0].ToString(),
@@ -219,8 +253,8 @@ namespace CobranzaSP.Lógica
                     CantidadEntrada = int.Parse(lgRegistro.Inventario[3].ToString()),
                     CantidadGarantia = int.Parse(lgRegistro.Inventario[7].ToString()),
                     Cliente_Proveedor = lgRegistro.Inventario[4].ToString(),
-                    BusquedaCliente = false,
-                    ClaveFusor = lgRegistro.Inventario[6].ToString()
+                    ClaveFusor = lgRegistro.Inventario[6].ToString(),
+                    IdTipoArticulo = int.Parse(lgRegistro.Inventario[8].ToString())
                 };
                 lgRegistro.AgregarRegistrosATabla(document, nuevoReporteRegistro);
             }
@@ -251,6 +285,7 @@ namespace CobranzaSP.Lógica
             comando.Parameters.AddWithValue("@FechaInicio", Fecha);
             comando.Parameters.AddWithValue("@FechaFinal", Fecha);
             comando.Parameters.AddWithValue("@Parametro", "");
+            comando.Parameters.AddWithValue("@Cliente", "");
             Totales = comando.ExecuteReader();
 
             //Definicion de columnas y asignacion de encabezados de columnas
@@ -288,7 +323,6 @@ namespace CobranzaSP.Lógica
             document.Add(tblTotalesRegistros);
             Totales.Close();
             lgRegistro.ReiniciarDatos();
-            Inventario.Close();
             document.Close();
         }
 

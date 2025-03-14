@@ -33,6 +33,10 @@ namespace CobranzaSP.Lógica
         SortedSet<string> lstClientes = new SortedSet<string>();
 
         Document document;
+        Reporte NuevoReporte = new Reporte();
+        Pdf pe;
+        DataTable dtDatosReporteGarantia;
+        DataTable dtDatosTotalesGarantias;
 
         public string RegistrarGarantia(Garantia NuevaGarantia, string sp)
         {
@@ -67,101 +71,55 @@ namespace CobranzaSP.Lógica
         #region PDF
 
         #region ObtenerDatos
-        public bool DeterminarTipoReporte(DatosReporteGarantia NuevoReporte)
-        {
-            bool DatosEncontrados = false;
-            TipoBusqueda = NuevoReporte.TipoBusqueda;
 
-            switch (TipoBusqueda)
-            {
-                case "Modelo":
-                    DatosEncontrados = ObtenerDatosReporteModeloGarantia(NuevoReporte);
-                    break;
-                case "Cliente":
-                    DatosEncontrados = ObtenerDatosReporteClienteModeloGarantia(NuevoReporte);
-                    ; break;
-                case "Rango Fecha":
-                    DatosEncontrados = ObtenerDatosReporteModeloGarantia(NuevoReporte);
-                    ; break;
-            }
-            return DatosEncontrados;
-        }
-
-        public bool ObtenerDatosReporteModeloGarantia(DatosReporteGarantia NuevoReporte)
+        public bool ObtenerDatosReporteGarantia(Reporte NuevoReporteGarantia)
         {
             bool DatosEncontrados = true;
+            dtDatosReporteGarantia = new DataTable();
+            //Se asigna a la variable global para usarlo en varias partes del sistema
+            NuevoReporte = NuevoReporteGarantia;
+            string StoreProcedure = 
+                (NuevoReporte.Cliente != "") 
+                ? "ObtenerDatosReporteGarantiaClientes" 
+                : "ObtenerDatosReporteGarantia";
             comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = "ObtenerDatosReporteModeloGarantia";
+            comando.CommandText = StoreProcedure;
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.Clear();
-            comando.Parameters.AddWithValue("@Cartucho", NuevoReporte.ParametroBusqueda);
+            if(NuevoReporte.Cliente != "")
+            {
+                comando.Parameters.AddWithValue("@Cliente", NuevoReporte.Cliente);
+            }
+
+            comando.Parameters.AddWithValue("@ParametroBusqueda", NuevoReporte.ParametroBusqueda);
             comando.Parameters.AddWithValue("@FechaInicial", NuevoReporte.FechaInicio);
             comando.Parameters.AddWithValue("@FechaFinal", NuevoReporte.FechaFinal);
-            leer = comando.ExecuteReader();
-            if (!leer.HasRows)
+            dtDatosReporteGarantia.Load(comando.ExecuteReader());
+            if (dtDatosReporteGarantia.Rows.Count == 0)
             {
-                leer.Close();
                 return DatosEncontrados = false;
             }
-            Pdf(NuevoReporte);
+            Pdf();
             return DatosEncontrados;
         }
 
-        public void ObtenerTotalesGarantia(DatosReporteGarantia NuevoReporte)
+        public void ObtenerTotalesGarantia()
         {
             comando.Connection = conexion.AbrirConexion();
+            dtDatosTotalesGarantias = new DataTable();
             comando.CommandText = "ObtenerTotalesGarantias";
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.Clear();
-            switch (TipoBusqueda)
-            {
-                case "Modelo":
-                    comando.Parameters.AddWithValue("@Cartucho", NuevoReporte.ParametroBusqueda);
-                    comando.Parameters.AddWithValue("@Cliente", "");
-                    break;
-                case "Cliente":
-                    comando.Parameters.AddWithValue("@Cartucho", NuevoReporte.SegundoParametro);
-                    comando.Parameters.AddWithValue("@Cliente", NuevoReporte.ParametroBusqueda);
-                    ; break;
-                default:
-                    comando.Parameters.AddWithValue("@Cartucho", "");
-                    comando.Parameters.AddWithValue("@Cliente", "");
-                    ; break;
-            }
+            comando.Parameters.AddWithValue("@ParametroBusqueda", NuevoReporte.ParametroBusqueda);
+            comando.Parameters.AddWithValue("@Cliente", NuevoReporte.Cliente);
             comando.Parameters.AddWithValue("@FechaInicial", NuevoReporte.FechaInicio);
             comando.Parameters.AddWithValue("@FechaFinal", NuevoReporte.FechaFinal);
-            leer = comando.ExecuteReader();
-
-            if (!leer.HasRows)
-            {
-                bool Bandera = true;
-            }
-        }
-
-        public bool ObtenerDatosReporteClienteModeloGarantia(DatosReporteGarantia NuevoReporte)
-        {
-            bool DatosEncontrados = true;
-            comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = "ObtenerDatosReporteClienteModelosGarantia";
-            comando.CommandType = CommandType.StoredProcedure;
-            comando.Parameters.Clear();
-            comando.Parameters.AddWithValue("@Cartucho", NuevoReporte.SegundoParametro);
-            comando.Parameters.AddWithValue("@Cliente", NuevoReporte.ParametroBusqueda);
-            comando.Parameters.AddWithValue("@FechaInicial", NuevoReporte.FechaInicio);
-            comando.Parameters.AddWithValue("@FechaFinal", NuevoReporte.FechaFinal);
-            leer = comando.ExecuteReader();
-            if (!leer.HasRows)
-            {
-                leer.Close();
-                return DatosEncontrados = false;
-            }
-            Pdf(NuevoReporte);
-            return DatosEncontrados;
+            dtDatosTotalesGarantias.Load(comando.ExecuteReader());
         }
         #endregion
 
         #region CreacionPdf
-        public void Pdf(DatosReporteGarantia NuevoReporte)
+        public void Pdf()
         {
             string RutaArchivo = ConfiguracionPdf.RutaReportesGarantias;
             string NombreArchivo = RutaArchivo + "ReporteGarantia" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
@@ -176,12 +134,12 @@ namespace CobranzaSP.Lógica
             PdfWriter pw = PdfWriter.GetInstance(document, fs);
 
             //Instanciamos la clase para la paginacion
-            var pe = new Pdf();
+            pe = new Pdf();
             pe.ColocarFormatoSuperior = true;
             pw.PageEvent = pe;
 
             document.Open();
-            string NombreReporte = ColocarTituloReporte(NuevoReporte);
+            string NombreReporte = ColocarTituloReporte();
             //Colocar el titulo del reporte
             Paragraph titulo = new Paragraph(NombreReporte, pe.FuenteTitulo) { Alignment = Element.ALIGN_CENTER };
             document.Add(titulo);
@@ -191,20 +149,7 @@ namespace CobranzaSP.Lógica
 
             tblGarantias = new PdfPTable(4);
 
-            switch (TipoBusqueda)
-            {
-                case "Modelo":
-                    GenerarPdf();
-                    break;
-                case "Cliente":
-                    GenerarPdf();
-
-                    ; break;
-
-                case "Rango Fecha":
-                    GenerarPdf();
-                    ; break;
-            }
+            GenerarPdf();
 
 
             document.Add(tblGarantias);
@@ -213,7 +158,6 @@ namespace CobranzaSP.Lógica
             lstMarcas.Clear();
             lstFechas.Clear();
             lstModelos.Clear();
-            leer.Close();
 
             //Separamos con una linea los totales
             iTextSharp.text.pdf.draw.LineSeparator lineSeparator = new iTextSharp.text.pdf.draw.LineSeparator() { Offset = 2f };
@@ -223,32 +167,72 @@ namespace CobranzaSP.Lógica
             document.Add(TituloTotales);
             document.Add(new Chunk());
 
-            ObtenerTotalesGarantia(NuevoReporte);
+            ObtenerTotalesGarantia();
             CrearTablaTotales();
             document.Add(tblGarantias);
-            leer.Close();
+            //leer.Close();
             document.Close();
             //Abrimos el pdf
 
             pe.AbrirPdf(NombreArchivo);
         }
 
+        public string ColocarTituloReporte()
+        {
+            StringBuilder Titulo = new StringBuilder("GARANTIAS ");
+
+            Titulo.Append(ColocarClienteEnTitulo());
+
+            switch (NuevoReporte.TipoBusqueda)
+            {
+                case "Modelo":
+                    Titulo.Append("MODELO: ").Append(NuevoReporte.ParametroBusqueda);
+                    break;
+                case "Marca":
+                    Titulo.Append((NuevoReporte.ParametroBusqueda == "") ?"MARCAS: ":"MARCA:").Append(NuevoReporte.ParametroBusqueda);break;
+            }
+            return Titulo.ToString();
+        }
+
+        public string ColocarClienteEnTitulo()
+        {
+            StringBuilder TituloCliente = new StringBuilder("");
+
+            if (NuevoReporte.Cliente != "")
+            {
+                TituloCliente.Append("CLIENTE: ").Append(NuevoReporte.Cliente);
+
+                if (NuevoReporte.ParametroBusqueda != "")
+                {
+                    TituloCliente.Append("\n");
+                }
+            }
+            else
+            {
+                if(NuevoReporte.TipoBusqueda == "Cliente")
+                {
+                    TituloCliente.Append("CLIENTES");
+                }
+            }
+
+            return TituloCliente.ToString();
+        }
+
         public void GenerarPdf()
         {
-            Pdf pe = new Pdf();
 
-            while (leer.Read())
+            foreach (DataRow fila in dtDatosReporteGarantia.Rows)
             {
                 ReporteGarantia ReporteGarantia = new ReporteGarantia()
                 {
-                    Marca = leer[0].ToString(),
-                    Cartucho = leer[1].ToString(),
-                    Fecha = DateTime.Parse(leer[2].ToString()),
-                    Cliente = leer[3].ToString(),
-                    Cantidad = int.Parse(leer[4].ToString()),
-                    Descripcion = leer[5].ToString()
+                    Marca = fila[0].ToString(),
+                    Cartucho = fila[1].ToString(),
+                    Fecha = DateTime.Parse(fila[2].ToString()),
+                    Cliente = fila[3].ToString(),
+                    Cantidad = int.Parse(fila[4].ToString()),
+                    Descripcion = fila[5].ToString()
                 };
-                if (TipoBusqueda != "Cliente")
+                if (NuevoReporte.TipoBusqueda != "Cliente")
                 {
                     AgregarMarca(ReporteGarantia.Marca, ReporteGarantia);
                 }
@@ -261,12 +245,11 @@ namespace CobranzaSP.Lógica
 
         public void AgregarModelo(string Modelo, ReporteGarantia ReporteGarantia)
         {
-            Pdf pe = new Pdf();
 
             if (!lstModelos.Contains(Modelo))
             {
                 document.Add(tblGarantias);//Requerimos mover esta linea a otra
-                if (TipoBusqueda != "Modelo")
+                if (NuevoReporte.TipoBusqueda != "Modelo")
                 {
                     Paragraph ParrafoModelo;
                     ParrafoModelo = new Paragraph(Modelo, pe.FuenteParrafoGrande) { Alignment = Element.ALIGN_LEFT };
@@ -286,16 +269,12 @@ namespace CobranzaSP.Lógica
 
         public void CrearTablaGarantia()
         {
-            Pdf pe = new Pdf();
-            tblGarantias = (TipoBusqueda != "Cliente") ? new PdfPTable(5) : new PdfPTable(3);
+            tblGarantias = (NuevoReporte.TipoBusqueda != "Cliente") ? new PdfPTable(5) : new PdfPTable(3);
 
-            if (TipoBusqueda != "Cliente")
+            if (NuevoReporte.TipoBusqueda != "Cliente")
             {
                 PdfPCell clCliente = new PdfPCell(new Phrase("CLIENTE", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 2 };
                 tblGarantias.AddCell(clCliente);
-            }
-            else
-            {
             }
             PdfPCell clFecha = new PdfPCell(new Phrase("FECHA", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
             tblGarantias.AddCell(clFecha);
@@ -307,9 +286,8 @@ namespace CobranzaSP.Lógica
 
         public void AgregarGarantiaATabla(ReporteGarantia ReporteGarantia)
         {
-            Pdf pe = new Pdf();
 
-            if (TipoBusqueda != "Cliente")
+            if (NuevoReporte.TipoBusqueda != "Cliente")
             {
                 PdfPCell clCliente = new PdfPCell(new Phrase(ReporteGarantia.Cliente, pe.FuenteParrafo)) { BorderWidth = .5f, Colspan = 2 };
                 tblGarantias.AddCell(clCliente);
@@ -327,7 +305,6 @@ namespace CobranzaSP.Lógica
 
         public void AgregarMarca(string Marca, ReporteGarantia ReporteGarantia)
         {
-            Pdf pe = new Pdf();
 
             if (!lstMarcas.Contains(Marca))
             {
@@ -337,7 +314,7 @@ namespace CobranzaSP.Lógica
                 lstModelos.Clear();
                 tblGarantias = new PdfPTable(4);
                 Paragraph ParrafoMarca;
-                if (TipoBusqueda == "Rango Fecha")
+                if (NuevoReporte.TipoBusqueda == "Rango Fecha")
                 {
                     ParrafoMarca = new Paragraph(Marca, pe.FuenteParrafoGrande) { Alignment = Element.ALIGN_LEFT };
                     //Agregamos la fecha tanto a la lista que tenemos de fechas, como al documento colocando la cantidad que tenemos en dicho día
@@ -355,7 +332,6 @@ namespace CobranzaSP.Lógica
 
         public void AgregarCliente(string Cliente, ReporteGarantia ReporteGarantia)
         {
-            Pdf pe = new Pdf();
 
             if (!lstClientes.Contains(Cliente))
             {
@@ -366,7 +342,7 @@ namespace CobranzaSP.Lógica
                 //lstMarcas.Clear();
                 tblGarantias = new PdfPTable(4);
                 lstMarcas.Clear();
-                if (TipoBusqueda != "Cliente")
+                if (NuevoReporte.TipoBusqueda != "Cliente" || NuevoReporte.Cliente == "")
                 {
                     Paragraph ParrafoCliente;
                     ParrafoCliente = new Paragraph(Cliente, pe.FuenteParrafoGrande) { Alignment = Element.ALIGN_LEFT };
@@ -383,26 +359,10 @@ namespace CobranzaSP.Lógica
         }
 
 
-
-        public string ColocarTituloReporte(DatosReporteGarantia NuevoReporte)
-        {
-            string Titulo = "GARANTIAS DE ";
-            switch (TipoBusqueda)
-            {
-                case "Cliente":
-                    Titulo += (NuevoReporte.ParametroBusqueda == "") ? " CLIENTES" : "CLIENTE:" + NuevoReporte.ParametroBusqueda;
-                    break;
-                case "Modelo":
-                    Titulo += NuevoReporte.Marca + " " + NuevoReporte.ParametroBusqueda;
-                    break;
-                case "Rango Fecha": Titulo = "REPORTE DE GARANTIAS"; break;
-            }
-            return Titulo;
-        }
+        
 
         public void CrearTablaTotales()
         {
-            Pdf pe = new Pdf();
             tblGarantias = new PdfPTable(3);
 
             PdfPCell clMarca = new PdfPCell(new Phrase("MARCA", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
@@ -411,13 +371,13 @@ namespace CobranzaSP.Lógica
             tblGarantias.AddCell(clModelo);
             PdfPCell clTotal = new PdfPCell(new Phrase("TOTAL", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
             tblGarantias.AddCell(clTotal);
-            while (leer.Read())
+            foreach (DataRow fila in dtDatosTotalesGarantias.Rows)
             {
-                PdfPCell clDatoMarca = new PdfPCell(new Phrase(leer[0].ToString(), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+                PdfPCell clDatoMarca = new PdfPCell(new Phrase(fila[0].ToString(), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
                 tblGarantias.AddCell(clDatoMarca);
-                PdfPCell clDatoModelo = new PdfPCell(new Phrase(leer[1].ToString(), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+                PdfPCell clDatoModelo = new PdfPCell(new Phrase(fila[1].ToString(), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
                 tblGarantias.AddCell(clDatoModelo);
-                PdfPCell clDatoTotal = new PdfPCell(new Phrase(leer[2].ToString(), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
+                PdfPCell clDatoTotal = new PdfPCell(new Phrase(fila[2].ToString(), pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 1 };
                 tblGarantias.AddCell(clDatoTotal);
             }
 

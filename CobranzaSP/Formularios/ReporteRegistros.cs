@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using CobranzaSP.Modelos;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 
 namespace CobranzaSP.Formularios
 {
@@ -26,6 +27,7 @@ namespace CobranzaSP.Formularios
         LogicaRegistro AccionRegistro = new LogicaRegistro();
         FuncionesFormularios Formulario = new FuncionesFormularios();
         string TipoBusqueda;
+        bool Validado;
 
         #region Inicio
         public void InicioAplicacion()
@@ -33,8 +35,9 @@ namespace CobranzaSP.Formularios
             cboMarca.DropDownStyle = ComboBoxStyle.DropDownList;
             cboBusqueda.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTipoBusqueda.DropDownStyle = ComboBoxStyle.DropDownList;
-            LlenarComboBox(cboBusqueda, "SeleccionarClientesServicios", 0);
-            LlenarComboBox(cboClienteEspecifico, "SeleccionarClientesServicios", 0);
+            
+            LlenarComboBox(cboCliente, "SeleccionarClientesServicios", 0);
+            //LlenarComboBox(cboCliente, "SeleccionarClientes", 0);
             LlenarComboBoxTipoBusqueda();
         }
 
@@ -73,8 +76,8 @@ namespace CobranzaSP.Formularios
 
         #region Validaciones
         public bool ValidarCampos()
-        {
-            bool Validado = true;
+        {   
+            Validado = true;
             erRegistro.Clear();
             if (cboTipoBusqueda.SelectedIndex != -1)
             {
@@ -82,7 +85,7 @@ namespace CobranzaSP.Formularios
                 switch (TipoBusqueda)
                 {
                     case "Modelo": Validado = ValidarModelo(); break;
-                    case "Cliente": Validado = ValidarParametroBusqueda(); break;
+                    case "Cliente": ValidarCampo(cboCliente,"Seleccione un cliente"); break;
                 }
 
             }
@@ -91,39 +94,36 @@ namespace CobranzaSP.Formularios
 
         public bool ValidarModelo()
         {
-            bool Validado = true;
-            if (cboMarca.SelectedItem == " ")
-            {
-                erRegistro.SetError(cboMarca, "Seleccione una marca");
-                return Validado = false;
-            }
-            if (cboBusqueda.SelectedItem == " ")
-            {
-                erRegistro.SetError(cboBusqueda, "Seleccione un modelo");
-                Validado = false;
-            }
+            ValidarCampo(cboMarca, "Seleccione una marca");
+            ValidarCampo(cboBusqueda, "Seleccione un modelo");
 
             if (chkCliente.Checked)
             {
-                if (cboClienteEspecifico.SelectedItem == " ")
-                {
-                    erRegistro.SetError(cboClienteEspecifico, "Seleccione un cliente");
-                    Validado = false;
-                }
+                ValidarCampo(cboCliente, "Seleccione un cliente");
             }
 
             return Validado;
         }
 
-        public bool ValidarParametroBusqueda()
+        public void ValidarCampo(Control c, string Mensaje)
         {
-            bool Validado = true;
-            if (cboBusqueda.SelectedItem == " ")
+            if (c is TextBox || c is RichTextBox)
             {
-                erRegistro.SetError(cboBusqueda, "Seleccione una opcion");
-                Validado = false;
+                if (string.IsNullOrEmpty(c.Text))
+                {
+                    erRegistro.SetError(c, Mensaje);
+                    Validado = false;
+                }
             }
-            return Validado;
+            else if (c is ComboBox)
+            {
+                ComboBox combo = (ComboBox)c;
+                if (combo.SelectedIndex == -1 || combo.SelectedIndex == 0)
+                {
+                    erRegistro.SetError(c, Mensaje);
+                    Validado = false;
+                }
+            }
         }
         #endregion
 
@@ -141,16 +141,15 @@ namespace CobranzaSP.Formularios
                 return;
             }
 
-            ReporteRegistroInventario NuevoReporte = new ReporteRegistroInventario()
+            ReporteRegistroInventarioToners NuevoReporte = new ReporteRegistroInventarioToners()
             {
                 FechaInicio = dtpFechaInicio.Value,
                 FechaFinal = dtpFechaFinal.Value,
-                TipoBusqueda = (cboTipoBusqueda.SelectedIndex == -1) ? "" : cboTipoBusqueda.SelectedItem.ToString(),
-                //Verificamos que tengamos algun parametro, en dado caso de que no se tenga se deja en blanco
-                ParametroBusqueda = (cboBusqueda.SelectedIndex == -1) ? "" : cboBusqueda.SelectedItem.ToString(),
+                TipoBusqueda = (cboTipoBusqueda.SelectedIndex == -1) ? "" : cboTipoBusqueda.SelectedItem.ToString()
             };
             //Comprobamos que si no se trata de un reporte por modelo para añadir los campos correspondientes
-            EsReporteModelo(NuevoReporte);
+            DeterminarTipoBusqueda(NuevoReporte);
+            //EsReporteModelo(NuevoReporte);
 
             //AQUI ES DONDE SE PONDRA EL GLOBAL PARA LOS 2, ES DECIR EL PDF PARA LOS 2
             if (!AccionRegistro.GenerarPdf(NuevoReporte))
@@ -158,17 +157,35 @@ namespace CobranzaSP.Formularios
                 MessageBox.Show("¡NO SE ENCONTRARON REGISTROS!", "DATOS NO ENCONTRADOS", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            cboBusqueda.SelectedIndex = 0;
+            //cboBusqueda.SelectedIndex = 0;
+        }
+
+        public void DeterminarTipoBusqueda(ReporteRegistroInventarioToners NuevoReporte)
+        {
+            if(NuevoReporte.TipoBusqueda == "Cliente")
+            {
+                NuevoReporte.Cliente = cboCliente.SelectedItem.ToString();
+                NuevoReporte.ParametroBusqueda = "";
+            }
+            else if (NuevoReporte.TipoBusqueda == "Modelo")
+            {
+                NuevoReporte.Marca = cboMarca.SelectedItem.ToString();
+                NuevoReporte.ParametroBusqueda = cboBusqueda.SelectedItem.ToString();
+                NuevoReporte.Cliente = (chkCliente.Checked) ? cboCliente.SelectedItem.ToString() : "";
+                NuevoReporte.IdTipoArticulo = NuevaAccion.BuscarId(NuevoReporte.ParametroBusqueda, "ObtenerIdTipoArticulo");
+            }
         }
 
         //METODOS QUE SE ESTAN CREANDO PARA SER MAS ENTENDIBLE LOS REPORTES
-        public void EsReporteModelo(ReporteRegistroInventario NuevoReporte)
+        public void EsReporteModelo(ReporteRegistroInventarioToners NuevoReporte)
         {
             if (NuevoReporte.TipoBusqueda == "Modelo")
             {
                 NuevoReporte.Marca = cboMarca.SelectedItem.ToString();
-                NuevoReporte.Cliente = (chkCliente.Checked) ? cboClienteEspecifico.SelectedItem.ToString() : "";
+                NuevoReporte.Cliente = (chkCliente.Checked) ? cboCliente.SelectedItem.ToString() : "";
+                NuevoReporte.IdTipoArticulo = NuevaAccion.BuscarId(NuevoReporte.ParametroBusqueda, "ObtenerIdTipoArticulo");
             }
+
         }
 
         #region PanelSuperior
@@ -195,15 +212,16 @@ namespace CobranzaSP.Formularios
             btnGenerar.Enabled = true;
             TipoBusqueda = cboTipoBusqueda.SelectedItem.ToString();
 
+            cboCliente.Visible = false;
             cboBusqueda.Visible = false;
+            HabilitarClienteEspecifico(false);
 
             switch (cboTipoBusqueda.SelectedItem.ToString())
             {
                 case "Cliente":
-                    LlenarComboBox(cboBusqueda, "SeleccionarClientesServicios", 0);
-                    cboMarca.Visible = false;
-                    HabilitarClienteEspecifico(false);
-                    cboBusqueda.Visible = true;
+                    LlenarComboBox(cboCliente, "SeleccionarClientesServicios", 0);
+                    //LlenarComboBox(cboCliente, "SeleccionarClientes", 0);
+                    cboCliente.Visible = true;
                     break;
                 case "Modelo":
                     LlenarComboBox(cboMarca, "SeleccionarMarca", 0);
@@ -211,6 +229,7 @@ namespace CobranzaSP.Formularios
                     HabilitarClienteEspecifico(true);
                     break;
             }
+            
         }
 
         public void HabilitarClienteEspecifico(bool mostrar)
@@ -229,7 +248,7 @@ namespace CobranzaSP.Formularios
 
         private void chkCliente_CheckedChanged(object sender, EventArgs e)
         {
-            cboClienteEspecifico.Visible = (chkCliente.Checked) ? true : false;
+            cboCliente.Visible = (chkCliente.Checked) ? true : false;
         }
 
         private void cboMarca_SelectedIndexChanged_1(object sender, EventArgs e)

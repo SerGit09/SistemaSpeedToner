@@ -376,7 +376,6 @@ C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.InventarioPartes.resources
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.IRemisiones.resources
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.ModuloNuevo.resources
-C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.Modulos.resources
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.NuevoModeloParte.resources
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.ReporteEquipoRenta.resources
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.ReporteFacturas.resources
@@ -394,7 +393,6 @@ C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Fr_Restauracion_Modulos.resources
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Properties.Resources.resources
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.ReporteRegistroPartesRicoh.resources
-C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.SeleccionarPartes.resources
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.csproj.GenerateResource.cache
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.csproj.CoreCompileInputs.cache
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.exe.manifest
@@ -404,3 +402,9 @@ C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.exe
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.pdb
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.InventariosPartesGuardados.resources
 C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.GuardarArchivoInventarioPartes.resources
+C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.FormatoRemision.resources
+C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\bin\Debug\BouncyCastle.Cryptography.dll
+C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\bin\Debug\itextsharp.xmlworker.dll
+C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\bin\Debug\BouncyCastle.Cryptography.xml
+C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.ReportesServicioModulos.resources
+C:\Users\DELL PC\Documents\PROGRAMA\CobranzaSP\obj\Debug\CobranzaSP.Formularios.AgregarModuloRicohBodega.resources

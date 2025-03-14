@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using CobranzaSP.Modelos;
 
 namespace CobranzaSP.Lógica
 {
@@ -184,6 +185,38 @@ namespace CobranzaSP.Lógica
                 return FolioRepetido;
             }
         }
+
+        public void GuardarArchivoInventario(ArchivoInventarioDatos NuevoInventarioPartes)
+        {
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "GuardarArchivoInventario";
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.Clear();
+            comando.Parameters.AddWithValue("@IdArchivoInventario", NuevoInventarioPartes.IdArchivoInventario);
+            comando.Parameters.AddWithValue("@IdTipoInventario", NuevoInventarioPartes.IdTipoInventario);
+            comando.Parameters.AddWithValue("@Fecha", NuevoInventarioPartes.Fecha);
+            comando.Parameters.AddWithValue("@UrlArchivo", NuevoInventarioPartes.UrlArchivo);
+            comando.ExecuteNonQuery();
+
+            comando.Parameters.Clear();
+            conexion.CerrarConexion();
+        }
+
+        public DataTable MostrarArchivosInventario(string sp, int IdTipoInventario)
+        {
+            DataTable tabla = new DataTable();
+            SqlDataReader leer;
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = sp;
+            comando.Parameters.Clear();
+            comando.Parameters.AddWithValue("@IdTipoInventario", IdTipoInventario);
+            comando.CommandType = CommandType.StoredProcedure;
+            leer = comando.ExecuteReader();
+            tabla.Load(leer);
+            conexion.CerrarConexion();
+            return tabla;
+        }
+
 
         public bool VerificarExistenciaRegistro(string ParametroBusqueda, string sp)
         {

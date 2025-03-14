@@ -18,7 +18,7 @@ namespace CobranzaSP.Formularios
     public partial class DatosImpresoraRentada : Form
     {
         private EquiposBodega EquipoBodega;
-        public DatosImpresoraRentada(EquiposBodega EquipoBodega, ReporteEquipo nuevoEquipo, int Id)
+        public DatosImpresoraRentada(EquiposBodega EquipoBodega, Equipo nuevoEquipo, int Id)
         {
             InitializeComponent();
             InicioAplicacion();
@@ -26,7 +26,7 @@ namespace CobranzaSP.Formularios
             idEquipo = Id;
             this.IdSerie = nuevoEquipo.IdSerie;
             //Cargamos los datos que teniamos desde bodega
-            txtPrecioEquipo.Text = nuevoEquipo.Precio.ToString();
+            txtPrecioEquipo.Text = nuevoEquipo.PrecioRenta.ToString();
             cboMarcas.SelectedItem = nuevoEquipo.Marca;
             cboModelos.SelectedItem = nuevoEquipo.Modelo;
             txtSerie.Text = nuevoEquipo.Serie.ToString();
@@ -44,6 +44,7 @@ namespace CobranzaSP.Formularios
         public void InicioAplicacion()
         {
             Formulario.LlenarComboBox(cboClientes, "SeleccionarClientesServicios");
+            //Formulario.LlenarComboBox(cboClientes, "SeleccionarClientes");
             Formulario.LlenarComboBox(cboTipoRenta, "spSeleccionarTipoRenta");
             Formulario.LlenarComboBox(cboMarcas, "SeleccionarMarca");
             Formulario.LlenarComboBox(cboModelos, "SeleccionarModelos");
@@ -116,7 +117,7 @@ namespace CobranzaSP.Formularios
                     IdModelo = NuevaAccion.BuscarId(cboModelos.SelectedItem.ToString(), "ObtenerIdModelo"),
                     Serie = txtSerie.Text,
                     IdRenta = NuevaAccion.BuscarId(cboTipoRenta.SelectedItem.ToString(), "ObtenerIdTipoRenta"),
-                    Precio = double.Parse(txtPrecio.Text.Replace(",", "")),
+                    PrecioRenta = double.Parse(txtPrecio.Text.Replace(",", "")),
                     FechaPago = txtFechaPago.Text,
                     Valor = double.Parse(txtPrecioEquipo.Text),
                     IdSerie = this.IdSerie

@@ -40,6 +40,7 @@ namespace CobranzaSP.Formularios
             PropiedadesDtgCobranza();
             MostrarDatosCobranza();
             LlenarComboBox(cboClientes, "SeleccionarClientes", 0);
+            LlenarComboBox(cboTipoFactura, "SeleccionarTiposFacturas", 0);
 
             ActualizarTotalCobranza();
         }
@@ -148,9 +149,11 @@ namespace CobranzaSP.Formularios
             NumberFormatInfo numberFormant = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
             numberFormant.NumberDecimalSeparator = ".";
 
-            Cobranza nuevaCobranza = new Cobranza()
+            Factura NuevaFactura = new Factura()
             {
                 IdCliente = NuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "BuscarIdCliente"),
+                //IdCliente = NuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "ObtenerIdCliente"),
+                IdTipoFactura = NuevaAccion.BuscarId(cboTipoFactura.SelectedItem.ToString(), "BuscarIdTipoFactura"),
                 NumeroFactura = txtFactura.Text,
                 DiasCredito = nuevoCobro.MostrarDiasCredito(cboClientes.SelectedItem.ToString()),
                 Cantidad = double.Parse(txtCantidad.Text.Replace(",", ""),numberFormant),
@@ -158,7 +161,7 @@ namespace CobranzaSP.Formularios
                 FechaFactura = dtpFechaFactura.Value,
                 Observaciones = rtxtObservaciones.Text
             };
-            VerificarPromesaPago(nuevaCobranza);
+            VerificarPromesaPago(NuevaFactura);
             if (Modificando)
             {
                 if (MessageBox.Show("¿Esta seguro de modificar el registro?", "CONFIRME LA MODIFICACION", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
@@ -167,12 +170,12 @@ namespace CobranzaSP.Formularios
                     LimpiarForm();
                     return;
                 }
-                MessageBox.Show(nuevoCobro.ModificarCobro(nuevaCobranza, Id), "MODIFICACION DE COBRO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(nuevoCobro.ModificarCobro(NuevaFactura, Id), "MODIFICACION DE COBRO", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
                 //Evitamos duplicados de facturas
-                FacturaDuplicada = NuevaAccion.VerificarDuplicados(nuevaCobranza.NumeroFactura, "VerificarFacturaDuplicada");
+                FacturaDuplicada = NuevaAccion.VerificarDuplicados(NuevaFactura.NumeroFactura, "VerificarFacturaDuplicada");
                 //En esta parte deberemos de comprobar si existe la cuenta de dicho cliente, para saber si la agregamos o simplemente la dejamos ahi
                 if (FacturaDuplicada)
                 {
@@ -180,7 +183,7 @@ namespace CobranzaSP.Formularios
                 }
                 else
                 {
-                    MessageBox.Show(nuevoCobro.Registrar(nuevaCobranza), "AGREGANDO NUEVO COBRO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(nuevoCobro.Registrar(NuevaFactura), "AGREGANDO NUEVO COBRO", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             ActualizarTotalCobranza();
@@ -188,45 +191,21 @@ namespace CobranzaSP.Formularios
             LimpiarForm();
         }
 
-        public void VerificarPromesaPago(Cobranza NuevoCobro)
+        public void VerificarPromesaPago(Factura NuevaFactura)
         {
             if (chkPromesaPago.Checked)
             {
-                NuevoCobro.FechaPromesaPago = dtpFechaPromesaPago.Value;
-                NuevoCobro.PromesaPago = "SI";
+                NuevaFactura.FechaPromesaPago = dtpFechaPromesaPago.Value;
+                NuevaFactura.PromesaPago = "SI";
             }
             else
             {
-                NuevoCobro.FechaPromesaPago = null;
-                NuevoCobro.PromesaPago = "NO";
+                NuevaFactura.FechaPromesaPago = null;
+                NuevaFactura.PromesaPago = "NO";
             }
         }
         private void btnCobrado_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    if (MessageBox.Show("¿Esta seguro de que la factura fue pagada?", "CONFIRME EL PAGO", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-            //    {
-            //        MessageBox.Show("!!CUENTA NO PAGADA!!", "OPERACION CANCELADA", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //        LimpiarForm();
-            //        return;
-            //    }
-            //    CuentaPagada nuevaCuentaPagada = new CuentaPagada()
-            //    {
-            //        IdCliente = NuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "BuscarIdCliente"),
-            //        Factura = txtFactura.Text,
-            //        Cantidad = double.Parse(txtCantidad.Text.Replace(",", "")),
-            //        FechaFactura = dtpFechaFactura.Value,
-            //    };
-            //    MessageBox.Show(nuevoCobro.CuentaPagada(nuevaCuentaPagada, Id), "AGREGANDO NUEVO COBRO", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //    MostrarDatosCobranza();
-            //    ActualizarTotalCobranza();
-            //    LimpiarForm();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
 
             try
             {
@@ -234,17 +213,14 @@ namespace CobranzaSP.Formularios
                 {
                     Id = Id,
                     IdCliente = NuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "BuscarIdCliente"),
+                    IdTipoFactura = NuevaAccion.BuscarId(cboTipoFactura.SelectedItem.ToString(), "BuscarIdTipoFactura"),
                     Factura = txtFactura.Text,
                     Cantidad = double.Parse(txtCantidad.Text.Replace(",", "")),
                     FechaFactura = dtpFechaFactura.Value,
                     Saldo = Saldo
                 };
-                //MessageBox.Show(nuevoCobro.CuentaPagada(nuevaCuentaPagada, Id), "AGREGANDO NUEVO COBRO", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 frDatosFacturaPagada forma = new frDatosFacturaPagada(this, nuevaCuentaPagada);
                 forma.Show();
-                //MostrarDatosCobranza();
-                //ActualizarTotalCobranza();
-                //LimpiarForm();
             }
             catch (Exception ex)
             {
@@ -351,7 +327,7 @@ namespace CobranzaSP.Formularios
             else
                 chkPue.Checked = false;
             //chkPue.Checked = (Estado == "PUE") ? true: false
-
+            cboTipoFactura.SelectedItem = dtgCobranza.CurrentRow.Cells[13].Value.ToString();
         }
 
         private void dtgCobranza_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)

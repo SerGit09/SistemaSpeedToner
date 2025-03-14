@@ -16,7 +16,7 @@ namespace CobranzaSP.Modelos
 
         public int IdRenta { get; set; }
 
-        public double Precio { get; set; }
+        public double PrecioRenta { get; set; }
 
         public string FechaPago { get; set; }
 

@@ -28,7 +28,7 @@ namespace CobranzaSP.Formularios
         AccionesLógica nuevaAccion = new AccionesLógica();
         FuncionesFormularios Formulario = new FuncionesFormularios();
         //Objeto que nos servirá para poder tener capturado en dado caso de una modificacion
-        RegistroInventario RegistroAnterior;
+        RegistroInventarioToners RegistroAnterior;
         bool inventario = true;
         bool EstaModificando = false;
         int Id = 0;
@@ -50,12 +50,14 @@ namespace CobranzaSP.Formularios
 
             //Agregamos opciones que estan en la base de datos
             Formulario.LlenarComboBox(cboClientes, "SeleccionarClientesServicios");
-            
+            //Formulario.LlenarComboBox(cboClientes, "SeleccionarClientes");
+
             //LlenarComboBox(cboModelos, "SeleccionarCartuchos", 0);
             Formulario.LlenarComboBox(cboMarca, "SeleccionarMarca");
             Formulario.LlenarComboBox(cboMarcas, "SeleccionarMarca");
             Formulario.LlenarComboBox(cboModelos, "SeleccionarCartuchos");
             Formulario.LlenarComboBox(cboFusor, "SeleccionarFusores");
+            Formulario.LlenarComboBox(cboTiposArticulos, "SeleccionarTiposArticulosToners");
 
             //Denegar escritura en combobox
             cboModelos.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -105,6 +107,7 @@ namespace CobranzaSP.Formularios
             if (inventario)
             {
                 dtgCartuchos.Columns["Id"].Visible = false;
+                dtgCartuchos.Columns["TipoArticulo"].Visible = false;
             }
             else
             {
@@ -243,7 +246,8 @@ namespace CobranzaSP.Formularios
                 IdMarca = NuevaAccion.BuscarId(cboMarca.SelectedItem.ToString(), "ObtenerIdMarca"),
                 CantidadOficina = int.Parse(txtOficina.Text),
                 Fecha = dtpFecha.Value,
-                Precio = double.Parse(txtPrecio.Text)
+                Precio = double.Parse(txtPrecio.Text), 
+                IdTipoArticulo = NuevaAccion.BuscarId(cboTiposArticulos.SelectedItem.ToString(), "ObtenerIdArticuloToner")
             };
             if (EstaModificando)
             {
@@ -300,7 +304,7 @@ namespace CobranzaSP.Formularios
                 return;
 
             int IdMarcaEncontrada = NuevaAccion.BuscarId(cboMarcas.SelectedItem.ToString(), "ObtenerIdMarca");
-            RegistroInventario nuevoRegistro = new RegistroInventario()
+            RegistroInventarioToners nuevoRegistro = new RegistroInventarioToners()
             {
                 Id = Id,
                 Cliente = cboClientes.SelectedItem.ToString(),
@@ -326,61 +330,63 @@ namespace CobranzaSP.Formularios
                     return;
                 }
 
-                //En dado caso de que sean diferentes quiere decir que cambio el modelo o la marca, por lo que se tiene que modificar
-                //tambien ese registro anterior que se tenia
-                bool CantidadesModificadas = RegistroAnterior.IdMarca != nuevoRegistro.IdMarca || RegistroAnterior.CantidadSalida != nuevoRegistro.CantidadSalida || RegistroAnterior.CantidadEntrada != nuevoRegistro.CantidadEntrada || RegistroAnterior.IdCartucho != nuevoRegistro.IdCartucho;
-                if (CantidadesModificadas)
-                {
-                    if (nuevoRegistro.CantidadSalida > 0)//Comprobamos si se trata de una salida
-                    {
-                        if (AccionRegistro.ModificarRegistroInventario(nuevoRegistro, false))//Comprobamos si podemos realizar los cambios
-                        {
-                            //Ahora deberemos de modificar el registro anterior
-                            AccionRegistro.ModificarInventario(RegistroAnterior, "ModificarTonerInventario");
-                            MessageBox.Show("Se ha actualizado el registro", "MODIFICACION EXITOSA", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("La cantidad de salida excede la cantidad disponible en oficina", "FALLO DE MODIFICACION", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
-                    else//Si no, se trata de una entrada
-                    {
-                        //Comprobamos que podamos quitarle las entradas al cartucho anterior y si podemos hacer nuevo registro
-                        if (AccionRegistro.ComprobarCantidadInventario(RegistroAnterior) && AccionRegistro.ModificarRegistroInventario(nuevoRegistro, false))
-                        {
-                            AccionRegistro.ModificarInventario(RegistroAnterior, "ModificarTonerInventario");
-                        }
-                        else
-                        {
-                            MessageBox.Show("La cantidad de entrada excede la cantidad disponible en oficina del registro anterior", "FALLO DE MODIFICACION", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
-                }
-                else
-                {
-                    //Si no hay modificaciones acerca de cantidades, marcas o modelos, solamente se modificara el registro en sí
-                    if (AccionRegistro.ModificarRegistroInventario(nuevoRegistro, true))
-                    {
-                        MessageBox.Show("Registro modificado correctamente", "MODIFICACION EXITOSA", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Algo salió mal al realizar la modificación", "ERROR EN MODIFICACION", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
+                ////En dado caso de que sean diferentes quiere decir que cambio el modelo o la marca, por lo que se tiene que modificar
+                ////tambien ese registro anterior que se tenia
+                //bool CantidadesModificadas = RegistroAnterior.IdMarca != nuevoRegistro.IdMarca || RegistroAnterior.CantidadSalida != nuevoRegistro.CantidadSalida || RegistroAnterior.CantidadEntrada != nuevoRegistro.CantidadEntrada || RegistroAnterior.IdCartucho != nuevoRegistro.IdCartucho;
+                //if (CantidadesModificadas)
+                //{
+                //    if (nuevoRegistro.CantidadSalida > 0)//Comprobamos si se trata de una salida
+                //    {
+                //        if (AccionRegistro.ModificarRegistroInventario(nuevoRegistro, false))//Comprobamos si podemos realizar los cambios
+                //        {
+                //            //Ahora deberemos de modificar el registro anterior
+                //            AccionRegistro.ModificarInventario(RegistroAnterior, "ModificarTonerInventario");
+                //            MessageBox.Show("Se ha actualizado el registro", "MODIFICACION EXITOSA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //        }
+                //        else
+                //        {
+                //            MessageBox.Show("La cantidad de salida excede la cantidad disponible en oficina", "FALLO DE MODIFICACION", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //        }
+                //    }
+                //    else//Si no, se trata de una entrada
+                //    {
+                //        //Comprobamos que podamos quitarle las entradas al cartucho anterior y si podemos hacer nuevo registro
+                //        if (AccionRegistro.ComprobarCantidadInventario(RegistroAnterior) && AccionRegistro.ModificarRegistroInventario(nuevoRegistro, false))
+                //        {
+                //            AccionRegistro.ModificarInventario(RegistroAnterior, "ModificarTonerInventario");
+                //        }
+                //        else
+                //        {
+                //            MessageBox.Show("La cantidad de entrada excede la cantidad disponible en oficina del registro anterior", "FALLO DE MODIFICACION", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    //Si no hay modificaciones acerca de cantidades, marcas o modelos, solamente se modificara el registro en sí
+                //    if (AccionRegistro.ModificarRegistroInventario(nuevoRegistro, true))
+                //    {
+                //        MessageBox.Show("Registro modificado correctamente", "MODIFICACION EXITOSA", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //    }
+                //    else
+                //    {
+                //        MessageBox.Show("Algo salió mal al realizar la modificación", "ERROR EN MODIFICACION", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //    }
+                //}
+                string Mensaje = AccionRegistro.ModificarRegistro(nuevoRegistro);
+                MessageBox.Show(Mensaje, "MODIFICACION DE REGISTRO",MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
             else
             {
-                string Mensaje = AccionRegistro.AgregarRegistroInventario(nuevoRegistro);
+                string Mensaje = AccionRegistro.AgregarRegistroInventario(nuevoRegistro,false);
                 MessageBox.Show(Mensaje, "REGISTRO INVENTARIO", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             Mostrar("VerRegistroInventario");
             LimpiarForm(grpDatosRegistro);
         }
-        public void ColocarCantidadesMovimiento(RegistroInventario nuevoRegistro)
+        public void ColocarCantidadesMovimiento(RegistroInventarioToners nuevoRegistro)
         {
             nuevoRegistro.CantidadEntrada = 0;
             nuevoRegistro.CantidadSalida = 0;
@@ -419,7 +425,7 @@ namespace CobranzaSP.Formularios
                 return;
             }
 
-            RegistroInventario eliminarRegistro = new RegistroInventario()
+            RegistroInventarioToners eliminarRegistro = new RegistroInventarioToners()
             {
                 Id = Id,
                 IdMarca = IdMarca,
@@ -428,29 +434,29 @@ namespace CobranzaSP.Formularios
             };
             ColocarCantidadesMovimiento(eliminarRegistro);
 
-            if (eliminarRegistro.CantidadEntrada > 0)//Comprobamos que se trata de una entrada
-            {
-                //Primero verifiquemos que la cantidad a restar en el anterior registro no exceda a las que cuenta
-                if (AccionRegistro.ComprobarCantidadInventario(eliminarRegistro))
-                {
-                    AccionRegistro.ModificarInventario(eliminarRegistro, "EliminarRegistroInventario");
-                }
-                else
-                {
-                    MessageBox.Show("La cantidad que se quiere restar de entrada excede la cantidad del toner", "ERROR AL ELIMINAR", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LimpiarForm(grpDatosRegistro);
-                    return;
-                }
-            }
-            else
-            {
-                AccionRegistro.ModificarInventario(eliminarRegistro, "EliminarRegistroInventario");
-            }
+            //if (eliminarRegistro.CantidadEntrada > 0)//Comprobamos que se trata de una entrada
+            //{
+            //    //Primero verifiquemos que la cantidad a restar en el anterior registro no exceda a las que cuenta
+            //    if (AccionRegistro.ComprobarCantidadInventario(eliminarRegistro))
+            //    {
+            //        AccionRegistro.ModificarInventario(eliminarRegistro, "EliminarRegistroInventario");
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("La cantidad que se quiere restar de entrada excede la cantidad del toner", "ERROR AL ELIMINAR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //        LimpiarForm(grpDatosRegistro);
+            //        return;
+            //    }
+            //}
+            //else
+            //{
+            //    AccionRegistro.ModificarInventario(eliminarRegistro, "EliminarRegistroInventario");
+            //}
+            string Mensaje = AccionRegistro.ModificarInventario(eliminarRegistro, "EliminarRegistroInventario");
+
             //VERIFICAR ESTA PARTE, NO COLOCAR ESTA CONDICION CUANDO ELIMINEMOS UNA ENTRADA
 
-
-
-            MessageBox.Show("Registro eliminado correctamente", "ELIMINAR REGISTRO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Mensaje, "ELIMINAR REGISTRO", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Mostrar("VerRegistroInventario");
             ReiniciarControles();
         }
@@ -491,6 +497,9 @@ namespace CobranzaSP.Formularios
 
         public void LlenarCamposRegistroInventario()
         {
+            //Deshabilitar campos
+            DeshabilitarCamposNoModificables(false);
+
             int IdMarcaSeleccionada = NuevaAccion.BuscarId(dtgCartuchos.CurrentRow.Cells[1].Value.ToString(), "ObtenerIdMarca");
             Id = int.Parse(dtgCartuchos.CurrentRow.Cells[0].Value.ToString());
 
@@ -498,7 +507,7 @@ namespace CobranzaSP.Formularios
             cboModelos.SelectedItem = dtgCartuchos.CurrentRow.Cells[2].Value.ToString();
             //Aqui se requiere capturar de nuevo el modelo y la marca en dado caso de que se vaya cambiar el modelo o la marca
             //Esto para tener capturado la marca y el modelo anterior para realizar la respectiva modificacion en el inventario
-            RegistroAnterior = new RegistroInventario()
+            RegistroAnterior = new RegistroInventarioToners()
             {
                 IdMarca = IdMarcaSeleccionada,
                 IdCartucho = NuevaAccion.BuscarId(dtgCartuchos.CurrentRow.Cells[2].Value.ToString(), "ObtenerIdCartucho"),
@@ -507,7 +516,6 @@ namespace CobranzaSP.Formularios
                 CantidadGarantia = int.Parse(dtgCartuchos.CurrentRow.Cells[5].Value.ToString())
             };
             SeleccionarRadioButtonTipoMovimiento(RegistroAnterior);
-
 
             cboClientes.SelectedItem = dtgCartuchos.CurrentRow.Cells[6].Value.ToString();
             dtpFechaRegistro.Value = DateTime.Parse(dtgCartuchos.CurrentRow.Cells[7].Value.ToString());
@@ -521,7 +529,19 @@ namespace CobranzaSP.Formularios
             }
         }
 
-        public void SeleccionarRadioButtonTipoMovimiento(RegistroInventario RegistroSeleccionado)
+        public void DeshabilitarCamposNoModificables(bool CampoHabilitado)
+        {
+            //Este metodo evitara que el usuario cambie la marca, modelo, cantidad y tipo de movimiento, en dado caso de haber tenido un
+            //error con dichos campos, es mejor eliminar dicho registro y darlo de alta nuevamente
+            cboMarcas.Enabled = CampoHabilitado;
+            cboModelos.Enabled = CampoHabilitado;
+            radEntrada.Enabled = CampoHabilitado;
+            radGarantia.Enabled = CampoHabilitado;
+            radSalida.Enabled = CampoHabilitado;
+            txtCantidad.Enabled = CampoHabilitado;
+        }
+
+        public void SeleccionarRadioButtonTipoMovimiento(RegistroInventarioToners RegistroSeleccionado)
         {
             if (RegistroSeleccionado.CantidadSalida > 0)
             {
@@ -548,6 +568,7 @@ namespace CobranzaSP.Formularios
             txtOficina.Text = dtgCartuchos.CurrentRow.Cells[3].Value.ToString();
             dtpFecha.Value = DateTime.Parse(dtgCartuchos.CurrentRow.Cells[4].Value.ToString());
             txtPrecio.Text = dtgCartuchos.CurrentRow.Cells[5].Value.ToString().Replace("$", "").Replace(",", "");
+            cboTiposArticulos.SelectedItem = dtgCartuchos.CurrentRow.Cells[6].Value.ToString();
         }
 
         public void MostrarCapturaSerie(bool Mostrar)
@@ -576,20 +597,26 @@ namespace CobranzaSP.Formularios
         private void cboModelosP_SelectedIndexChanged(object sender, EventArgs e)
         {
             string Cartucho = cboModelos.SelectedItem.ToString();
-            var prefijosValidos = new HashSet<string> { "RM1-", "D01SE", "DR", "RM2-","R" };
-            //Para saber si se trata de un fusor
-            if (prefijosValidos.Any(prefijo => Cartucho.StartsWith(prefijo)))
+            int IdTipoArticulo = 0;
+            if(cboModelos.SelectedItem.ToString() == " ")
+            {
+                return;
+            }
+            IdTipoArticulo = NuevaAccion.BuscarId(Cartucho, "ObtenerIdArticuloTonerSeleccionado");
+
+            //VALIDAR QUE SOLO SE TRATEN DE DRUMS O FUSORES
+            if (IdTipoArticulo == 2 || IdTipoArticulo == 3)
             {
                 MostrarCapturaSerie(true);
-                //Si entra en la condicion quiere decir que se trata e un drum
-                if (Cartucho.StartsWith("DR"))
+                //Validar si es DRUM
+                if (IdTipoArticulo == 2)
                 {
                     Formulario.LlenarComboBox(cboFusor, "SeleccionarSeriesBrother");
                     return;
                 }
                 Formulario.LlenarComboBox(cboFusor, "SeleccionarFusores");
             }
-            else
+            else//No mostramos las series o fusores
             {
                 MostrarCapturaSerie(false);
             }
@@ -631,6 +658,7 @@ namespace CobranzaSP.Formularios
         {
             EstaModificando = false;
             ControlesDesactivados(false);
+            DeshabilitarCamposNoModificables(true);
             LimpiarForm(grpDatosRegistro);
             LimpiarForm(grpDatosInventario);
             Id = 0;

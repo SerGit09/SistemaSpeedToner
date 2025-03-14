@@ -70,6 +70,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.dtgFusores = new System.Windows.Forms.DataGridView();
             this.erFusores = new System.Windows.Forms.ErrorProvider(this.components);
+            this.dtpFechaLlegada = new System.Windows.Forms.DateTimePicker();
+            this.label3 = new System.Windows.Forms.Label();
             this.grpDatos.SuspendLayout();
             this.grpReportes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgFusores)).BeginInit();
@@ -78,6 +80,8 @@
             // 
             // grpDatos
             // 
+            this.grpDatos.Controls.Add(this.dtpFechaLlegada);
+            this.grpDatos.Controls.Add(this.label3);
             this.grpDatos.Controls.Add(this.chkFusorReconstruido);
             this.grpDatos.Controls.Add(this.cboModelos);
             this.grpDatos.Controls.Add(this.lblModelo);
@@ -104,7 +108,7 @@
             this.grpDatos.Controls.Add(this.label1);
             this.grpDatos.Location = new System.Drawing.Point(12, 0);
             this.grpDatos.Name = "grpDatos";
-            this.grpDatos.Size = new System.Drawing.Size(1318, 321);
+            this.grpDatos.Size = new System.Drawing.Size(1318, 360);
             this.grpDatos.TabIndex = 2;
             this.grpDatos.TabStop = false;
             this.grpDatos.Text = "Datos";
@@ -127,7 +131,7 @@
             this.cboModelos.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboModelos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboModelos.FormattingEnabled = true;
-            this.cboModelos.Location = new System.Drawing.Point(97, 156);
+            this.cboModelos.Location = new System.Drawing.Point(104, 192);
             this.cboModelos.Margin = new System.Windows.Forms.Padding(4);
             this.cboModelos.Name = "cboModelos";
             this.cboModelos.Size = new System.Drawing.Size(432, 27);
@@ -140,7 +144,7 @@
             this.lblModelo.AutoSize = true;
             this.lblModelo.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblModelo.ForeColor = System.Drawing.Color.White;
-            this.lblModelo.Location = new System.Drawing.Point(24, 161);
+            this.lblModelo.Location = new System.Drawing.Point(31, 197);
             this.lblModelo.Name = "lblModelo";
             this.lblModelo.Size = new System.Drawing.Size(66, 19);
             this.lblModelo.TabIndex = 50;
@@ -320,7 +324,7 @@
             this.cboDiasGarantía.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboDiasGarantía.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboDiasGarantía.FormattingEnabled = true;
-            this.cboDiasGarantía.Location = new System.Drawing.Point(369, 225);
+            this.cboDiasGarantía.Location = new System.Drawing.Point(376, 261);
             this.cboDiasGarantía.Margin = new System.Windows.Forms.Padding(4);
             this.cboDiasGarantía.Name = "cboDiasGarantía";
             this.cboDiasGarantía.Size = new System.Drawing.Size(160, 27);
@@ -332,7 +336,7 @@
             this.lblDiasGarantia.AutoSize = true;
             this.lblDiasGarantia.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDiasGarantia.ForeColor = System.Drawing.Color.White;
-            this.lblDiasGarantia.Location = new System.Drawing.Point(260, 229);
+            this.lblDiasGarantia.Location = new System.Drawing.Point(267, 265);
             this.lblDiasGarantia.Name = "lblDiasGarantia";
             this.lblDiasGarantia.Size = new System.Drawing.Size(109, 19);
             this.lblDiasGarantia.TabIndex = 37;
@@ -351,14 +355,14 @@
             // 
             // txtCosto
             // 
-            this.txtCosto.Location = new System.Drawing.Point(85, 226);
+            this.txtCosto.Location = new System.Drawing.Point(92, 262);
             this.txtCosto.Name = "txtCosto";
             this.txtCosto.Size = new System.Drawing.Size(169, 27);
             this.txtCosto.TabIndex = 35;
             // 
             // txtFactura
             // 
-            this.txtFactura.Location = new System.Drawing.Point(89, 190);
+            this.txtFactura.Location = new System.Drawing.Point(96, 226);
             this.txtFactura.Name = "txtFactura";
             this.txtFactura.Size = new System.Drawing.Size(158, 27);
             this.txtFactura.TabIndex = 32;
@@ -378,7 +382,7 @@
             this.btnCancelar.ForeColor = System.Drawing.Color.White;
             this.btnCancelar.Image = ((System.Drawing.Image)(resources.GetObject("btnCancelar.Image")));
             this.btnCancelar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancelar.Location = new System.Drawing.Point(260, 263);
+            this.btnCancelar.Location = new System.Drawing.Point(257, 303);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(117, 51);
             this.btnCancelar.TabIndex = 30;
@@ -395,7 +399,7 @@
             this.btnEliminar.ForeColor = System.Drawing.Color.White;
             this.btnEliminar.Image = ((System.Drawing.Image)(resources.GetObject("btnEliminar.Image")));
             this.btnEliminar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEliminar.Location = new System.Drawing.Point(137, 263);
+            this.btnEliminar.Location = new System.Drawing.Point(137, 303);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new System.Drawing.Size(117, 51);
             this.btnEliminar.TabIndex = 29;
@@ -412,7 +416,7 @@
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
             this.btnGuardar.Image = ((System.Drawing.Image)(resources.GetObject("btnGuardar.Image")));
             this.btnGuardar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGuardar.Location = new System.Drawing.Point(14, 263);
+            this.btnGuardar.Location = new System.Drawing.Point(11, 303);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(117, 51);
             this.btnGuardar.TabIndex = 16;
@@ -426,7 +430,7 @@
             this.lblCosto.AutoSize = true;
             this.lblCosto.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCosto.ForeColor = System.Drawing.Color.White;
-            this.lblCosto.Location = new System.Drawing.Point(24, 229);
+            this.lblCosto.Location = new System.Drawing.Point(31, 265);
             this.lblCosto.Name = "lblCosto";
             this.lblCosto.Size = new System.Drawing.Size(55, 19);
             this.lblCosto.TabIndex = 13;
@@ -438,7 +442,7 @@
             this.cboProveedores.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboProveedores.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboProveedores.FormattingEnabled = true;
-            this.cboProveedores.Location = new System.Drawing.Point(342, 190);
+            this.cboProveedores.Location = new System.Drawing.Point(349, 226);
             this.cboProveedores.Margin = new System.Windows.Forms.Padding(4);
             this.cboProveedores.Name = "cboProveedores";
             this.cboProveedores.Size = new System.Drawing.Size(187, 27);
@@ -450,7 +454,7 @@
             this.lblProveedor.AutoSize = true;
             this.lblProveedor.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblProveedor.ForeColor = System.Drawing.Color.White;
-            this.lblProveedor.Location = new System.Drawing.Point(253, 194);
+            this.lblProveedor.Location = new System.Drawing.Point(260, 230);
             this.lblProveedor.Name = "lblProveedor";
             this.lblProveedor.Size = new System.Drawing.Size(87, 19);
             this.lblProveedor.TabIndex = 6;
@@ -461,7 +465,7 @@
             this.lblFactura.AutoSize = true;
             this.lblFactura.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFactura.ForeColor = System.Drawing.Color.White;
-            this.lblFactura.Location = new System.Drawing.Point(17, 194);
+            this.lblFactura.Location = new System.Drawing.Point(24, 230);
             this.lblFactura.Name = "lblFactura";
             this.lblFactura.Size = new System.Drawing.Size(66, 19);
             this.lblFactura.TabIndex = 4;
@@ -522,7 +526,7 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dtgFusores.DefaultCellStyle = dataGridViewCellStyle2;
             this.dtgFusores.EnableHeadersVisualStyles = false;
-            this.dtgFusores.Location = new System.Drawing.Point(12, 327);
+            this.dtgFusores.Location = new System.Drawing.Point(12, 366);
             this.dtgFusores.Name = "dtgFusores";
             this.dtgFusores.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -542,13 +546,31 @@
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dtgFusores.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dtgFusores.RowTemplate.Height = 25;
-            this.dtgFusores.Size = new System.Drawing.Size(1318, 638);
+            this.dtgFusores.Size = new System.Drawing.Size(1318, 599);
             this.dtgFusores.TabIndex = 17;
             this.dtgFusores.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgFusores_CellClick);
             // 
             // erFusores
             // 
             this.erFusores.ContainerControl = this;
+            // 
+            // dtpFechaLlegada
+            // 
+            this.dtpFechaLlegada.Location = new System.Drawing.Point(134, 155);
+            this.dtpFechaLlegada.Name = "dtpFechaLlegada";
+            this.dtpFechaLlegada.Size = new System.Drawing.Size(395, 27);
+            this.dtpFechaLlegada.TabIndex = 54;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(17, 160);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(114, 19);
+            this.label3.TabIndex = 53;
+            this.label3.Text = "Fecha Llegada:";
             // 
             // Fusores
             // 
@@ -611,5 +633,7 @@
         private System.Windows.Forms.Label lblModelo;
         private System.Windows.Forms.ErrorProvider erFusores;
         private System.Windows.Forms.CheckBox chkFusorReconstruido;
+        private System.Windows.Forms.DateTimePicker dtpFechaLlegada;
+        private System.Windows.Forms.Label label3;
     }
 }

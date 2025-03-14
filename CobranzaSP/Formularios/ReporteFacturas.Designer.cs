@@ -40,6 +40,10 @@
             this.cboClientes = new System.Windows.Forms.ComboBox();
             this.radTodosLosClientes = new System.Windows.Forms.RadioButton();
             this.erReporteFactura = new System.Windows.Forms.ErrorProvider(this.components);
+            this.dtpFechaFinal = new System.Windows.Forms.DateTimePicker();
+            this.dtpFechaInicial = new System.Windows.Forms.DateTimePicker();
+            this.lblFechaFinal = new System.Windows.Forms.Label();
+            this.lblFechaInicio = new System.Windows.Forms.Label();
             this.pSuperior.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
             this.grpCliente.SuspendLayout();
@@ -103,7 +107,7 @@
             this.btnGenerarReporte.ForeColor = System.Drawing.Color.White;
             this.btnGenerarReporte.Image = ((System.Drawing.Image)(resources.GetObject("btnGenerarReporte.Image")));
             this.btnGenerarReporte.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGenerarReporte.Location = new System.Drawing.Point(351, 196);
+            this.btnGenerarReporte.Location = new System.Drawing.Point(375, 278);
             this.btnGenerarReporte.Name = "btnGenerarReporte";
             this.btnGenerarReporte.Size = new System.Drawing.Size(117, 51);
             this.btnGenerarReporte.TabIndex = 29;
@@ -168,12 +172,54 @@
             // 
             this.erReporteFactura.ContainerControl = this;
             // 
+            // dtpFechaFinal
+            // 
+            this.dtpFechaFinal.Location = new System.Drawing.Point(163, 220);
+            this.dtpFechaFinal.Name = "dtpFechaFinal";
+            this.dtpFechaFinal.Size = new System.Drawing.Size(303, 27);
+            this.dtpFechaFinal.TabIndex = 88;
+            this.dtpFechaFinal.Visible = false;
+            // 
+            // dtpFechaInicial
+            // 
+            this.dtpFechaInicial.Location = new System.Drawing.Point(164, 179);
+            this.dtpFechaInicial.Name = "dtpFechaInicial";
+            this.dtpFechaInicial.Size = new System.Drawing.Size(303, 27);
+            this.dtpFechaInicial.TabIndex = 87;
+            this.dtpFechaInicial.Visible = false;
+            // 
+            // lblFechaFinal
+            // 
+            this.lblFechaFinal.AutoSize = true;
+            this.lblFechaFinal.ForeColor = System.Drawing.Color.White;
+            this.lblFechaFinal.Location = new System.Drawing.Point(125, 226);
+            this.lblFechaFinal.Name = "lblFechaFinal";
+            this.lblFechaFinal.Size = new System.Drawing.Size(30, 19);
+            this.lblFechaFinal.TabIndex = 86;
+            this.lblFechaFinal.Text = "Al:";
+            this.lblFechaFinal.Visible = false;
+            // 
+            // lblFechaInicio
+            // 
+            this.lblFechaInicio.AutoSize = true;
+            this.lblFechaInicio.ForeColor = System.Drawing.Color.White;
+            this.lblFechaInicio.Location = new System.Drawing.Point(124, 185);
+            this.lblFechaInicio.Name = "lblFechaInicio";
+            this.lblFechaInicio.Size = new System.Drawing.Size(38, 19);
+            this.lblFechaInicio.TabIndex = 85;
+            this.lblFechaInicio.Text = "Del:";
+            this.lblFechaInicio.Visible = false;
+            // 
             // ReporteFacturas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(57)))), ((int)(((byte)(80)))));
-            this.ClientSize = new System.Drawing.Size(504, 263);
+            this.ClientSize = new System.Drawing.Size(504, 341);
+            this.Controls.Add(this.dtpFechaFinal);
+            this.Controls.Add(this.dtpFechaInicial);
+            this.Controls.Add(this.lblFechaFinal);
+            this.Controls.Add(this.lblFechaInicio);
             this.Controls.Add(this.grpCliente);
             this.Controls.Add(this.btnGenerarReporte);
             this.Controls.Add(this.cboOpcionReporte);
@@ -207,5 +253,9 @@
         private System.Windows.Forms.ComboBox cboClientes;
         private System.Windows.Forms.RadioButton radTodosLosClientes;
         private System.Windows.Forms.ErrorProvider erReporteFactura;
+        private System.Windows.Forms.DateTimePicker dtpFechaFinal;
+        private System.Windows.Forms.DateTimePicker dtpFechaInicial;
+        private System.Windows.Forms.Label lblFechaFinal;
+        private System.Windows.Forms.Label lblFechaInicio;
     }
 }

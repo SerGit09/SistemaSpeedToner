@@ -15,11 +15,12 @@ namespace CobranzaSP
 {
     public partial class GuardarArchivoInventarioPartes : Form
     {
-        public GuardarArchivoInventarioPartes()
+        public GuardarArchivoInventarioPartes(int idTipoInventario)
         {
             InitializeComponent();
+            IdTipoInventario = idTipoInventario;
         }
-
+        int IdTipoInventario;
         #region PanelSuperior
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
@@ -46,16 +47,32 @@ namespace CobranzaSP
             }
 
 
-            LogicaInventarioPartesRicoh InventarioPartes = new LogicaInventarioPartesRicoh();
-            InventarioPartesDatos NuevoInventarioPartes = new InventarioPartesDatos()
+            AccionesLógica NuevaAccion = new AccionesLógica();
+            ArchivoInventarioDatos NuevoInventarioPartes = new ArchivoInventarioDatos()
             {
-                IdInventarioPartes = 0,
-                Fecha = dtpFecha.Value,
-                UrlArchivo = InventarioPartes.CrearPDF(false, dtpFecha.Value)
+                IdArchivoInventario = 0,
+                IdTipoInventario = IdTipoInventario,
+                Fecha = dtpFecha.Value
             };
-            InventarioPartes.GuardarArchivoInventarioPartes(NuevoInventarioPartes);
-            MessageBox.Show("ARCHIVO DE INVENTARIO DE PARTES GUARDADO CORRECTAMENTE");
+            CrearPdfInventario(NuevoInventarioPartes);
+            NuevaAccion.GuardarArchivoInventario(NuevoInventarioPartes);
+            MessageBox.Show("ARCHIVO DE INVENTARIO GUARDADO CORRECTAMENTE");
             this.Close();
+        }
+
+        public void CrearPdfInventario(ArchivoInventarioDatos ArchivoInventario)
+        {
+            switch (IdTipoInventario)
+            {
+                case 2:
+                    LogicaInventarioPartesRicoh InventarioPartes = new LogicaInventarioPartesRicoh();
+                    ArchivoInventario.UrlArchivo = InventarioPartes.CrearPDF(false, dtpFecha.Value);
+                    break;
+                case 3:
+                    LogicaInventarioModulos InventarioModulos = new LogicaInventarioModulos();
+                    ArchivoInventario.UrlArchivo = InventarioModulos.CrearPDF(dtpFecha.Value);
+                    ; break;
+            }
         }
         #endregion
 

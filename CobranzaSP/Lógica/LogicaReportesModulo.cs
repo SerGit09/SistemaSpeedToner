@@ -25,7 +25,6 @@ namespace CobranzaSP.Lógica
         private AccionesLógica NuevaAccion = new AccionesLógica();
         SqlCommand comando = new SqlCommand();
         SqlDataReader reporte;
-        PdfPTable tblRegistroPartesUsadas;
         PdfPTable tblModulos;
 
         LogicaReporteServicio lgReporteServicio = new LogicaReporteServicio();
@@ -36,6 +35,8 @@ namespace CobranzaSP.Lógica
         string TipoBusqueda = "";
         string ParametroBusqueda = "";
         bool DatosEncontrados = true;
+
+        Pdf pe;
 
         #region DatosReportes
 
@@ -51,6 +52,8 @@ namespace CobranzaSP.Lógica
                     DatosEncontrados = ObtenerDatosHistorialModulos(NuevoReporte); break;
                 case "UBICACION MODULO": 
                     DatosEncontrados = ObtenerDatosUbicacionModulos(NuevoReporte); break;
+                case "MODULOS":
+                    DatosEncontrados = ObtenerDatosModulos(NuevoReporte); break;
                 case "MODULOS POR SERIE DE EQUIPO":
                     DatosEncontrados = ObtenerDatosModulosSeries(NuevoReporte); break;
                     //default: DatosEncontrados = lgReporteServicio.DeterminarGenerarReporteConRangoFechaRicoh(NuevoReporte); break;
@@ -137,6 +140,24 @@ namespace CobranzaSP.Lógica
 
             return DatosEncontrados;
         }
+
+        public bool ObtenerDatosModulos(Reporte NuevoReporte)
+        {
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "ObtenerDatosModulos";
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.Clear();
+            comando.Parameters.AddWithValue("@ParametroBusqueda", NuevoReporte.ParametroBusqueda);
+            comando.Parameters.AddWithValue("@ModeloModulo", NuevoReporte.TipoBusquedaAdicional);
+            reporte = comando.ExecuteReader();
+            if (!reporte.HasRows)
+            {
+                reporte.Close();
+                return DatosEncontrados = false;
+            }
+
+            return DatosEncontrados;
+        }
         #endregion
 
         public bool Pdf(Reporte NuevoReporte)
@@ -158,10 +179,10 @@ namespace CobranzaSP.Lógica
             PdfWriter pw = PdfWriter.GetInstance(document, fs);
 
             //Instanciamos la clase para la paginacion
-            var pe = new Pdf();
-            pe.ColocarFormatoSuperior = true;
+            pe = new Pdf();
+            pe.ColocarFormatoSuperior = false;
+            pe.ColocarLogo = true;
             pw.PageEvent = pe;
-            tblRegistroPartesUsadas = new PdfPTable(5);
             tblModulos = new PdfPTable(8);
 
 
@@ -169,13 +190,13 @@ namespace CobranzaSP.Lógica
 
             NombreReporte = ColocarTituloReporte();
 
-            Paragraph TituloReporte = new Paragraph(NombreReporte, pe.FuenteTitulo) { Alignment = Element.ALIGN_CENTER };
+            Paragraph TituloReporte = new Paragraph(NombreReporte, pe.FuenteTitulo12) { Alignment = Element.ALIGN_CENTER };
             document.Add(TituloReporte);
 
 
             if (NuevoReporte.RangoHabilitado)
             {
-                Paragraph Fechas = new Paragraph("DEL " + NuevoReporte.FechaInicio.ToString("dd/MM/yyyy") + " AL " + NuevoReporte.FechaFinal.ToString("dd/MM/yyyy"), pe.FuenteTitulo) { Alignment = Element.ALIGN_CENTER };
+                Paragraph Fechas = new Paragraph("DEL " + NuevoReporte.FechaInicio.ToString("dd/MM/yyyy") + " AL " + NuevoReporte.FechaFinal.ToString("dd/MM/yyyy"), pe.FuenteTitulo12) { Alignment = Element.ALIGN_CENTER };
                 document.Add(Fechas);
             }
 
@@ -197,6 +218,7 @@ namespace CobranzaSP.Lógica
                 case "RANGO DE FECHA":CerrarDatos = false ; break;
                 case "MODELO": CerrarDatos = false;break;
                 case "HISTORIAL MODULO": GenerarReporteModulo(document); break;
+                case "MODULOS": GenerarReporteClavesPorModulo(document); break;
                 case "UBICACION MODULO": GenerarReporteModulo(document); break;
                 case "MANTENIMIENTOS": CerrarDatos = false;break;
                 case "MODULOS POR SERIE DE EQUIPO":
@@ -226,8 +248,149 @@ namespace CobranzaSP.Lógica
             return DatosEncontrados;
         }
 
+        public string ColocarTituloReporte()
+        {
+            string TituloReporte = "REPORTE ";
+            switch (TipoBusqueda)
+            {
+                case "MODULOS":
+                    TituloReporte += "CLAVES POR MODULO: " + ParametroBusqueda;
+                    break;
+                //case "RANGO DE FECHA": DatosObtenidos = ObtenerFusoresReporte(nuevoReporte); break;
+                case "HISTORIAL MODULO":
+                    TituloReporte += "HISTORIAL MODULO" + "\n" + ColocarTipoModulo() + ":" + ParametroBusqueda + "\n" + ColocarMarcaModeloDeModulo(ParametroBusqueda); break;
+                case "UBICACION MODULO":
+                    TituloReporte += "UBICACIÓN MODULO" + "\n" + ColocarTipoModulo() + ":" + ParametroBusqueda + "\n" + ColocarMarcaModeloDeModulo(ParametroBusqueda); break;
+                case "MODULOS POR SERIE DE EQUIPO": TituloReporte += DeterminarNombreReporteModulosSerie(); break;
+                case "MANTENIMIENTOS": TituloReporte += "MANTENIMIENTOS RICOH"; break;
+            }
+            return TituloReporte;
+        }
+
+        public string DeterminarNombreReporteModulosSerie()
+        {
+            string Serie = ParametroBusqueda;
+            string TituloReporte = "";
+            if (Serie != "")
+            {
+                TituloReporte = "MODULOS DE EQUIPO " + ColocarMarcaModeloEquipo(ParametroBusqueda);
+            }
+            else
+            {
+                TituloReporte = "MODULOS DE EQUIPOS";
+            }
+            return TituloReporte;
+        }
+
+        public string ColocarMarcaModeloEquipo(string Serie)
+        {
+            DataTable tblDatosEquipo = new DataTable();
+            StringBuilder Equipo = new StringBuilder();
+            string Marca = "";
+            string Modelo = "";
+            string Cliente = "";
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "ObtenerMarcaModeloEquipo";
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.Clear();
+
+            comando.Parameters.AddWithValue("@Serie", Serie);
+            tblDatosEquipo.Load(comando.ExecuteReader());
+            comando.Dispose();
+            foreach (DataRow fila in tblDatosEquipo.Rows)
+            {
+                Marca = fila[0].ToString();
+                Modelo = fila[1].ToString();
+                Cliente = fila[2].ToString();
+            }
+            conexion.CerrarConexion();
+            Equipo.Append(Marca.ToUpper()).Append(" ").Append(Modelo.ToUpper()).Append(" SERIE: ").Append(Serie);
+            Equipo.Append("\n");
+            if (Cliente == "")
+            {
+                Equipo.Append("SPEED TONER");
+            }
+            else
+            {
+                Equipo.Append("Cliente: ").Append(Cliente);
+            }
+            return Equipo.ToString();
+        }
+
+        public string ColocarMarcaModeloDeModulo(string Clave)
+        {
+            DataTable tblDatosModulo = new DataTable();
+            StringBuilder Equipo = new StringBuilder();
+            string Marca = "";
+            string Modelo = "";
+
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "ObtenerMarcaModeloDeClave";
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.Clear();
+            comando.Parameters.AddWithValue("@Clave", Clave);
+            tblDatosModulo.Load(comando.ExecuteReader());
+            comando.Dispose();
+
+            foreach (DataRow fila in tblDatosModulo.Rows)
+            {
+                Marca = fila[0].ToString();
+                Modelo = fila[1].ToString();
+            }
+            conexion.CerrarConexion();
+            Equipo.Append(Marca.ToUpper()).Append(" ").Append(Modelo.ToUpper());
+            return Equipo.ToString();
+        }
+
+        public string ColocarTipoModulo()
+        {
+            string TipoModulo = "";
+            Dictionary<string, string> tipoModuloMapping = new Dictionary<string, string>
+            {
+                { "UI-", "UNIDAD DE IMAGEN" },
+                { "UR-", "UNIDAD DE REVELADO" },
+                { "FR-", "FUSOR" },
+                { "T-", "TELILLA WEB" },
+                { "TT-", "UNIDAD DE REVELADO" },
+                { "MT-", "MODULO DE TRANSFERENCIA" }
+            };
+
+            foreach (var kvp in tipoModuloMapping)
+            {
+                if (ParametroBusqueda.StartsWith(kvp.Key))
+                {
+                    TipoModulo = kvp.Value;
+                    break;
+                }
+            }
+            return TipoModulo;
+        }
+
 
         #region ReporteModulo
+        public void GenerarReporteClavesPorModulo(Document document)
+        {
+            //Debemos de crear la tabla de modulos
+            CrearTablaClavesModulos();
+
+            while (reporte.Read())
+            {
+                PdfModuloEquipo ModuloEquipo = new PdfModuloEquipo()
+                {
+                    Clave = reporte[0].ToString(),
+                    Serie = reporte[1].ToString(),
+                    Cliente = reporte[2].ToString()
+                };
+                AgregarClavesATablaModulos(ModuloEquipo, document);
+            }
+
+            document.Add(new Paragraph("\n"));
+
+            //Agregamos la tabla al documento
+            document.Add(tblModulos);
+        }
+
+
         public void GenerarReporteModulo(Document document)
         {
             //Debemos de crear la tabla de modulos
@@ -240,7 +403,7 @@ namespace CobranzaSP.Lógica
 
             while (reporte.Read())
             {
-                ReporteModuloEquipo ModuloEquipo = new ReporteModuloEquipo()
+                PdfModuloEquipo ModuloEquipo = new PdfModuloEquipo()
                 {
                     Serie = reporte[0].ToString(),
                     Cliente = reporte[1].ToString(),
@@ -304,10 +467,9 @@ namespace CobranzaSP.Lógica
 
         public void GenerarReporteModulosEquipos(Document document)
         {
-            var pe = new Pdf();
             while (reporte.Read())
             {
-                ReporteModuloSerie ModuloEquipo = new ReporteModuloSerie()
+                PdfModulosSerie ModuloEquipo = new PdfModulosSerie()
                 {
                     Clave = reporte[0].ToString(),
                     Modulo = reporte[1].ToString(),
@@ -348,31 +510,43 @@ namespace CobranzaSP.Lógica
 
         public void ColocarRendimiento(int PrimerContador, int UltimoContador)
         {
-            var pe = new Pdf();
-
-            PdfPCell clSerie = new PdfPCell(new Phrase("", pe.FuenteParrafoBold)) { BorderWidth = .5f };
-            PdfPCell clCliente = new PdfPCell(new Phrase("", pe.FuenteParrafoBold)) { BorderWidth = .5f };
-            PdfPCell clEstado = new PdfPCell(new Phrase("", pe.FuenteParrafoBold)) { BorderWidth = .5f };
-            PdfPCell clFolio = new PdfPCell(new Phrase("", pe.FuenteParrafoBold)) { BorderWidth = .5f };
-            PdfPCell clObservacion = new PdfPCell(new Phrase("", pe.FuenteParrafoBold)) { BorderWidth = .5f};
+            PdfPCell clEspacioBlanco = new PdfPCell(new Phrase("", pe.FuenteParrafoBold)) { BorderWidth = .5f,Colspan= 5 };
             PdfPCell clRendimiento = new PdfPCell(new Phrase("RENDIMIENTO", pe.FuenteParrafoBold)) { BorderWidth = .5f, Colspan = 2 };
 
             int Rendimiento = UltimoContador - PrimerContador;
             PdfPCell clContador = new PdfPCell(new Phrase(Rendimiento.ToString("N0"), pe.FuenteParrafoBold)) { BorderWidth = .5f };
 
-            tblModulos.AddCell(clSerie);
-            tblModulos.AddCell(clCliente);
-            tblModulos.AddCell(clEstado);
-            tblModulos.AddCell(clFolio);
-            tblModulos.AddCell(clObservacion);
+            tblModulos.AddCell(clEspacioBlanco);
             tblModulos.AddCell(clRendimiento);
             tblModulos.AddCell(clContador);
+        }
+
+        public void CrearTablaClavesModulos()
+        {
+            tblModulos = new PdfPTable(4) { WidthPercentage = 100 };
+
+            PdfPCell clClave = new PdfPCell(new Phrase("CLAVE", pe.FuenteParrafoBold)) { BorderWidth = .5f };
+            PdfPCell clSerie = new PdfPCell(new Phrase("SERIE", pe.FuenteParrafoBold)) { BorderWidth = .5f };
+            PdfPCell clCliente = new PdfPCell(new Phrase("CLIENTE", pe.FuenteParrafoBold)) { BorderWidth = .5f , Colspan = 2};
+            tblModulos.AddCell(clClave);
+            tblModulos.AddCell(clSerie);
+            tblModulos.AddCell(clCliente);
+        }
+
+        public void AgregarClavesATablaModulos(PdfModuloEquipo ModuloEquipo, Document document)
+        {
+            PdfPCell clFolio = new PdfPCell(new Phrase(ModuloEquipo.Clave, pe.FuenteParrafo)) { BorderWidth = .5f };
+            PdfPCell clSerie = new PdfPCell(new Phrase(ModuloEquipo.Serie, pe.FuenteParrafo)) { BorderWidth = .5f };
+            PdfPCell clCliente = new PdfPCell(new Phrase(ModuloEquipo.Cliente, pe.FuenteParrafo)) { BorderWidth = .5f ,Colspan = 2};
+            
+            tblModulos.AddCell(clFolio);
+            tblModulos.AddCell(clSerie);
+            tblModulos.AddCell(clCliente);
         }
 
         public void CrearTablaModulos()
         {
             tblModulos = new PdfPTable(8) { WidthPercentage = 100 };
-            var pe = new Pdf();
 
             PdfPCell clSerie = new PdfPCell(new Phrase("SERIE", pe.FuenteParrafoBold)) { BorderWidth = .5f };
             PdfPCell clCliente = new PdfPCell(new Phrase("CLIENTE", pe.FuenteParrafoBold)) { BorderWidth = .5f };
@@ -391,9 +565,8 @@ namespace CobranzaSP.Lógica
             tblModulos.AddCell(clContador);
         }
 
-        public void AgregarDatosATablaModulos(ReporteModuloEquipo ModuloEquipo, Document document)
+        public void AgregarDatosATablaModulos(PdfModuloEquipo ModuloEquipo, Document document)
         {
-            var pe = new Pdf();
             PdfPCell clSerie = new PdfPCell(new Phrase(ModuloEquipo.Serie, pe.FuenteParrafo)) { BorderWidth = .5f };
             PdfPCell clCliente = new PdfPCell(new Phrase(ModuloEquipo.Cliente, pe.FuenteParrafo)) { BorderWidth = .5f };
             PdfPCell clEstado = new PdfPCell(new Phrase(ModuloEquipo.Estado, pe.FuenteParrafo)) { BorderWidth = .5f };
@@ -411,122 +584,7 @@ namespace CobranzaSP.Lógica
             tblModulos.AddCell(clContador);
         }
 
-        public string ColocarTituloReporte()
-        {
-            string TituloReporte = "REPORTE ";
-            switch (TipoBusqueda)
-            {
-                case "SERIE":; break;
-                case "CLIENTE":; break;
-                //case "RANGO DE FECHA": DatosObtenidos = ObtenerFusoresReporte(nuevoReporte); break;
-                case "HISTORIAL MODULO": 
-                    TituloReporte += "HISTORIAL MODULO" + "\n" + ColocarTipoModulo() + ":" + ParametroBusqueda + "\n" + ColocarMarcaModeloDeModulo(ParametroBusqueda); break;
-                case "UBICACION MODULO": 
-                    TituloReporte += "UBICACIÓN MODULO" + "\n" + ColocarTipoModulo() + ":" + ParametroBusqueda + "\n" + ColocarMarcaModeloDeModulo(ParametroBusqueda); break;
-                case "MODULOS POR SERIE DE EQUIPO": TituloReporte += DeterminarNombreReporteModulosSerie();break;
-                case "MANTENIMIENTOS": TituloReporte += "MANTENIMIENTOS RICOH";break;
-            }
-            return TituloReporte;
-        }
-
-        public string DeterminarNombreReporteModulosSerie()
-        {
-            string Serie = ParametroBusqueda;
-            string TituloReporte = "";
-            if(Serie != "")
-            {
-                TituloReporte = "MODULOS DE EQUIPO " + ColocarMarcaModeloEquipo(ParametroBusqueda);
-            }
-            else
-            {
-                TituloReporte = "MODULOS DE EQUIPOS";
-            }
-            return TituloReporte;
-        }
-
-        public string ColocarMarcaModeloEquipo(string Serie)
-        {
-            DataTable tblDatosEquipo = new DataTable();
-            StringBuilder Equipo = new StringBuilder();
-            string Marca = "";
-            string Modelo = "";
-            string Cliente = "";
-            comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = "ObtenerMarcaModeloEquipo";
-            comando.CommandType = CommandType.StoredProcedure;
-            comando.Parameters.Clear();
-
-            comando.Parameters.AddWithValue("@Serie", Serie);
-            tblDatosEquipo.Load(comando.ExecuteReader());
-            comando.Dispose();
-            foreach (DataRow fila in tblDatosEquipo.Rows)
-            {
-                Marca = fila[0].ToString();
-                Modelo = fila[1].ToString();
-                Cliente = fila[2].ToString();
-            }
-            conexion.CerrarConexion();
-            Equipo.Append(Marca.ToUpper()).Append(" ").Append(Modelo.ToUpper()).Append(" SERIE: ").Append(Serie);
-            Equipo.Append("\n");
-            if(Cliente == "")
-            {
-                Equipo.Append("SPEED TONER");
-            }
-            else
-            {
-                Equipo.Append("Cliente: ").Append(Cliente);
-            }
-            return Equipo.ToString();
-        }
-
-        public string ColocarMarcaModeloDeModulo(string Clave)
-        {
-            DataTable tblDatosModulo = new DataTable();
-            StringBuilder Equipo = new StringBuilder();
-            string Marca = "";
-            string Modelo = "";
-
-            comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = "ObtenerMarcaModeloDeClave";
-            comando.CommandType = CommandType.StoredProcedure;
-            comando.Parameters.Clear();
-            comando.Parameters.AddWithValue("@Clave", Clave);
-            tblDatosModulo.Load(comando.ExecuteReader());
-            comando.Dispose();
-
-            foreach (DataRow fila in tblDatosModulo.Rows)
-            {
-                Marca = fila[0].ToString();
-                Modelo = fila[1].ToString();
-            }
-            conexion.CerrarConexion();
-            Equipo.Append(Marca.ToUpper()).Append(" ").Append(Modelo.ToUpper());
-            return Equipo.ToString();
-        }
-
-        public string ColocarTipoModulo()
-        {
-            string TipoModulo = "";
-            Dictionary<string, string> tipoModuloMapping = new Dictionary<string, string>
-            {
-                { "UI-", "UNIDAD DE IMAGEN" },
-                { "UR-", "UNIDAD DE REVELADO" },
-                { "FR-", "FUSOR" },
-                { "T-", "TELILLA WEB" },
-                { "TT-", "UNIDAD DE REVELADO" },
-                { "MT-", "MODULO DE TRANSFERENCIA" }
-            };
-
-            foreach (var kvp in tipoModuloMapping)
-            {
-                if (ParametroBusqueda.StartsWith(kvp.Key))
-                {
-                    TipoModulo = kvp.Value;
-                    break;
-                }
-            }
-            return TipoModulo;
-        }
+        
         #endregion
 
         #region ReporteModulosSerie
@@ -538,7 +596,7 @@ namespace CobranzaSP.Lógica
             //Leemos los datos
             while (reporte.Read())
             {
-                ReporteModuloSerie ModuloEquipo = new ReporteModuloSerie()
+                PdfModulosSerie ModuloEquipo = new PdfModulosSerie()
                 {
                     Clave = reporte[0].ToString(),
                     Modulo = reporte[1].ToString(),
@@ -583,7 +641,7 @@ namespace CobranzaSP.Lógica
             tblModulos.AddCell(clRendimiento);
         }
 
-        public void AgregarDatosATablaModulosSerie(ReporteModuloSerie ModuloEquipo)
+        public void AgregarDatosATablaModulosSerie(PdfModulosSerie ModuloEquipo)
         {
             var pe = new Pdf();
 

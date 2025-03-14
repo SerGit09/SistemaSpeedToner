@@ -17,12 +17,12 @@ namespace CobranzaSP.Lógica
 
         
         //public static List<string> Claves { get; set; } = new List<string>();
-        public static List<ModuloEquipo> ModulosEquipo { get; set; } = new List<ModuloEquipo>();
+        public static List<ModuloRicoh> ModulosEquipo { get; set; } = new List<ModuloRicoh>();
         //Lista que nos servira para las claves a las cuales se le modifico su observacion
         public static List<string> ClavesObservaciones = new List<string>();
         LogicaModulosBodega lgModuloBodega = new LogicaModulosBodega();
         LogicaReportesModulo lgReporteModulo = new LogicaReportesModulo();
-        public string RegistrarModulo(Modulo_Cliente NuevoModulo, string sp)
+        public string RegistrarModulo(RegistroModulo NuevoModulo, string sp)
         {
             string AccionRealizada = "agrego";
             int respuesta;
@@ -30,10 +30,10 @@ namespace CobranzaSP.Lógica
             comando.CommandText = sp;
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.Clear();
-            if (NuevoModulo.Id > 0)
+            if (NuevoModulo.IdRegistroModulo > 0)
             {
                 AccionRealizada = "modifico";
-                comando.Parameters.AddWithValue("@Id", NuevoModulo.Id);
+                comando.Parameters.AddWithValue("@Id", NuevoModulo.IdRegistroModulo);
             }
             comando.Parameters.AddWithValue("@IdModulo", NuevoModulo.IdModulo);
             comando.Parameters.AddWithValue("@Clave", NuevoModulo.Clave);
@@ -64,7 +64,7 @@ namespace CobranzaSP.Lógica
             conexion.CerrarConexion();
         }
 
-        public void RetirarModulo(Modulo_Cliente NuevoModulo, bool ModuloSeleccionado)
+        public void RetirarModulo(RegistroModulo NuevoModulo, bool ModuloSeleccionado)
         {
             int respuesta;
             comando.Connection = conexion.AbrirConexion();
@@ -92,11 +92,11 @@ namespace CobranzaSP.Lógica
                 //Deberemos de agregar en el inventario la que retiramos y eliminar la que dejamos instalada
                 ModificarInventarioModulosBodega(NuevoModulo);
             }
-            else//Si no se selecciono un modulo
-            {
-                //Solamente agregaremos la que se retiro
-                RegistrarModuloABodega(NuevoModulo);
-            }
+            //else//Si no se selecciono un modulo
+            //{
+            //    //Solamente agregaremos la que se retiro
+            //    RegistrarModuloABodega(NuevoModulo);
+            //}
         }
 
         public string ObtenerSerieClaveRepetida(string Clave)
@@ -122,11 +122,11 @@ namespace CobranzaSP.Lógica
             return Equipo;
         }
 
-        public void RegistrarModuloABodega(Modulo_Cliente NuevoModulo)
+        public void RegistrarModuloABodega(RegistroModulo NuevoModulo)
         {
             int respuesta;
             comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = "AgregarModuloBodega";
+            comando.CommandText = "AgregarModuloBodega";    
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.Clear();
             comando.Parameters.AddWithValue("@IdModulo", NuevoModulo.IdModulo);
@@ -136,11 +136,24 @@ namespace CobranzaSP.Lógica
             conexion.CerrarConexion();
         }
 
+        public void EliminarClaveModuloBodega(string ClaveModulo)
+        {
+            int respuesta;
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "EliminarClaveModuloBodega";
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.Clear();
+            comando.Parameters.AddWithValue("@ClaveModulo", ClaveModulo);
+
+            comando.ExecuteNonQuery();
+            conexion.CerrarConexion();
+        }
+
         //Quizas una funcion solo para agregar el modelo que fue retirado en bodega de modulos
 
         //Metodo que nos ayuda a agregar el modulo que fue retirado al inventario de modulos
         //Y retirar el que se le coloco ahora al equipo
-        public void ModificarInventarioModulosBodega(Modulo_Cliente NuevoModulo)
+        public void ModificarInventarioModulosBodega(RegistroModulo NuevoModulo)
         {
             comando.Connection = conexion.AbrirConexion();
             comando.CommandText = "AgregarYEliminarModuloBodega";
@@ -156,7 +169,7 @@ namespace CobranzaSP.Lógica
         }
 
         //Modificar al retirar modulo en serie_x_modulo o dar de alta en serie_x_modulo en caso de que se instale por primera vez
-        public void GuardarClaveDeSerie(Modulo_Cliente NuevoModulo, bool CambioClave)
+        public void GuardarClaveDeSerie(RegistroModulo NuevoModulo, bool CambioClave)
         {
             comando.Connection = conexion.AbrirConexion();
             comando.CommandText = "GuardarClaveModuloSerie";
@@ -167,9 +180,15 @@ namespace CobranzaSP.Lógica
             comando.Parameters.AddWithValue("@NumeroFolio", NuevoModulo.Reporte);
             comando.Parameters.AddWithValue("@Serie", NuevoModulo.Serie);
             comando.Parameters.AddWithValue("@CambioClave", CambioClave);
-
             comando.ExecuteNonQuery();
             conexion.CerrarConexion();
+
+            if (!CambioClave)
+            {
+                //Eliminar la clave que fue seleccionada del inventario de modulos para instalación
+                EliminarClaveModuloBodega(NuevoModulo.Clave);
+            }
+
         }
 
         //Utilizado al eliminar un reporte de servicio, para comprobar que no se elimine el ultimo reporte que tienen los modulos

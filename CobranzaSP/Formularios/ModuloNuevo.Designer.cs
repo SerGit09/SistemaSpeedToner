@@ -34,7 +34,6 @@
             this.btnCerrar = new System.Windows.Forms.PictureBox();
             this.btnAgregarModulo = new System.Windows.Forms.Button();
             this.cboModulos = new System.Windows.Forms.ComboBox();
-            this.txtClave = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.cboClaves = new System.Windows.Forms.ComboBox();
@@ -44,6 +43,7 @@
             this.grpModulo = new System.Windows.Forms.GroupBox();
             this.rtxtObsrevacion = new System.Windows.Forms.RichTextBox();
             this.lblObservacion = new System.Windows.Forms.Label();
+            this.btnAgregarModuloBodega = new System.Windows.Forms.Button();
             this.panelSuperior.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnCerrar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.erModulo)).BeginInit();
@@ -106,13 +106,6 @@
             this.cboModulos.TabIndex = 62;
             this.cboModulos.SelectedIndexChanged += new System.EventHandler(this.cboModulos_SelectedIndexChanged);
             // 
-            // txtClave
-            // 
-            this.txtClave.Location = new System.Drawing.Point(94, 63);
-            this.txtClave.Name = "txtClave";
-            this.txtClave.Size = new System.Drawing.Size(289, 27);
-            this.txtClave.TabIndex = 59;
-            // 
             // label14
             // 
             this.label14.AutoSize = true;
@@ -147,7 +140,6 @@
             this.cboClaves.Size = new System.Drawing.Size(289, 27);
             this.cboClaves.Sorted = true;
             this.cboClaves.TabIndex = 64;
-            this.cboClaves.Visible = false;
             // 
             // lblAnteriorClave
             // 
@@ -183,7 +175,6 @@
             this.grpModulo.Controls.Add(this.cboClaves);
             this.grpModulo.Controls.Add(this.cboModulos);
             this.grpModulo.Controls.Add(this.label14);
-            this.grpModulo.Controls.Add(this.txtClave);
             this.grpModulo.ForeColor = System.Drawing.SystemColors.Control;
             this.grpModulo.Location = new System.Drawing.Point(12, 41);
             this.grpModulo.Name = "grpModulo";
@@ -211,12 +202,31 @@
             this.lblObservacion.TabIndex = 67;
             this.lblObservacion.Text = "Observacion:";
             // 
+            // btnAgregarModuloBodega
+            // 
+            this.btnAgregarModuloBodega.Enabled = false;
+            this.btnAgregarModuloBodega.FlatAppearance.BorderColor = System.Drawing.Color.SandyBrown;
+            this.btnAgregarModuloBodega.FlatAppearance.BorderSize = 2;
+            this.btnAgregarModuloBodega.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAgregarModuloBodega.ForeColor = System.Drawing.Color.White;
+            this.btnAgregarModuloBodega.Image = ((System.Drawing.Image)(resources.GetObject("btnAgregarModuloBodega.Image")));
+            this.btnAgregarModuloBodega.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAgregarModuloBodega.Location = new System.Drawing.Point(275, 334);
+            this.btnAgregarModuloBodega.Name = "btnAgregarModuloBodega";
+            this.btnAgregarModuloBodega.Size = new System.Drawing.Size(263, 40);
+            this.btnAgregarModuloBodega.TabIndex = 68;
+            this.btnAgregarModuloBodega.Text = "Agregar Modulo En Bodega";
+            this.btnAgregarModuloBodega.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnAgregarModuloBodega.UseVisualStyleBackColor = true;
+            this.btnAgregarModuloBodega.Click += new System.EventHandler(this.btnAgregarModuloBodega_Click);
+            // 
             // ModuloNuevo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(28)))), ((int)(((byte)(48)))));
             this.ClientSize = new System.Drawing.Size(682, 392);
+            this.Controls.Add(this.btnAgregarModuloBodega);
             this.Controls.Add(this.grpModulo);
             this.Controls.Add(this.btnAgregarModulo);
             this.Controls.Add(this.panelSuperior);
@@ -241,7 +251,6 @@
         private System.Windows.Forms.PictureBox btnCerrar;
         private System.Windows.Forms.Button btnAgregarModulo;
         private System.Windows.Forms.ComboBox cboModulos;
-        private System.Windows.Forms.TextBox txtClave;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ComboBox cboClaves;
@@ -251,5 +260,6 @@
         private System.Windows.Forms.GroupBox grpModulo;
         private System.Windows.Forms.RichTextBox rtxtObsrevacion;
         private System.Windows.Forms.Label lblObservacion;
+        private System.Windows.Forms.Button btnAgregarModuloBodega;
     }
 }

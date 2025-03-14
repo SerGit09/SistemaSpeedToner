@@ -67,7 +67,7 @@ namespace CobranzaSP.Lógica
         {
             string Modelo = DeterminarModeloModulo(nuevoServicio.Modelo);
             //Actualizaremos cada clave, tanto en los modulos_clientes como en historial_modulo
-            foreach (ModuloEquipo Modulo in LogicaModulosCliente.ModulosEquipo)
+            foreach (ModuloRicoh Modulo in LogicaModulosCliente.ModulosEquipo)
             {
                 ActualizarModulo(nuevoServicio, Modulo, Modelo);
             }
@@ -75,9 +75,9 @@ namespace CobranzaSP.Lógica
             lgModuloEquipo.ActualizarReporteActualModulos(nuevoServicio);
         }
 
-        public void ActualizarModulo(Servicio nuevoServicio, ModuloEquipo Modulo, string Modelo)
+        public void ActualizarModulo(Servicio nuevoServicio, ModuloRicoh Modulo, string Modelo)
         {
-            Modulo_Cliente NuevoModulo = new Modulo_Cliente()
+            RegistroModulo NuevoModulo = new RegistroModulo()
             {
                 IdModelo = NuevaAccion.BuscarId(Modelo, "ObtenerIdModeloModulo"),
 

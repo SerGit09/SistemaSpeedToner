@@ -29,12 +29,16 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IRemisiones));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IRemisiones));
             this.grpDatos = new System.Windows.Forms.GroupBox();
+            this.cboTipoFactura = new System.Windows.Forms.ComboBox();
+            this.dtpFecha = new System.Windows.Forms.DateTimePicker();
+            this.lblTipoFactura = new System.Windows.Forms.Label();
+            this.lblFecha = new System.Windows.Forms.Label();
             this.cboClientes = new System.Windows.Forms.ComboBox();
             this.txtCantidad = new System.Windows.Forms.TextBox();
             this.dtpFechaRemision = new System.Windows.Forms.DateTimePicker();
@@ -47,14 +51,15 @@
             this.radMostrador = new System.Windows.Forms.RadioButton();
             this.radRemisiones = new System.Windows.Forms.RadioButton();
             this.lblRemisiones = new System.Windows.Forms.Label();
+            this.dtgRemisiones = new System.Windows.Forms.DataGridView();
+            this.erRemisiones = new System.Windows.Forms.ErrorProvider(this.components);
+            this.btnReportes = new System.Windows.Forms.Button();
+            this.btnEnviarCorreo = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnCobrado = new System.Windows.Forms.Button();
             this.btnGuardar = new System.Windows.Forms.Button();
-            this.dtgRemisiones = new System.Windows.Forms.DataGridView();
-            this.btnEnviarCorreo = new System.Windows.Forms.Button();
-            this.erRemisiones = new System.Windows.Forms.ErrorProvider(this.components);
-            this.btnReportes = new System.Windows.Forms.Button();
+            this.btnGenerarRemision = new System.Windows.Forms.Button();
             this.grpDatos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgRemisiones)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.erRemisiones)).BeginInit();
@@ -62,6 +67,10 @@
             // 
             // grpDatos
             // 
+            this.grpDatos.Controls.Add(this.cboTipoFactura);
+            this.grpDatos.Controls.Add(this.dtpFecha);
+            this.grpDatos.Controls.Add(this.lblTipoFactura);
+            this.grpDatos.Controls.Add(this.lblFecha);
             this.grpDatos.Controls.Add(this.cboClientes);
             this.grpDatos.Controls.Add(this.txtCantidad);
             this.grpDatos.Controls.Add(this.dtpFechaRemision);
@@ -76,10 +85,50 @@
             this.grpDatos.Controls.Add(this.lblRemisiones);
             this.grpDatos.Location = new System.Drawing.Point(12, 12);
             this.grpDatos.Name = "grpDatos";
-            this.grpDatos.Size = new System.Drawing.Size(573, 234);
+            this.grpDatos.Size = new System.Drawing.Size(573, 328);
             this.grpDatos.TabIndex = 0;
             this.grpDatos.TabStop = false;
             this.grpDatos.Text = "Datos:";
+            // 
+            // cboTipoFactura
+            // 
+            this.cboTipoFactura.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboTipoFactura.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboTipoFactura.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTipoFactura.FormattingEnabled = true;
+            this.cboTipoFactura.Location = new System.Drawing.Point(149, 271);
+            this.cboTipoFactura.Margin = new System.Windows.Forms.Padding(4);
+            this.cboTipoFactura.Name = "cboTipoFactura";
+            this.cboTipoFactura.Size = new System.Drawing.Size(369, 27);
+            this.cboTipoFactura.Sorted = true;
+            this.cboTipoFactura.TabIndex = 27;
+            // 
+            // dtpFecha
+            // 
+            this.dtpFecha.Location = new System.Drawing.Point(150, 120);
+            this.dtpFecha.Name = "dtpFecha";
+            this.dtpFecha.Size = new System.Drawing.Size(312, 27);
+            this.dtpFecha.TabIndex = 14;
+            // 
+            // lblTipoFactura
+            // 
+            this.lblTipoFactura.AutoSize = true;
+            this.lblTipoFactura.ForeColor = System.Drawing.SystemColors.Control;
+            this.lblTipoFactura.Location = new System.Drawing.Point(41, 274);
+            this.lblTipoFactura.Name = "lblTipoFactura";
+            this.lblTipoFactura.Size = new System.Drawing.Size(103, 19);
+            this.lblTipoFactura.TabIndex = 26;
+            this.lblTipoFactura.Text = "Tipo Factura:";
+            // 
+            // lblFecha
+            // 
+            this.lblFecha.AutoSize = true;
+            this.lblFecha.ForeColor = System.Drawing.Color.White;
+            this.lblFecha.Location = new System.Drawing.Point(81, 126);
+            this.lblFecha.Name = "lblFecha";
+            this.lblFecha.Size = new System.Drawing.Size(55, 19);
+            this.lblFecha.TabIndex = 13;
+            this.lblFecha.Text = "Fecha:";
             // 
             // cboClientes
             // 
@@ -87,7 +136,7 @@
             this.cboClientes.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboClientes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboClientes.FormattingEnabled = true;
-            this.cboClientes.Location = new System.Drawing.Point(151, 191);
+            this.cboClientes.Location = new System.Drawing.Point(151, 232);
             this.cboClientes.Margin = new System.Windows.Forms.Padding(4);
             this.cboClientes.Name = "cboClientes";
             this.cboClientes.Size = new System.Drawing.Size(311, 27);
@@ -96,7 +145,7 @@
             // 
             // txtCantidad
             // 
-            this.txtCantidad.Location = new System.Drawing.Point(150, 153);
+            this.txtCantidad.Location = new System.Drawing.Point(150, 194);
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(100, 27);
             this.txtCantidad.TabIndex = 11;
@@ -104,7 +153,7 @@
             // 
             // dtpFechaRemision
             // 
-            this.dtpFechaRemision.Location = new System.Drawing.Point(150, 120);
+            this.dtpFechaRemision.Location = new System.Drawing.Point(150, 161);
             this.dtpFechaRemision.Name = "dtpFechaRemision";
             this.dtpFechaRemision.Size = new System.Drawing.Size(312, 27);
             this.dtpFechaRemision.TabIndex = 10;
@@ -129,7 +178,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(81, 194);
+            this.label5.Location = new System.Drawing.Point(81, 235);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(63, 19);
             this.label5.TabIndex = 7;
@@ -139,7 +188,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(67, 161);
+            this.label4.Location = new System.Drawing.Point(67, 202);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 19);
             this.label4.TabIndex = 6;
@@ -149,7 +198,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(49, 126);
+            this.label3.Location = new System.Drawing.Point(49, 167);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(95, 19);
             this.label3.TabIndex = 5;
@@ -200,6 +249,90 @@
             this.lblRemisiones.Size = new System.Drawing.Size(138, 19);
             this.lblRemisiones.TabIndex = 1;
             this.lblRemisiones.Text = "Numero remision:";
+            // 
+            // dtgRemisiones
+            // 
+            this.dtgRemisiones.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dtgRemisiones.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            this.dtgRemisiones.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgRemisiones.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dtgRemisiones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtgRemisiones.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dtgRemisiones.EnableHeadersVisualStyles = false;
+            this.dtgRemisiones.Location = new System.Drawing.Point(12, 346);
+            this.dtgRemisiones.Name = "dtgRemisiones";
+            this.dtgRemisiones.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgRemisiones.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgRemisiones.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            this.dtgRemisiones.RowTemplate.Height = 25;
+            this.dtgRemisiones.Size = new System.Drawing.Size(1008, 439);
+            this.dtgRemisiones.TabIndex = 18;
+            this.dtgRemisiones.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgRemisiones_CellClick);
+            // 
+            // erRemisiones
+            // 
+            this.erRemisiones.ContainerControl = this;
+            // 
+            // btnReportes
+            // 
+            this.btnReportes.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnReportes.FlatAppearance.BorderSize = 2;
+            this.btnReportes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReportes.ForeColor = System.Drawing.Color.White;
+            this.btnReportes.Image = ((System.Drawing.Image)(resources.GetObject("btnReportes.Image")));
+            this.btnReportes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnReportes.Location = new System.Drawing.Point(715, 24);
+            this.btnReportes.Name = "btnReportes";
+            this.btnReportes.Size = new System.Drawing.Size(117, 51);
+            this.btnReportes.TabIndex = 24;
+            this.btnReportes.Text = "Reportes";
+            this.btnReportes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnReportes.UseVisualStyleBackColor = true;
+            this.btnReportes.Click += new System.EventHandler(this.btnReportes_Click);
+            // 
+            // btnEnviarCorreo
+            // 
+            this.btnEnviarCorreo.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btnEnviarCorreo.FlatAppearance.BorderSize = 2;
+            this.btnEnviarCorreo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEnviarCorreo.Image = ((System.Drawing.Image)(resources.GetObject("btnEnviarCorreo.Image")));
+            this.btnEnviarCorreo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEnviarCorreo.Location = new System.Drawing.Point(863, 195);
+            this.btnEnviarCorreo.Name = "btnEnviarCorreo";
+            this.btnEnviarCorreo.Size = new System.Drawing.Size(157, 51);
+            this.btnEnviarCorreo.TabIndex = 19;
+            this.btnEnviarCorreo.Text = "Enviar Correo";
+            this.btnEnviarCorreo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnEnviarCorreo.UseVisualStyleBackColor = true;
+            this.btnEnviarCorreo.Click += new System.EventHandler(this.btnEnviarCorreo_Click);
             // 
             // btnCancelar
             // 
@@ -260,7 +393,7 @@
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
             this.btnGuardar.Image = ((System.Drawing.Image)(resources.GetObject("btnGuardar.Image")));
             this.btnGuardar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGuardar.Location = new System.Drawing.Point(591, 24);
+            this.btnGuardar.Location = new System.Drawing.Point(592, 24);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(117, 51);
             this.btnGuardar.TabIndex = 5;
@@ -269,89 +402,22 @@
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
-            // dtgRemisiones
+            // btnGenerarRemision
             // 
-            this.dtgRemisiones.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.dtgRemisiones.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
-            this.dtgRemisiones.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgRemisiones.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dtgRemisiones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InfoText;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtgRemisiones.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dtgRemisiones.EnableHeadersVisualStyles = false;
-            this.dtgRemisiones.Location = new System.Drawing.Point(12, 252);
-            this.dtgRemisiones.Name = "dtgRemisiones";
-            this.dtgRemisiones.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgRemisiones.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgRemisiones.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.dtgRemisiones.RowTemplate.Height = 25;
-            this.dtgRemisiones.Size = new System.Drawing.Size(1008, 296);
-            this.dtgRemisiones.TabIndex = 18;
-            this.dtgRemisiones.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgRemisiones_CellClick);
-            // 
-            // btnEnviarCorreo
-            // 
-            this.btnEnviarCorreo.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.btnEnviarCorreo.FlatAppearance.BorderSize = 2;
-            this.btnEnviarCorreo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEnviarCorreo.Image = ((System.Drawing.Image)(resources.GetObject("btnEnviarCorreo.Image")));
-            this.btnEnviarCorreo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEnviarCorreo.Location = new System.Drawing.Point(863, 195);
-            this.btnEnviarCorreo.Name = "btnEnviarCorreo";
-            this.btnEnviarCorreo.Size = new System.Drawing.Size(157, 51);
-            this.btnEnviarCorreo.TabIndex = 19;
-            this.btnEnviarCorreo.Text = "Enviar Correo";
-            this.btnEnviarCorreo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnEnviarCorreo.UseVisualStyleBackColor = true;
-            this.btnEnviarCorreo.Click += new System.EventHandler(this.btnEnviarCorreo_Click);
-            // 
-            // erRemisiones
-            // 
-            this.erRemisiones.ContainerControl = this;
-            // 
-            // btnReportes
-            // 
-            this.btnReportes.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.btnReportes.FlatAppearance.BorderSize = 2;
-            this.btnReportes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReportes.ForeColor = System.Drawing.Color.White;
-            this.btnReportes.Image = ((System.Drawing.Image)(resources.GetObject("btnReportes.Image")));
-            this.btnReportes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReportes.Location = new System.Drawing.Point(714, 24);
-            this.btnReportes.Name = "btnReportes";
-            this.btnReportes.Size = new System.Drawing.Size(117, 51);
-            this.btnReportes.TabIndex = 24;
-            this.btnReportes.Text = "Reportes";
-            this.btnReportes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnReportes.UseVisualStyleBackColor = true;
-            this.btnReportes.Click += new System.EventHandler(this.btnReportes_Click);
+            this.btnGenerarRemision.FlatAppearance.BorderColor = System.Drawing.Color.Coral;
+            this.btnGenerarRemision.FlatAppearance.BorderSize = 2;
+            this.btnGenerarRemision.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGenerarRemision.ForeColor = System.Drawing.Color.White;
+            this.btnGenerarRemision.Image = ((System.Drawing.Image)(resources.GetObject("btnGenerarRemision.Image")));
+            this.btnGenerarRemision.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGenerarRemision.Location = new System.Drawing.Point(714, 81);
+            this.btnGenerarRemision.Name = "btnGenerarRemision";
+            this.btnGenerarRemision.Size = new System.Drawing.Size(117, 51);
+            this.btnGenerarRemision.TabIndex = 25;
+            this.btnGenerarRemision.Text = "Generar Remision";
+            this.btnGenerarRemision.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnGenerarRemision.UseVisualStyleBackColor = true;
+            this.btnGenerarRemision.Click += new System.EventHandler(this.btnGenerarRemision_Click);
             // 
             // IRemisiones
             // 
@@ -359,6 +425,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(69)))), ((int)(((byte)(82)))));
             this.ClientSize = new System.Drawing.Size(1387, 862);
+            this.Controls.Add(this.btnGenerarRemision);
             this.Controls.Add(this.btnReportes);
             this.Controls.Add(this.btnEnviarCorreo);
             this.Controls.Add(this.dtgRemisiones);
@@ -403,5 +470,10 @@
         private System.Windows.Forms.Button btnEnviarCorreo;
         private System.Windows.Forms.ErrorProvider erRemisiones;
         private System.Windows.Forms.Button btnReportes;
+        private System.Windows.Forms.Button btnGenerarRemision;
+        private System.Windows.Forms.DateTimePicker dtpFecha;
+        private System.Windows.Forms.Label lblFecha;
+        private System.Windows.Forms.ComboBox cboTipoFactura;
+        private System.Windows.Forms.Label lblTipoFactura;
     }
 }

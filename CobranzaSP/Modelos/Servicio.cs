@@ -27,12 +27,6 @@ namespace CobranzaSP.Modelos
 
         public string Cliente { get; set; }
 
-        public string Modelo { get; set; }
-        public string Marca { get; set; }
-
-        public bool SeDioMantenimiento { get; set; }
-        public bool EstaModificando { get; set; }
-
         public int IdTipoServicio { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace CobranzaSP.Lógica
         double TotalImporte = 0;
         SqlDataReader leer;
         PdfPTable tblCuentas;
-        public string Registrar(Cobranza objCobranza)
+        public string Registrar(Factura NuevaFactura)
         {
             int respuesta = 0;
             string mensaje = "";
@@ -46,21 +46,22 @@ namespace CobranzaSP.Lógica
                 comando.CommandText = "AgregarCobranza";
                 comando.CommandType = CommandType.StoredProcedure;
 
-                comando.Parameters.AddWithValue("@IdCliente", objCobranza.IdCliente);
-                comando.Parameters.AddWithValue("@Factura", objCobranza.NumeroFactura);
-                comando.Parameters.AddWithValue("@DiasCredito", objCobranza.DiasCredito);
-                comando.Parameters.AddWithValue("@Cantidad", objCobranza.Cantidad);
-                comando.Parameters.AddWithValue("@FormaPago", objCobranza.FormaPago);
-                comando.Parameters.AddWithValue("@FechaFactura", objCobranza.FechaFactura);
-                comando.Parameters.AddWithValue("@Observaciones", objCobranza.Observaciones);
-                comando.Parameters.AddWithValue("@PromesaPago", objCobranza.PromesaPago);
-                if (objCobranza.FechaPromesaPago == null)
+                comando.Parameters.AddWithValue("@IdCliente", NuevaFactura.IdCliente);
+                comando.Parameters.AddWithValue("@Factura", NuevaFactura.NumeroFactura);
+                comando.Parameters.AddWithValue("@DiasCredito", NuevaFactura.DiasCredito);
+                comando.Parameters.AddWithValue("@Cantidad", NuevaFactura.Cantidad);
+                comando.Parameters.AddWithValue("@FormaPago", NuevaFactura.FormaPago);
+                comando.Parameters.AddWithValue("@FechaFactura", NuevaFactura.FechaFactura);
+                comando.Parameters.AddWithValue("@Observaciones", NuevaFactura.Observaciones);
+                comando.Parameters.AddWithValue("@PromesaPago", NuevaFactura.PromesaPago);
+                comando.Parameters.AddWithValue("@IdTipoFactura", NuevaFactura.IdTipoFactura);
+                if (NuevaFactura.FechaPromesaPago == null)
                 {
                     comando.Parameters.AddWithValue("@FechaPromesaPago", DBNull.Value);
                 }
                 else
                 {
-                    comando.Parameters.AddWithValue("@FechaPromesaPago", objCobranza.FechaPromesaPago);
+                    comando.Parameters.AddWithValue("@FechaPromesaPago", NuevaFactura.FechaPromesaPago);
                 }
                 respuesta = comando.ExecuteNonQuery();
                 mensaje = (respuesta > 0) ? "Registro agregado correctamente" : "Algo ha salido mal, no agrego el registro";
@@ -72,7 +73,7 @@ namespace CobranzaSP.Lógica
             return mensaje;
         }
 
-        public string ModificarCobro(Cobranza objCobranza, int Id)
+        public string ModificarCobro(Factura NuevaFactura, int Id)
         {
             int respuesta = 0;
             string mensaje = "";
@@ -81,21 +82,22 @@ namespace CobranzaSP.Lógica
             comando.CommandType = CommandType.StoredProcedure;
 
             comando.Parameters.AddWithValue("@Id", Id);
-            comando.Parameters.AddWithValue("@IdCliente", objCobranza.IdCliente);
-            comando.Parameters.AddWithValue("@Factura", objCobranza.NumeroFactura);
-            comando.Parameters.AddWithValue("@DiasCredito", objCobranza.DiasCredito);
-            comando.Parameters.AddWithValue("@Cantidad", objCobranza.Cantidad);
-            comando.Parameters.AddWithValue("@FechaFactura", objCobranza.FechaFactura);
-            comando.Parameters.AddWithValue("@Observaciones", objCobranza.Observaciones);
-            comando.Parameters.AddWithValue("@FormaPago", objCobranza.FormaPago);
-            comando.Parameters.AddWithValue("@PromesaPago", objCobranza.PromesaPago);
-            if (objCobranza.FechaPromesaPago == null)
+            comando.Parameters.AddWithValue("@IdCliente", NuevaFactura.IdCliente);
+            comando.Parameters.AddWithValue("@Factura", NuevaFactura.NumeroFactura);
+            comando.Parameters.AddWithValue("@DiasCredito", NuevaFactura.DiasCredito);
+            comando.Parameters.AddWithValue("@Cantidad", NuevaFactura.Cantidad);
+            comando.Parameters.AddWithValue("@FechaFactura", NuevaFactura.FechaFactura);
+            comando.Parameters.AddWithValue("@Observaciones", NuevaFactura.Observaciones);
+            comando.Parameters.AddWithValue("@FormaPago", NuevaFactura.FormaPago);
+            comando.Parameters.AddWithValue("@PromesaPago", NuevaFactura.PromesaPago);
+            comando.Parameters.AddWithValue("@IdTipoFactura", NuevaFactura.IdTipoFactura);
+            if (NuevaFactura.FechaPromesaPago == null)
             {
                 comando.Parameters.AddWithValue("@FechaPromesaPago", DBNull.Value);
             }
             else
             {
-                comando.Parameters.AddWithValue("@FechaPromesaPago", objCobranza.FechaPromesaPago);
+                comando.Parameters.AddWithValue("@FechaPromesaPago", NuevaFactura.FechaPromesaPago);
             }
             respuesta = comando.ExecuteNonQuery();
             mensaje = (respuesta > 0) ? "Registro modificado correctamente" : "Algo ha salido mal, no se modifico el registro";
@@ -122,6 +124,7 @@ namespace CobranzaSP.Lógica
             comando.Parameters.AddWithValue("@FechaPago", nuevaCuentaPagada.FechaPago);
             comando.Parameters.AddWithValue("@TipoPago", "FACTURA");
             comando.Parameters.AddWithValue("@CuentaPagada", nuevaCuentaPagada.CuentaSaldada);
+            comando.Parameters.AddWithValue("@IdTipoFactura", nuevaCuentaPagada.IdTipoFactura);
 
             respuesta = comando.ExecuteNonQuery();
             mensaje = (respuesta > 0) ? "Cuenta cobrada correctamente" : "Algo ha salido mal, no se pudo cobrar la cuenta";

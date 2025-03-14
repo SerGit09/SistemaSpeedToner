@@ -25,9 +25,11 @@ namespace CobranzaSP.Lógica
 
         //Nos ayudara a controlar si mostrar los formatos superiores en los pdfs
         public bool ColocarFormatoSuperior { get; set; }
+        public bool ColocarLogo { get; set; }
 
         //Fuentes globales para todos los pdfs
         public iTextSharp.text.Font FuenteTitulo = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 14, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+        public iTextSharp.text.Font FuenteTitulo12 = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 12, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
         public iTextSharp.text.Font FuenteTitulo18 = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 18, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
         public iTextSharp.text.Font FuenteParrafo = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.TIMES_ROMAN, 10, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
 
@@ -51,7 +53,7 @@ namespace CobranzaSP.Lógica
             p.Start();
         }
 
-        public void ColocarFormatosSuperiores(Document document)
+        public void ColocarLogos(Document document)
         {
             //Agregamos el logo de la izquierda
             iTextSharp.text.Image Logo = iTextSharp.text.Image.GetInstance(Properties.Resources.LogoSpeedToner, System.Drawing.Imaging.ImageFormat.Png);
@@ -69,6 +71,11 @@ namespace CobranzaSP.Lógica
             Logotipo.SetAbsolutePosition(document.Right - 150, document.Top - 50);
             //Logotipo.SetAbsolutePosition(document.Right - 100, document.Top - 50);
             document.Add(Logotipo);
+        }
+
+        public void ColocarFormatosSuperiores(Document document)
+        {
+            ColocarLogos(document);
 
             Paragraph NombreEmpresa = new Paragraph("SPEED TONER NUEVO LAREDO.", FuenteTitulo) { Alignment = Element.ALIGN_CENTER };
             document.Add(NombreEmpresa);
@@ -93,6 +100,12 @@ namespace CobranzaSP.Lógica
                 cb = writer.DirectContent;
                 //Sirve como canvas 
                 template = cb.CreateTemplate(document.PageSize.Width, 50);
+
+                if (ColocarLogo)
+                {
+                    ColocarLogos(document);
+                }
+
                 if (ColocarFormatoSuperior)
                 {
                     ColocarFormatosSuperiores(document);

@@ -28,7 +28,7 @@ namespace CobranzaSP.Formularios
         #region Inicio
         public void InicioAplicacion()
         {
-            string[] Opciones = { "","FACTURAS VENCIDAS", "FACTURAS NO VENCIDAS","FACTURAS CON PROMESA DE PAGO VENCIDAS", "SALDOS POR CLIENTE" };
+            string[] Opciones = { "","FACTURAS VENCIDAS", "FACTURAS NO VENCIDAS","FACTURAS CON PROMESA DE PAGO VENCIDAS", "SALDOS POR CLIENTE", "TIPOS FACTURAS" };
             cboOpcionReporte.Items.AddRange(Opciones);
             cboOpcionReporte.SelectedIndex = 0;
 
@@ -98,10 +98,25 @@ namespace CobranzaSP.Formularios
         {
             grpCliente.Visible = false;
             radTodosLosClientes.Checked = true;
-            if (cboOpcionReporte.SelectedItem.ToString() != "")
+            MostrarCapturaFechas(false);
+            string OpcionElegida = cboOpcionReporte.SelectedItem.ToString();
+            if (OpcionElegida != "")
             {
                 grpCliente.Visible = true;
+                int IndiceOpcion = cboOpcionReporte.SelectedIndex;
+                if(IndiceOpcion == 5)
+                {
+                    MostrarCapturaFechas(true);
+                }
             }
+        }
+
+        public void MostrarCapturaFechas(bool Mostrar)
+        {
+            lblFechaInicio.Visible = Mostrar;
+            lblFechaFinal.Visible = Mostrar;
+            dtpFechaFinal.Visible = Mostrar;
+            dtpFechaInicial.Visible = Mostrar;
         }
 
         private void radTodosLosClientes_CheckedChanged(object sender, EventArgs e)
@@ -123,7 +138,7 @@ namespace CobranzaSP.Formularios
                 return;
             }
 
-            ReporteFactura NuevoReporte = new ReporteFactura()
+            Reporte NuevoReporte = new Reporte()
             {
                 TipoBusqueda = cboOpcionReporte.SelectedItem.ToString(),
                 Cliente = (rdUnCliente.Checked) ? cboClientes.SelectedItem.ToString() : ""
@@ -131,9 +146,12 @@ namespace CobranzaSP.Formularios
             DeterminarParametroBusqueda(NuevoReporte);
             int IndiceOpcion = cboOpcionReporte.SelectedIndex;
 
+            //MessageBox.Show(NuevoReporte.FechaFinal + " " + NuevoReporte.FechaInicio + " " + NuevoReporte.Cliente);
+
             switch (IndiceOpcion)
             {
                 case 1: lgReporteFactura.ObtenerDatosReporteFacturasPromesaPago(NuevoReporte);  break;
+                case 5: lgReporteFactura.ObtenerDatosReporteTiposFacturas(NuevoReporte);  break;
                 default: lgReporteFactura.ObtenerDatosReporteFacturas(NuevoReporte); break;
             }
             
@@ -141,7 +159,7 @@ namespace CobranzaSP.Formularios
             //MessageBox.Show(NuevoReporte.TipoBusqueda + "\n" + NuevoReporte.ParametroBusqueda + "\n" + NuevoReporte.Cliente);
         }
 
-        public void DeterminarParametroBusqueda(ReporteFactura NuevoReporte)
+        public void DeterminarParametroBusqueda(Reporte NuevoReporte)
         {
             int IndiceOpcion = cboOpcionReporte.SelectedIndex;
 
@@ -150,6 +168,10 @@ namespace CobranzaSP.Formularios
                 case 1: NuevoReporte.ParametroBusqueda = "SI";break;
                 case 2:NuevoReporte.ParametroBusqueda = "Disponible";break;
                 case 3: NuevoReporte.ParametroBusqueda = "Vencida";break;
+                case 5:
+                    NuevoReporte.FechaInicio = dtpFechaInicial.Value;
+                    NuevoReporte.FechaFinal = dtpFechaFinal.Value;
+                    break;
                 default: NuevoReporte.ParametroBusqueda = "";break;
             }
         }

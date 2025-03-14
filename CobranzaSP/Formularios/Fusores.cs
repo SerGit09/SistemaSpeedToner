@@ -69,6 +69,9 @@ namespace CobranzaSP.Formularios
             tabla = NuevaAccion.Mostrar("spMostrarTodosFusores");
             //Asignamos los registros que optuvimos al datagridview
             dtgFusores.DataSource = tabla;
+            dtgFusores.Columns[0].Visible = false;
+            //dtgFusores.Columns[1].Visible = false;
+            dtgFusores.Columns[12].Visible = false;
         }
 
         #endregion
@@ -143,7 +146,8 @@ namespace CobranzaSP.Formularios
                     FechaFactura = dtpFechaFactura.Value,
                     Proveedor = cboProveedores.SelectedItem.ToString(),
                     Estado = (radActivo.Checked) ? "Activado" : "Desactivado",
-                    IdCartucho = NuevaAccion.BuscarId(cboModelos.SelectedItem.ToString(), "ObtenerIdCartucho")
+                    IdCartucho = NuevaAccion.BuscarId(cboModelos.SelectedItem.ToString(), "ObtenerIdCartucho"),
+                    FechaLlegada = dtpFechaLlegada.Value
                 };
                 VerificarFusorReconstruido(nuevoFusor);
                 if (Modificando)
@@ -181,17 +185,19 @@ namespace CobranzaSP.Formularios
             if (EsFusorReconstruido)
             {
                 nuevoFusor.NumeroFactura = "";
-                nuevoFusor.Cantidad = 0;
+                nuevoFusor.Precio = 0;
+                nuevoFusor.Proveedor = "SPEED TONER";
                 nuevoFusor.IdProveedor = 23;//SpeedToner
-
+                nuevoFusor.IdTipoFusor = 2;//Fusor de tipo reconstruido
                 nuevoFusor.DiasGarantia = 0;
             }
             else
             {
                 nuevoFusor.NumeroFactura = txtFactura.Text;
                 nuevoFusor.IdProveedor = NuevaAccion.BuscarId(cboProveedores.SelectedItem.ToString(), "ObtenerIdProveedor");
-                nuevoFusor.Cantidad = double.Parse(txtCosto.Text.Replace(",", ""));
+                nuevoFusor.Precio = double.Parse(txtCosto.Text.Replace(",", ""));
                 nuevoFusor.DiasGarantia = int.Parse(cboDiasGarantía.SelectedItem.ToString());
+                nuevoFusor.IdTipoFusor = 1;//Fusor de tipo nuevo
             }
         }
 
@@ -296,6 +302,7 @@ namespace CobranzaSP.Formularios
 
             string Estado = dtgFusores.CurrentRow.Cells[10].Value.ToString();
             cboModelos.SelectedItem = dtgFusores.CurrentRow.Cells[11].Value.ToString();
+            dtpFechaLlegada.Value = DateTime.Parse(dtgFusores.CurrentRow.Cells[13].Value.ToString());
             activo = (Estado == "Activado") ? true : false;
 
             cboDiasGarantía.SelectedItem = dtgFusores.CurrentRow.Cells[8].Value.ToString();
@@ -331,6 +338,7 @@ namespace CobranzaSP.Formularios
                 }
             }
             dtpFechaFactura.Value = DateTime.Today;
+            dtpFechaLlegada.Value = DateTime.Today;
             dtpFechaInicio.Value = DateTime.Today;
             dtpFechaFinal.Value = DateTime.Today;
             MostrarFechas(false);

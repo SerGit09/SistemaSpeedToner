@@ -71,6 +71,8 @@
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnCobrado = new System.Windows.Forms.Button();
             this.btnGuardar = new System.Windows.Forms.Button();
+            this.cboTipoFactura = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.grpDatos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgCobranza)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.erCobranza)).BeginInit();
@@ -84,6 +86,8 @@
             // 
             // grpDatos
             // 
+            this.grpDatos.Controls.Add(this.cboTipoFactura);
+            this.grpDatos.Controls.Add(this.label5);
             this.grpDatos.Controls.Add(this.dtpFechaPromesaPago);
             this.grpDatos.Controls.Add(this.lblFechaPromesa);
             this.grpDatos.Controls.Add(this.chkPromesaPago);
@@ -108,7 +112,7 @@
             // 
             // dtpFechaPromesaPago
             // 
-            this.dtpFechaPromesaPago.Location = new System.Drawing.Point(195, 187);
+            this.dtpFechaPromesaPago.Location = new System.Drawing.Point(718, 17);
             this.dtpFechaPromesaPago.Name = "dtpFechaPromesaPago";
             this.dtpFechaPromesaPago.Size = new System.Drawing.Size(314, 27);
             this.dtpFechaPromesaPago.TabIndex = 13;
@@ -117,7 +121,7 @@
             // lblFechaPromesa
             // 
             this.lblFechaPromesa.AutoSize = true;
-            this.lblFechaPromesa.Location = new System.Drawing.Point(6, 193);
+            this.lblFechaPromesa.Location = new System.Drawing.Point(529, 20);
             this.lblFechaPromesa.Name = "lblFechaPromesa";
             this.lblFechaPromesa.Size = new System.Drawing.Size(183, 19);
             this.lblFechaPromesa.TabIndex = 12;
@@ -127,7 +131,7 @@
             // chkPromesaPago
             // 
             this.chkPromesaPago.AutoSize = true;
-            this.chkPromesaPago.Location = new System.Drawing.Point(140, 156);
+            this.chkPromesaPago.Location = new System.Drawing.Point(140, 203);
             this.chkPromesaPago.Name = "chkPromesaPago";
             this.chkPromesaPago.Size = new System.Drawing.Size(151, 23);
             this.chkPromesaPago.TabIndex = 11;
@@ -151,7 +155,7 @@
             // chkPue
             // 
             this.chkPue.AutoSize = true;
-            this.chkPue.Location = new System.Drawing.Point(289, 122);
+            this.chkPue.Location = new System.Drawing.Point(289, 168);
             this.chkPue.Name = "chkPue";
             this.chkPue.Size = new System.Drawing.Size(57, 23);
             this.chkPue.TabIndex = 5;
@@ -160,16 +164,16 @@
             // 
             // rtxtObservaciones
             // 
-            this.rtxtObservaciones.Location = new System.Drawing.Point(533, 42);
+            this.rtxtObservaciones.Location = new System.Drawing.Point(533, 89);
             this.rtxtObservaciones.Name = "rtxtObservaciones";
-            this.rtxtObservaciones.Size = new System.Drawing.Size(545, 189);
+            this.rtxtObservaciones.Size = new System.Drawing.Size(545, 142);
             this.rtxtObservaciones.TabIndex = 7;
             this.rtxtObservaciones.Text = "";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(529, 20);
+            this.label6.Location = new System.Drawing.Point(529, 64);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(117, 19);
             this.label6.TabIndex = 10;
@@ -177,7 +181,7 @@
             // 
             // txtCantidad
             // 
-            this.txtCantidad.Location = new System.Drawing.Point(140, 122);
+            this.txtCantidad.Location = new System.Drawing.Point(140, 168);
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(120, 27);
             this.txtCantidad.TabIndex = 4;
@@ -185,7 +189,7 @@
             // 
             // dtpFechaFactura
             // 
-            this.dtpFechaFactura.Location = new System.Drawing.Point(140, 89);
+            this.dtpFechaFactura.Location = new System.Drawing.Point(140, 135);
             this.dtpFechaFactura.Name = "dtpFechaFactura";
             this.dtpFechaFactura.Size = new System.Drawing.Size(369, 27);
             this.dtpFechaFactura.TabIndex = 3;
@@ -201,7 +205,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(79, 129);
+            this.label4.Location = new System.Drawing.Point(79, 175);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(55, 19);
             this.label4.TabIndex = 3;
@@ -210,7 +214,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 90);
+            this.label3.Location = new System.Drawing.Point(23, 136);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(111, 19);
             this.label3.TabIndex = 2;
@@ -522,6 +526,28 @@
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
+            // cboTipoFactura
+            // 
+            this.cboTipoFactura.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboTipoFactura.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboTipoFactura.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTipoFactura.FormattingEnabled = true;
+            this.cboTipoFactura.Location = new System.Drawing.Point(140, 92);
+            this.cboTipoFactura.Margin = new System.Windows.Forms.Padding(4);
+            this.cboTipoFactura.Name = "cboTipoFactura";
+            this.cboTipoFactura.Size = new System.Drawing.Size(369, 27);
+            this.cboTipoFactura.Sorted = true;
+            this.cboTipoFactura.TabIndex = 15;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(32, 95);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(103, 19);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Tipo Factura:";
+            // 
             // ICobranza
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -609,5 +635,7 @@
         private System.Windows.Forms.CheckBox chkPromesaPago;
         private System.Windows.Forms.DateTimePicker dtpFechaPromesaPago;
         private System.Windows.Forms.Label lblFechaPromesa;
+        private System.Windows.Forms.ComboBox cboTipoFactura;
+        private System.Windows.Forms.Label label5;
     }
 }

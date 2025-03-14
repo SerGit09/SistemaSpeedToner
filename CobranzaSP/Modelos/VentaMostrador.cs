@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CobranzaSP.Modelos
 {
-    internal class VentaMostrador:Cuenta
+    internal class VentaMostrador:DocumentoCobranza
     {
         public int IdVenta { get; set; }
     }

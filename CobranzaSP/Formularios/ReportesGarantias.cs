@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CobranzaSP.Modelos;
 using System.Runtime.InteropServices;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 
 namespace CobranzaSP.Formularios
 {
@@ -21,6 +22,9 @@ namespace CobranzaSP.Formularios
         FuncionesFormularios Formulario = new FuncionesFormularios();
         AccionesLógica NuevaAccion = new AccionesLógica();
         LogicaGarantia lgGarantia = new LogicaGarantia();
+        Reporte NuevoReporteGarantia = new Reporte();
+        bool Validado;
+        bool ReporteCliente = false;
         public ReportesGarantias()
         {
             InitializeComponent();
@@ -32,14 +36,77 @@ namespace CobranzaSP.Formularios
         public void InicioAplicacion()
         {
             //Opciones reporte
-            string[] Opciones = { "", "Modelo", "Cliente", "Rango Fecha" };
+            string[] Opciones = { "", "Marca", "Cliente", "Rango Fecha" };
+            Formulario.LlenarComboBox(cboMarca, "SeleccionarMarca");
+            Formulario.LlenarComboBox(cboClientes, "SeleccionarClientesServicios");
+            //Formulario.LlenarComboBox(cboClientes, "SeleccionarClientes");
             cboOpcionReporte.Items.AddRange(Opciones);
             cboOpcionReporte.SelectedIndex = 0;
+            radTodasLasMarcas.Checked = true;
+
         }
 
         #endregion
 
         #region Validaciones
+        public bool ValidarReporte()
+        {
+            Validado = true;
+            erGarantia.Clear();
+
+            switch (TipoBusqueda)
+            {
+                case "Marca":ValidarMarcaImpresora(); break;
+                case "Cliente":
+                    if (rdUnCliente.Checked)
+                    {
+                        ValidarCampo(cboClientes, "Seleccione un cliente");
+                    }
+                    ValidarMarcaImpresora();
+                    ;break;
+                case "Modelo":ValidarModeloImpresora();break;
+            }
+
+            return Validado;
+        }
+
+        public void ValidarMarcaImpresora()
+        {
+            if (radUnaMarca.Checked)
+            {
+                ValidarCampo(cboMarca, "Seleccione una marca");
+            }
+            ValidarModeloImpresora();
+        }
+
+        public void ValidarModeloImpresora()
+        {
+            if (radUnModelo.Checked)
+            {
+                ValidarCampo(cboModelos, "Seleccione un modelo");
+            }
+        }
+
+        public void ValidarCampo(Control c, string Mensaje)
+        {
+            if (c is TextBox || c is RichTextBox)
+            {
+                if (string.IsNullOrEmpty(c.Text))
+                {
+                    erGarantia.SetError(c, Mensaje);
+                    Validado = false;
+                }
+            }
+            else if (c is ComboBox)
+            {
+                ComboBox combo = (ComboBox)c;
+                if (combo.SelectedIndex == -1 || combo.SelectedIndex == 0)
+                {
+                    erGarantia.SetError(c, Mensaje);
+                    Validado = false;
+                }
+            }
+        }
         #endregion
 
         #region PanelSuperior
@@ -64,92 +131,116 @@ namespace CobranzaSP.Formularios
         private void cboOpcionReporte_SelectedIndexChanged(object sender, EventArgs e)
         {
             btnGenerarReporte.Enabled = true;
-            TipoBusqueda = cboOpcionReporte.SelectedItem.ToString();
             ReiniciarOpciones();
-            switch (TipoBusqueda)
+            NuevoReporteGarantia.TipoBusqueda = cboOpcionReporte.SelectedItem.ToString();
+
+            if(NuevoReporteGarantia.TipoBusqueda != "")
             {
-                case "Modelo":
-                    MostrarComboBox(cboMarca, "SeleccionarMarca", true);
-                    MostrarLabelOpcion(true);
-                    break;
+                grpMarcas.Visible = true;
+                btnGenerarReporte.Enabled = true;
+            }
+
+            switch (NuevoReporteGarantia.TipoBusqueda)
+            {
                 case "Cliente":
-                    grpCliente.Visible = true;
-                    radTodosLosClientes.Checked = true;
-                    MostrarRadioButtonsCliente(true);
-                    ; break;
+                    ReporteCliente = true;
+                    grpCliente.Visible = true;break;
+                case "Rango Fecha": grpMarcas.Visible = false; break;
             }
         }
 
         public void ReiniciarOpciones()
         {
-            MostrarRadioButtonsCliente(false);
-            MostrarModelos(false);
-            radTodosLosClientes.Checked = false;
+            radTodosLosClientes.Checked = true;
+            radTodasLasMarcas.Checked = true;
+            NuevoReporteGarantia.ParametroBusqueda = "";
             grpCliente.Visible = false;
             cboMarca.Visible = false;
-            MostrarRadioButtonsModelos(false);
             grpModelos.Visible = false;
+            grpMarcas.Visible = false;
+            btnGenerarReporte.Enabled = false;
+            ReporteCliente = false;
         }
 
-        public void MostrarLabelOpcion(bool Mostrar)
+        #region RadioButtons
+        private void radTodosLosClientes_CheckedChanged(object sender, EventArgs e)
         {
-            lblOpcion.Visible = Mostrar;
+            MostrarControlesCapturaCliente(false);
+            cboClientes.SelectedIndex = 0;
         }
 
-        public void MostrarRadioButtonsCliente(bool Mostrar)
+        private void rdUnCliente_CheckedChanged(object sender, EventArgs e)
         {
-            rdUnCliente.Visible = Mostrar;
-            radTodosLosClientes.Visible = Mostrar;
+            MostrarControlesCapturaCliente(true);
+            Formulario.LlenarComboBox(cboClientes, "SeleccionarClientesServicios");
         }
-
-        private void MostrarComboBox(ComboBox cbo, string sp, bool Mostrar)
+        public void MostrarControlesCapturaCliente(bool Mostrar)
         {
-            cbo.Visible = Mostrar;
-            if (Mostrar)
-            {
-                Formulario.LlenarComboBox(cbo, sp, 0);
-            }
+            lblCliente.Visible = Mostrar;
+            cboClientes.Visible = Mostrar;
         }
 
-        public void MostrarModelos(bool Mostrar)
+        private void radTodosModelos_CheckedChanged(object sender, EventArgs e)
+        {
+            cboModelos.SelectedIndex = 0;
+            MostrarControlesCapturaModelo(false);
+            NuevoReporteGarantia.TipoBusqueda = "Marca";
+        }
+
+        private void radUnModelo_CheckedChanged(object sender, EventArgs e)
+        {
+            MostrarControlesCapturaModelo(true);
+            NuevoReporteGarantia.TipoBusqueda = "Modelo";
+        }
+
+        public void MostrarControlesCapturaModelo(bool Mostrar)
         {
             lblModelos.Visible = Mostrar;
             cboModelos.Visible = Mostrar;
         }
 
-        private void radTodosLosClientes_CheckedChanged(object sender, EventArgs e)
+        private void radTodasLasMarcas_CheckedChanged(object sender, EventArgs e)
         {
-            MostrarComboBox(cboClientes, "", false);
-            lblCliente.Visible = false;
+            cboMarca.SelectedIndex = 0;
+            MostrarControlesCapturaMarca(false);
+
+            if (ReporteCliente)
+            {
+                NuevoReporteGarantia.TipoBusqueda = "Cliente";
+            }
+            else
+            {
+                NuevoReporteGarantia.TipoBusqueda = "Marca";
+            }
+            NuevoReporteGarantia.ParametroBusqueda = "";
         }
 
-        private void rdUnCliente_CheckedChanged(object sender, EventArgs e)
+        private void radUnaMarca_CheckedChanged(object sender, EventArgs e)
         {
-            lblCliente.Visible = true;
-            MostrarComboBox(cboClientes, "SeleccionarClientesServicios", true);
+            MostrarControlesCapturaMarca(true);
         }
+
+        public void MostrarControlesCapturaMarca(bool Mostrar)
+        {
+            lblMarca.Visible = Mostrar;
+            cboMarca.Visible = Mostrar;
+        }
+        #endregion
+
+
 
         private void cboOpcionElegida_SelectedIndexChanged(object sender, EventArgs e)
         {
-            MostrarModelos(false);
             grpModelos.Visible = false;
             //En dado caso que se haya seleccionado algo de las marcas y mientras no estemos buscando un registro en especifico
             if (cboMarca.SelectedItem.ToString() != " ")
             {
                 grpModelos.Visible = true;
+                NuevoReporteGarantia.TipoBusqueda = "Marca";
                 int IdMarca = NuevaAccion.BuscarId(cboMarca.SelectedItem.ToString(), "ObtenerIdMarca");
                 Formulario.LlenarComboBox(cboModelos, "spSeleccionarCartuchosMarca", IdMarca);
-                if(TipoBusqueda != "Cliente")
-                {
-                    MostrarModelos(true);
-                }
+                radTodosModelos.Checked = true;
             }
-        }
-        public void MostrarRadioButtonsModelos(bool Mostrar)
-        {
-            radTodosModelos.Visible =Mostrar;
-            radUnModelo.Visible = Mostrar;
-            radTodosModelos.Checked = Mostrar;
         }
 
         #endregion
@@ -158,29 +249,22 @@ namespace CobranzaSP.Formularios
         private void btnGenerarReporte_Click(object sender, EventArgs e)
         {
             bool DatosEncontrados;
-            //if (!ValidarReporte())
-            //    return;
+            if (!ValidarReporte())
+                return;
             try
             {
-                DatosReporteGarantia NuevoReporte = new DatosReporteGarantia()
+                NuevoReporteGarantia.FechaInicio = dtpFechaInicial.Value;
+                NuevoReporteGarantia.FechaFinal = dtpFechaFinal.Value;
+
+                DeterminarParametroBusqueda();
+                //MessageBox.Show("TIPO BUSQUEDA:" + NuevoReporteGarantia.TipoBusqueda + "\n Cliente:" + NuevoReporteGarantia.Cliente
+                //    + "\n Parametro Busqueda:" + NuevoReporteGarantia.ParametroBusqueda);
+                DatosEncontrados = lgGarantia.ObtenerDatosReporteGarantia(NuevoReporteGarantia);
+
+                if (!DatosEncontrados)
                 {
-                    FechaInicio = dtpFechaInicial.Value,
-                    FechaFinal = dtpFechaFinal.Value,
-                    TipoBusqueda = TipoBusqueda,
-                    Marca = ColocarMarca(),
-                    ParametroBusqueda = DeterminarParametroBusqueda(),
-                    SegundoParametro = DeterminarSegundoParametro()
-                };
-                //MessageBox.Show(NuevoReporte.ParametroBusqueda);
-                //MessageBox.Show(NuevoReporte.SegundoParametro);
-                //MessageBox.Show(NuevoReporte.Marca);
-
-                DatosEncontrados = lgGarantia.DeterminarTipoReporte(NuevoReporte);
-
-                //if (!DatosEncontrados)
-                //{
-                //    MessageBox.Show("NO EXISTEN REGISTROS", "DATOS NO ENCONTRADOS", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //}
+                    MessageBox.Show("NO EXISTEN REGISTROS", "DATOS NO ENCONTRADOS", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {
@@ -188,77 +272,47 @@ namespace CobranzaSP.Formularios
             }
         }
 
-        public string ColocarMarca()
+        public void DeterminarParametroBusqueda()
         {
-            string Marca = "";
-            if (TipoBusqueda != "Rango Fecha" && radTodosLosClientes.Checked == false)
+            if (!ReporteCliente)
             {
-                Marca = cboMarca.SelectedItem.ToString();
+                NuevoReporteGarantia.Cliente = "";
             }
-            return Marca;
-        }
-
-        public string DeterminarParametroBusqueda()
-        {
-            string Parametro = "";
-            switch (TipoBusqueda)
+            
+            switch (NuevoReporteGarantia.TipoBusqueda)
             {
-                case "Modelo":
-                    Parametro = cboModelos.SelectedItem.ToString();
+                case "Marca":
+                    CapturarMarcaImpresora();
                     break;
-                case "Cliente":
-                    Parametro = (radTodosLosClientes.Checked) ? "" : cboClientes.SelectedItem.ToString();
-                    ; break;
+                case "Modelo":
+                    NuevoReporteGarantia.ParametroBusqueda = cboModelos.SelectedItem.ToString();
+                    break;
             }
-            return Parametro;
         }
 
-        public string DeterminarSegundoParametro()
+        public void CapturarMarcaImpresora()
         {
-            string SegundoParametro = "";
-            if (TipoBusqueda == "Cliente")
+            NuevoReporteGarantia.ParametroBusqueda = "";
+            if (radUnaMarca.Checked)
             {
-                if (!radTodosLosClientes.Checked)
-                {
-                    SegundoParametro = cboModelos.SelectedItem.ToString();
-                }
+                NuevoReporteGarantia.ParametroBusqueda = cboMarca.SelectedItem.ToString();
             }
-            return SegundoParametro;
+
+            if (radUnModelo.Checked)
+            {
+                NuevoReporteGarantia.ParametroBusqueda = cboModelos.SelectedItem.ToString();
+            }
         }
 
         #endregion
-
-        #region Eventos
-        #endregion
-
-        private void chkRango_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void cboClientes_SelectedIndexChanged(object sender, EventArgs e)
         {
+            NuevoReporteGarantia.Cliente = "";
             if (cboClientes.SelectedItem.ToString() != " ")
             {
-                MostrarComboBox(cboMarca, "SeleccionarMarca", true);
-                MostrarRadioButtonsModelos(true);
-                lblOpcion.Visible = true;
+                NuevoReporteGarantia.Cliente = cboClientes.SelectedItem.ToString();
             }
-        }
-
-        private void radTodosModelos_CheckedChanged(object sender, EventArgs e)
-        {
-            if(TipoBusqueda == "Cliente")
-            {
-                cboModelos.Visible = false;
-                lblModelos.Visible = false;
-            }
-        }
-
-        private void radUnModelo_CheckedChanged(object sender, EventArgs e)
-        {
-            cboModelos.Visible = true;
-            lblModelos.Visible = true;
         }
     }
 }

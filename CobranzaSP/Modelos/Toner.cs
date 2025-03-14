@@ -13,5 +13,6 @@ namespace CobranzaSP.Modelos
         public int IdMarca { get; set; }
 
         public int IdCartucho { get; set; }
+        public int IdTipoArticulo { get; set; }
     }
 }

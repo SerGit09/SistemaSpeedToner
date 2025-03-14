@@ -31,7 +31,7 @@ namespace CobranzaSP.Formularios
         FuncionesFormularios FuncionFormulario = new FuncionesFormularios();
 
         //Objeto para guardar los datos cuando buscamos un folio
-        Modulo_Cliente ModuloSeleccionado;
+        RegistroModulo ModuloSeleccionado;
 
         #region Variables
         //Generales
@@ -66,6 +66,7 @@ namespace CobranzaSP.Formularios
             FuncionFormulario.PropiedadesDtg(dtgPartesUsadas);
 
             FuncionFormulario.LlenarComboBox(cboClientes, "SeleccionarClientesServicios", 0);
+            //FuncionFormulario.LlenarComboBox(cboClientes, "SeleccionarClientes", 0);
             FuncionFormulario.LlenarComboBox(cboModelos, "SeleccionarModelosRicoh", 0);
 
             //LlenarComboBox(cboDescripciones, "SeleccionarDescripcionesPartesRicoh", 0);
@@ -108,8 +109,8 @@ namespace CobranzaSP.Formularios
             tabla = lgRegistroPartes.MostrarPartes(NumeroFolio);
             //Asignamos los registros que optuvimos al datagridview
             dtgPartesUsadas.DataSource = tabla;
-            dtgPartesUsadas.Columns["IdRegistro"].Visible = false;
-            dtgPartesUsadas.Columns["IdParte"].Visible = false;
+            //dtgPartesUsadas.Columns["IdRegistro"].Visible = false;
+            //dtgPartesUsadas.Columns["IdParte"].Visible = false;
         }
         #endregion
 
@@ -145,16 +146,28 @@ namespace CobranzaSP.Formularios
 
             ValidarCampo(txtNumeroFolio, "Ingrese número de folio del reporte");
             ValidarCampo(cboClientes, "Seleccione un cliente");
-            ValidarCampo(cboNumeroSerie, "Seleccione una serie de impresora");
+
+            if (chkSerie.Checked)
+            {
+                ValidarCampo(txtSerie, "Ingrese una serie de impresora");
+            }
+            else
+            {
+                ValidarCampo(cboNumeroSerie, "Seleccione una serie de impresora");
+            }
+            
 
             //Validar si no hay un nuevo modelo Ricoh
             if (checkBox1.Checked)
             {
                 ValidarCampo(txtModelo, "Ingrese el modelo de impresora");
+                
             }
             else
             {
+                
                 ValidarCampo(cboModelos, "Seleccione un modelo");
+
             }
 
             ValidarCampo(txtContador, "Ingrese contador del equipo");
@@ -197,6 +210,25 @@ namespace CobranzaSP.Formularios
             return Validado;
         }
 
+        public bool ValidarCamposParaModulos()
+        {
+            erServicios.Clear();
+            Validado = true;
+
+            ValidarCampo(txtNumeroFolio, "Es necesario capturar número de folio");
+            if (chkSerie.Checked)
+            {
+                ValidarCampo(txtSerie, "Es necesario capturar serie de equipo");
+            }
+            else
+            {
+                ValidarCampo(cboNumeroSerie, "Es necesario seleccionar una serie");
+            }
+            ValidarCampo(txtContador, "Es necesario capturar el contador de páginas");
+            ValidarCampo(cboModelos, "Es necesario capturar un modelo de impresora");
+            return Validado;
+        }
+
         public bool ValidarCamposVaciosPartesUsadas()
         {
             Validado = true;
@@ -233,23 +265,23 @@ namespace CobranzaSP.Formularios
                 string Mensaje;
                 Servicio nuevoServicio = new Servicio()
                 {
+                    IdServicio = IdServicio,
                     NumeroFolio = txtNumeroFolio.Text,
                     IdCliente = nuevaAccion.BuscarId(cboClientes.SelectedItem.ToString(), "ObtenerIdCliente"),
                     Contador = int.Parse(txtContador.Text.Replace(",", "")),
                     Modelo = cboModelos.SelectedItem.ToString(),
                     IdMarca = 6,
-                    IdSerie = nuevaAccion.BuscarId(Serie, "ObtenerIdSerie"),
                     Fecha = dtpFecha.Value,
                     Tecnico = cboTecnico.SelectedItem.ToString(),
                     ServicioRealizado = rtxtServicio.Text,
                     ReporteFallo = rtxtFallas.Text,
                     Fusor = "",
-                    FusorSaliente = "",
-                    EstaModificando = Modificar
+                    FusorSaliente = ""
                 };
                 VerificarNuevoModeloRicoh(nuevoServicio);
                 DeterminarTipoDeReporte(nuevoServicio);
-                nuevoServicio.Serie = (chkSerie.Checked) ? txtSerie.Text : cboNumeroSerie.SelectedItem.ToString();
+                ComprobarNuevaSerie(nuevoServicio);
+                nuevoServicio.IdSerie = nuevaAccion.BuscarId(Serie, "ObtenerIdSerie");
 
                 if (Modificar)
                 {
@@ -324,16 +356,16 @@ namespace CobranzaSP.Formularios
             }
         }
 
-        public void ComprobarNuevaSerie()
+        public void ComprobarNuevaSerie(Servicio NuevoServicio)
         {
             if (chkSerie.Checked)
             {
-                Serie = txtSerie.Text;
+                NuevoServicio.Serie = txtSerie.Text;
                 lgServicio.AñadirSerie(Serie);
             }
             else
             {
-                Serie = cboNumeroSerie.SelectedItem.ToString();
+                NuevoServicio.Serie = cboNumeroSerie.SelectedItem.ToString();
             }
         }
 
@@ -351,7 +383,7 @@ namespace CobranzaSP.Formularios
             {
                 string NumeroFolio = txtNumeroFolio.Text;
                 string Serie = cboNumeroSerie.SelectedItem.ToString();
-                lgServicio.EliminarRegistro(NumeroFolio, "EliminarServicio");
+                nuevaAccion.Eliminar(IdServicio, "EliminarServicio");
                 //En caso de tratarse el ultimo reporte de alguna serie, se debera actualizar el ultimo
                 //reporte de los modulos de dicha serie
                 lgModuloCliente.CambiarUltimoReporteEnSerieModulos(Serie, NumeroFolio);
@@ -395,6 +427,7 @@ namespace CobranzaSP.Formularios
 
             btnEliminar.Enabled = false;
             radServicio.Checked = true;
+            IdServicio = 0;
         }
 
         private void btnBuscarReporte_Click(object sender, EventArgs e)
@@ -461,8 +494,10 @@ namespace CobranzaSP.Formularios
                     Fecha = Convert.ToDateTime((fila[6].ToString())),
                     Tecnico = (fila[7].ToString()),
                     ServicioRealizado = fila[10].ToString(),
-                    ReporteFallo = fila[11].ToString()
+                    ReporteFallo = fila[11].ToString(),
+                    IdTipoServicio = int.Parse(fila[12].ToString())
                 };
+                IdServicio = int.Parse(fila[13].ToString());
             }
             LlenarFormulario(ServicioBuscado);
         }
@@ -480,6 +515,18 @@ namespace CobranzaSP.Formularios
             cboTecnico.SelectedItem = ServicioBuscado.Tecnico;
             rtxtServicio.Text = ServicioBuscado.ServicioRealizado;
             rtxtFallas.Text = ServicioBuscado.ReporteFallo;
+            SeleccionarTipoReporte(ServicioBuscado.IdTipoServicio);
+        }
+
+        public void SeleccionarTipoReporte(int IdTipoReporte)
+        {
+            switch (IdTipoReporte)
+            {
+                case 1: radServicio.Checked = true; break;
+                case 2: radInstalacion.Checked = true; break;
+                case 3: radRetirado.Checked = true; break;
+                case 4: radMantenimiento.Checked = true; break;
+            }
         }
         private void btnReportes_Click(object sender, EventArgs e)
         {
@@ -692,7 +739,7 @@ namespace CobranzaSP.Formularios
                     if (txtNumeroFolio.Text != FolioTabla)//Si es el igual realizamos una modificacion a dicho modulo
                     {
                         //Quiere decir que no ha sido modificado dicho modulo
-                        ModuloEquipo NuevoModulo = new ModuloEquipo()
+                        ModuloRicoh NuevoModulo = new ModuloRicoh()
                         {
                             Modulo = fila.Cells[1].Value.ToString(),
                             Clave = fila.Cells[2].Value.ToString()
@@ -766,6 +813,11 @@ namespace CobranzaSP.Formularios
         //Boton que nos abrira una forma para colocar un modulo nuevo
         private void btnAgregar_Click(object sender, EventArgs e)
         {
+            if (!ValidarCamposParaModulos())
+            {
+                return;
+            }
+
             int contador = int.Parse(txtContador.Text);
             Servicio NuevoServicio = new Servicio()
             {
@@ -774,7 +826,7 @@ namespace CobranzaSP.Formularios
                 Modelo = cboModelos.SelectedItem.ToString(),
                 NumeroFolio = txtNumeroFolio.Text
             };
-            //ModuloNuevo modulo = new ModuloNuevo(this, cboModelos.SelectedItem.ToString(), Serie, txtNumeroFolio.Text, contador, ModificarModulo);
+            
             ModuloNuevo modulo = new ModuloNuevo(this, NuevoServicio);
             modulo.Show();
         }
@@ -804,27 +856,13 @@ namespace CobranzaSP.Formularios
 
             Servicio DatosServicio = new Servicio()
             {
-                
                 Contador = int.Parse(txtContador.Text),
                 Serie = Serie,
                 Modelo = cboModelos.SelectedItem.ToString(),
                 NumeroFolio = txtNumeroFolio.Text
             };
-
-            //modulo = new ModuloNuevo(this, cboModelos.SelectedItem.ToString(), ModuloSeleccionado, Serie, txtNumeroFolio.Text, contador, ModificarModulo, RetirarModulo, BuscandoFolio);
             modulo = new ModuloNuevo(this, ModuloSeleccionado, DatosServicio, ModificarModulo, RetirarModulo, BuscandoFolio);
 
-            //if (ModificarModulo)
-            //{
-            //    //Alguna variable para cargar
-            //    modulo = new ModuloNuevo(this, cboModelos.SelectedItem.ToString(), ModuloSeleccionado, Serie, txtNumeroFolio.Text, contador, ModificarModulo, RetirarModulo, BuscandoFolio);
-
-            //    //modulo = new ModuloNuevo(this, cboModelos.SelectedItem.ToString(), Serie, txtNumeroFolio.Text, contador, ModificarModulo, RetirarModulo);
-            //}
-            //else
-            //{
-            //    modulo = new ModuloNuevo(this, cboModelos.SelectedItem.ToString(), Serie, txtNumeroFolio.Text, contador, ModificarModulo, RetirarModulo);
-            //}
 
             modulo.Show();
         }
@@ -856,14 +894,11 @@ namespace CobranzaSP.Formularios
             btnAgregar.Enabled = false;
             ModificarModulo = true;
 
-            ModuloSeleccionado = new Modulo_Cliente()
+            ModuloSeleccionado = new RegistroModulo()
             {
-                Id = int.Parse(dtgModulos.CurrentRow.Cells[0].Value.ToString()),
-                //Modelo = dtgModulos.CurrentRow.Cells[1].Value.ToString(),
+                IdRegistroModulo = int.Parse(dtgModulos.CurrentRow.Cells[0].Value.ToString()),
                 Modulo = dtgModulos.CurrentRow.Cells[1].Value.ToString(),
-                //Serie = dtgModulos.CurrentRow.Cells[3].Value.ToString(),
                 Clave = dtgModulos.CurrentRow.Cells[2].Value.ToString(),
-                //Paginas = int.Parse(txtContador.Text),
                 Estado = dtgModulos.CurrentRow.Cells[4].Value.ToString(),
                 Observacion = dtgModulos.CurrentRow.Cells[3].Value.ToString()
             };
@@ -890,6 +925,12 @@ namespace CobranzaSP.Formularios
                 cboModelos.Enabled = false;
                 cboNumeroSerie.Focus();
             }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            txtModelo.Visible = checkBox1.Checked;
+            cboModelos.Visible = !checkBox1.Checked;
         }
     }
 }

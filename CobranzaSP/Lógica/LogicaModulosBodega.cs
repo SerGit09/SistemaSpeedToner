@@ -53,10 +53,10 @@ namespace CobranzaSP.Lógica
             comando.Connection = conexion.AbrirConexion();
             comando.CommandText = "BuscarIdModulo";
             comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.Clear();
             comando.Parameters.AddWithValue("@CampoBusqueda", campo);
             comando.Parameters.AddWithValue("@IdModelo", IdModelo);
             ver = comando.ExecuteReader();
-            comando.Parameters.Clear();
 
             while (ver.Read())
             {

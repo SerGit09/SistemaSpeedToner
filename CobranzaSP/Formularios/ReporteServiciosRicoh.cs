@@ -36,11 +36,14 @@ namespace CobranzaSP.Formularios
             OpcionesReportes();
             MostrarOpcionesModulo(false);
             btnGenerarReporte.Enabled = false;
+            Formulario.LlenarComboBox(cboModelosModulos, "spSeleccionarModelosModulos");
         }
 
         public void OpcionesReportes()
         {
-            string[] Opciones = { "", "HISTORIAL MODULO","MODULOS POR SERIE DE EQUIPO","UBICACION MODULO","CLIENTE", "SERIE","RANGO DE FECHA", "MANTENIMIENTOS"};
+            string[] Opciones = 
+                { "", "HISTORIAL MODULO","MODULOS POR SERIE DE EQUIPO","MODULOS","UBICACION MODULO","CLIENTE", "SERIE","RANGO DE FECHA", "MANTENIMIENTOS"
+                };
             cboOpcionReporte.Items.AddRange(Opciones);
             cboOpcionReporte.SelectedIndex = 0;
 
@@ -51,13 +54,6 @@ namespace CobranzaSP.Formularios
         #endregion
 
         #region Validaciones
-        public bool ValidarReporte()
-        {
-            erReporte.Clear();
-            Validado = false;
-            ValidarOpcionElegida();
-            return Validado;
-        }
 
         public bool ValidarOpcionesReporte()
         {
@@ -94,40 +90,6 @@ namespace CobranzaSP.Formularios
             }
 
             return Validado;
-        }
-
-        public void ValidarOpcionElegida()
-        {
-            if (TipoBusqueda == "RANGO DE FECHA")
-            {
-                Validado = true;
-                return;
-            }
-
-            if(TipoBusqueda == "HISTORIAL MODULO" || TipoBusqueda == "UBICACION MODULO")
-            {
-                ValidarClave();
-            }
-            else
-            {
-                if (string.IsNullOrWhiteSpace(cboOpcionElegida.SelectedItem.ToString()))
-                {
-                    switch (TipoBusqueda)
-                    {
-                        case "CLIENTE": erReporte.SetError(cboOpcionElegida, "Eliga un cliente"); ; break;
-                        case "SERIE": erReporte.SetError(cboOpcionElegida, "Eliga una serie de equipo"); break;
-                        case "MODULOS POR SERIE DE EQUIPO": erReporte.SetError(cboOpcionElegida, "Eliga una serie de equipo"); break;
-                        case "RANGO DE FECHA": Validado = true; break;
-                        default: erReporte.SetError(cboOpcionElegida, "Eliga un modelo"); ; break;
-                    }
-                    Validado = false;
-                }
-                else
-                {
-                    Validado = true;
-                }
-            }
-            
         }
 
         public void ValidarCampo(Control c, string Mensaje)
@@ -185,6 +147,10 @@ namespace CobranzaSP.Formularios
                     case "SERIE":
                         MostrarSeries(true);
                         Formulario.LlenarComboBox(cboOpcionElegida, "SeleccionarSeriesRicoh");
+                        SeleccionClienteHabilitada = false;
+                        break;
+                    case "MODULOS":
+                        grpModulos.Visible = true;
                         SeleccionClienteHabilitada = false;
                         break;
                     case "RANGO DE FECHA":
@@ -253,8 +219,6 @@ namespace CobranzaSP.Formularios
             cboOpcionElegida.Visible = false;
             chkRango.Checked = false;
             MostrarSeleccionarFechas(false);
-            MostrarClavesModulos(false);
-            MostrarOpcionesModulos(false);
             btnGenerarReporte.Enabled= false;
             lblOpcionReporte.Visible = false;
             txtClaveModulo.Text = "";
@@ -262,11 +226,12 @@ namespace CobranzaSP.Formularios
             MostrarTextBoxClave(false);
             MostrarSeries(false);
 
+
+            radTodosLosClientes.Checked = false;
             //Ocultar clientes y modelos
             grpCliente.Visible = false;
             grpModelos.Visible = false;
-
-            radTodosLosClientes.Checked = false;
+            grpModulos.Visible = false;
 
             SeleccionClienteHabilitada = true;
         }
@@ -284,6 +249,7 @@ namespace CobranzaSP.Formularios
             cboClientes.Visible = true;
             lblCliente.Visible = true;
             Formulario.LlenarComboBox(cboClientes, "SeleccionarClientesServicios");
+            //Formulario.LlenarComboBox(cboClientes, "SeleccionarClientes");
         }
 
         //Ocultar elegir un cliente
@@ -309,7 +275,10 @@ namespace CobranzaSP.Formularios
         {
             //Mostrar para elegir un modelo ricoh
             cboModelos.Visible = true;
-            TipoBusqueda = "MODELO";
+            if(TipoBusqueda != "MANTENIMIENTOS")
+            {
+                TipoBusqueda = "MODELO";
+            }
             Formulario.LlenarComboBox(cboModelos, "SeleccionarModelosRicoh");
         }
         #endregion
@@ -333,10 +302,10 @@ namespace CobranzaSP.Formularios
                     TipoBusqueda = TipoBusqueda,
                     RangoHabilitado = chkRango.Checked
                 };
-                //MessageBox.Show(NuevoReporte.TipoBusqueda);
-                //MessageBox.Show(NuevoReporte.ParametroBusqueda);
                 DeterminarParametroBusqueda(NuevoReporte);
                 VerificarSeleccionDeCliente(NuevoReporte);
+
+                //MessageBox.Show(NuevoReporte.ParametroBusqueda + "   " + NuevoReporte.TipoBusqueda);
                 DatosEncontrados = lgReporteModulo.Pdf(NuevoReporte);
 
                 if (!DatosEncontrados)
@@ -375,6 +344,10 @@ namespace CobranzaSP.Formularios
                 case "UBICACION MODULO":
                     NuevoReporte.ParametroBusqueda = txtClaveModulo.Text;
                     break;
+                case "MODULOS":
+                    NuevoReporte.ParametroBusqueda = cboModulos.SelectedItem.ToString();
+                    NuevoReporte.TipoBusquedaAdicional = cboModelosModulos.SelectedItem.ToString();
+                    break;
                 case "RANGO DE FECHA":
                     NuevoReporte.ParametroBusqueda = "";
                     break;
@@ -410,42 +383,20 @@ namespace CobranzaSP.Formularios
         }
 
         #region ReporteModulos
-        private void cboOpcionElegida_SelectedIndexChanged(object sender, EventArgs e)
+        private void cboModelosModulos_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboOpcionElegida.SelectedItem.ToString() != " " && (TipoBusqueda == "HISTORIAL MODULO" || TipoBusqueda == "UBICACION MODULO"))
+            if (cboModelosModulos.SelectedItem.ToString() != " ")
             {
-                MostrarOpcionesModulos(true);
-                string opcion = cboOpcionElegida.SelectedItem.ToString();
-                int IdModelo = NuevaAccion.BuscarId(opcion, "ObtenerIdModeloModulo");
-
-                Formulario.LlenarComboBox(cboModulos, "SeleccionarModulos", IdModelo);
+                int IdModelo = NuevaAccion.BuscarId(cboModelosModulos.SelectedItem.ToString(), "spObtenerIdModeloModulo");
+                Formulario.LlenarComboBox(cboModulos, "spSeleccionarModulos", IdModelo);
             }
         }
 
-        public void MostrarOpcionesModulos(bool Mostrar)
-        {
-            cboModulos.Visible = Mostrar;
-            lblModulo.Visible = Mostrar;
-        }
+        #endregion
 
         private void cboModulos_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboModulos.SelectedItem.ToString() != " ")
-            {
-                MostrarClavesModulos(true);
-                int IdModelo = NuevaAccion.BuscarId(cboOpcionElegida.SelectedItem.ToString(), "ObtenerIdModeloModulo");
 
-                int IdModulo = lgReporteModulo.BuscarIdModulo(cboModulos.SelectedItem.ToString(), "ObtenerIdModulo", IdModelo);
-
-                Formulario.LlenarComboBox(cboClaves, "ObtenerClaves", IdModulo);
-            }
         }
-
-        public void MostrarClavesModulos(bool Mostrar)
-        {
-            lblClaves.Visible = Mostrar;
-            cboClaves.Visible = Mostrar;
-        }
-        #endregion
     }
 }

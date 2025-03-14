@@ -29,6 +29,7 @@ namespace CobranzaSP.Lógica
         public static string RutaReportesRegistrosInventarioToners { get; set; }
         public static string RutaReportesRegistrosInventarioPartes { get; set; }
         public static string RutaReportesRemisiones { get; set; }
+        public static string RutaReportesServiciosModulos { get; set; }
 
         // Constructor estático para inicializar las propiedades y asignarles la carpeta donde se guardaran los pdfs
         static ConfiguracionPdf()
@@ -48,6 +49,7 @@ namespace CobranzaSP.Lógica
             RutaReportesRegistrosInventarioPartes = CrearRuta("RegistrosInventarioPartes");
             RutaReportesRemisiones = CrearRuta("Remisiones");
             RutaReportesEstadosCuentas = CrearRuta("Estados de Cuenta");
+            RutaReportesServiciosModulos = CrearRuta("ServiciosModulos");
         }
 
         private static string CrearRuta(string subcarpeta)
