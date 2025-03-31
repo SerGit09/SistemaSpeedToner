@@ -90,14 +90,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CobranzaSP.exe" size="950272">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CobranzaSP.exe" size="951296">
       <assemblyIdentity name="CobranzaSP" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>y6brsb2CcKsVGd4kq9oa81DGZ2ut3jZXUOvhDTNK8to=</dsig:DigestValue>
+        <dsig:DigestValue>GsvfAacjy25KqrRG/TMaxLK0SRgZ1CjtNLiugh9egcM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

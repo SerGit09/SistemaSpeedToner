@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InventarioModulos));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnCancelar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnGuardar = new System.Windows.Forms.Button();
@@ -49,6 +49,8 @@
             this.cboModelo = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnImprimir = new System.Windows.Forms.Button();
+            this.chkModuloNuevo = new System.Windows.Forms.CheckBox();
+            this.txtModulo = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dtgModulos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.erInventarioModulos)).BeginInit();
             this.grpDatosInventario.SuspendLayout();
@@ -62,7 +64,7 @@
             this.btnCancelar.ForeColor = System.Drawing.Color.White;
             this.btnCancelar.Image = ((System.Drawing.Image)(resources.GetObject("btnCancelar.Image")));
             this.btnCancelar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancelar.Location = new System.Drawing.Point(366, 133);
+            this.btnCancelar.Location = new System.Drawing.Point(267, 145);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(117, 51);
             this.btnCancelar.TabIndex = 36;
@@ -79,7 +81,7 @@
             this.btnEliminar.ForeColor = System.Drawing.Color.White;
             this.btnEliminar.Image = ((System.Drawing.Image)(resources.GetObject("btnEliminar.Image")));
             this.btnEliminar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEliminar.Location = new System.Drawing.Point(366, 76);
+            this.btnEliminar.Location = new System.Drawing.Point(144, 145);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new System.Drawing.Size(117, 51);
             this.btnEliminar.TabIndex = 35;
@@ -96,7 +98,7 @@
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
             this.btnGuardar.Image = ((System.Drawing.Image)(resources.GetObject("btnGuardar.Image")));
             this.btnGuardar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGuardar.Location = new System.Drawing.Point(366, 19);
+            this.btnGuardar.Location = new System.Drawing.Point(21, 145);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(117, 51);
             this.btnGuardar.TabIndex = 34;
@@ -113,45 +115,45 @@
             this.dtgModulos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dtgModulos.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
             this.dtgModulos.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgModulos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgModulos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dtgModulos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InfoText;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtgModulos.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtgModulos.DefaultCellStyle = dataGridViewCellStyle6;
             this.dtgModulos.EnableHeadersVisualStyles = false;
-            this.dtgModulos.Location = new System.Drawing.Point(12, 190);
+            this.dtgModulos.Location = new System.Drawing.Point(12, 206);
             this.dtgModulos.Name = "dtgModulos";
             this.dtgModulos.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgModulos.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgModulos.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgModulos.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgModulos.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.dtgModulos.RowTemplate.Height = 25;
-            this.dtgModulos.Size = new System.Drawing.Size(1326, 775);
+            this.dtgModulos.Size = new System.Drawing.Size(1326, 759);
             this.dtgModulos.TabIndex = 37;
             this.dtgModulos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgModulos_CellClick);
             // 
@@ -167,7 +169,7 @@
             this.btnAbrirInventariosPartes.ForeColor = System.Drawing.Color.White;
             this.btnAbrirInventariosPartes.Image = ((System.Drawing.Image)(resources.GetObject("btnAbrirInventariosPartes.Image")));
             this.btnAbrirInventariosPartes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAbrirInventariosPartes.Location = new System.Drawing.Point(505, 76);
+            this.btnAbrirInventariosPartes.Location = new System.Drawing.Point(528, 76);
             this.btnAbrirInventariosPartes.Name = "btnAbrirInventariosPartes";
             this.btnAbrirInventariosPartes.Size = new System.Drawing.Size(169, 51);
             this.btnAbrirInventariosPartes.TabIndex = 59;
@@ -184,7 +186,7 @@
             this.btnGuardarInventario.ForeColor = System.Drawing.Color.White;
             this.btnGuardarInventario.Image = ((System.Drawing.Image)(resources.GetObject("btnGuardarInventario.Image")));
             this.btnGuardarInventario.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGuardarInventario.Location = new System.Drawing.Point(505, 19);
+            this.btnGuardarInventario.Location = new System.Drawing.Point(528, 19);
             this.btnGuardarInventario.Name = "btnGuardarInventario";
             this.btnGuardarInventario.Size = new System.Drawing.Size(135, 51);
             this.btnGuardarInventario.TabIndex = 58;
@@ -195,6 +197,8 @@
             // 
             // grpDatosInventario
             // 
+            this.grpDatosInventario.Controls.Add(this.txtModulo);
+            this.grpDatosInventario.Controls.Add(this.chkModuloNuevo);
             this.grpDatosInventario.Controls.Add(this.txtClave);
             this.grpDatosInventario.Controls.Add(this.label2);
             this.grpDatosInventario.Controls.Add(this.cboModulos);
@@ -204,7 +208,7 @@
             this.grpDatosInventario.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.grpDatosInventario.Location = new System.Drawing.Point(21, 12);
             this.grpDatosInventario.Name = "grpDatosInventario";
-            this.grpDatosInventario.Size = new System.Drawing.Size(339, 171);
+            this.grpDatosInventario.Size = new System.Drawing.Size(469, 127);
             this.grpDatosInventario.TabIndex = 60;
             this.grpDatosInventario.TabStop = false;
             this.grpDatosInventario.Text = "Datos";
@@ -284,13 +288,32 @@
             this.btnImprimir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnImprimir.ForeColor = System.Drawing.Color.White;
             this.btnImprimir.Image = ((System.Drawing.Image)(resources.GetObject("btnImprimir.Image")));
-            this.btnImprimir.Location = new System.Drawing.Point(505, 134);
+            this.btnImprimir.Location = new System.Drawing.Point(528, 134);
             this.btnImprimir.Name = "btnImprimir";
             this.btnImprimir.Size = new System.Drawing.Size(58, 49);
             this.btnImprimir.TabIndex = 36;
             this.btnImprimir.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnImprimir.UseVisualStyleBackColor = true;
             this.btnImprimir.Click += new System.EventHandler(this.btnImprimir_Click_1);
+            // 
+            // chkModuloNuevo
+            // 
+            this.chkModuloNuevo.AutoSize = true;
+            this.chkModuloNuevo.Location = new System.Drawing.Point(336, 55);
+            this.chkModuloNuevo.Name = "chkModuloNuevo";
+            this.chkModuloNuevo.Size = new System.Drawing.Size(130, 23);
+            this.chkModuloNuevo.TabIndex = 49;
+            this.chkModuloNuevo.Text = "Modulo Nuevo";
+            this.chkModuloNuevo.UseVisualStyleBackColor = true;
+            this.chkModuloNuevo.CheckedChanged += new System.EventHandler(this.chkModuloNuevo_CheckedChanged);
+            // 
+            // txtModulo
+            // 
+            this.txtModulo.Location = new System.Drawing.Point(80, 53);
+            this.txtModulo.Name = "txtModulo";
+            this.txtModulo.Size = new System.Drawing.Size(237, 27);
+            this.txtModulo.TabIndex = 50;
+            this.txtModulo.Visible = false;
             // 
             // InventarioModulos
             // 
@@ -336,5 +359,7 @@
         private System.Windows.Forms.ComboBox cboModelo;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnImprimir;
+        private System.Windows.Forms.TextBox txtModulo;
+        private System.Windows.Forms.CheckBox chkModuloNuevo;
     }
 }

@@ -46,6 +46,20 @@ namespace CobranzaSP.Lógica
             return Mensaje;
         }
 
+        public void GuardarNuevoModulo(ModuloBodega NuevoModulo)
+        {
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "AgregarModuloACatalogo";
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.Clear();
+
+            comando.Parameters.AddWithValue("@IdModelo", NuevoModulo.IdModelo);
+            comando.Parameters.AddWithValue("@Modulo", NuevoModulo.Modulo);
+            comando.ExecuteNonQuery();
+
+            conexion.CerrarConexion();
+        }
+
         public int BuscarIdModulo(string campo,int IdModelo)
         {
             SqlDataReader ver;

@@ -73,7 +73,15 @@ namespace CobranzaSP.Formularios
             erInventarioModulos.Clear();
 
             ValidarCampo(cboModelo, "Seleccione un modelo");
-            ValidarCampo(cboModulos, "Seleccione un modulo");
+
+            if (chkModuloNuevo.Checked)
+            {
+                ValidarCampo(txtModulo, "Escriba nombre del modulo");
+            }
+            else
+            {
+                ValidarCampo(cboModulos, "Seleccione un modulo");
+            }
             ValidarCampo(txtClave, "Escriba una clave");
 
             return Validado;
@@ -129,7 +137,17 @@ namespace CobranzaSP.Formularios
                     Clave = txtClave.Text
                 };
 
-                NuevoModulo.IdModulo = lgModuloBodega.BuscarIdModulo(cboModulos.SelectedItem.ToString(), NuevoModulo.IdModelo);
+                if (chkModuloNuevo.Checked)
+                {
+                    NuevoModulo.Modulo = txtModulo.Text;
+                    lgModuloBodega.GuardarNuevoModulo(NuevoModulo);
+                    NuevoModulo.IdModulo = lgModuloBodega.BuscarIdModulo(txtModulo.Text, NuevoModulo.IdModelo);
+                }
+                else
+                {
+                    NuevoModulo.IdModulo = lgModuloBodega.BuscarIdModulo(cboModulos.SelectedItem.ToString(), NuevoModulo.IdModelo);
+                }
+
                 if (EstaModificando)
                 {
                     if (MessageBox.Show("¿Esta seguro de modificar el registro?", "CONFIRME LA MODIFICACION", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
@@ -157,6 +175,7 @@ namespace CobranzaSP.Formularios
                 MessageBox.Show("Ocurrio un error " + ex.Message);
             }
         }
+
         #endregion
 
         private void btnCancelar_Click(object sender, EventArgs e)
@@ -173,6 +192,7 @@ namespace CobranzaSP.Formularios
             Id = 0;
             cboModelo.SelectedIndex = 0;
             cboModulos.SelectedIndex = 0;
+            chkModuloNuevo.Checked = false;
         }
 
         private void btnImprimir_Click_1(object sender, EventArgs e)
@@ -309,6 +329,20 @@ namespace CobranzaSP.Formularios
         private void cboModulos_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             
+        }
+
+        private void chkModuloNuevo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkModuloNuevo.Checked)
+            {
+                cboModulos.Visible = false;
+                txtModulo.Visible = true;
+            }
+            else
+            {
+                cboModulos.Visible = true;
+                txtModulo.Visible = false;
+            }
         }
     }
 }

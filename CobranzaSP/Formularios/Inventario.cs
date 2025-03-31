@@ -671,7 +671,7 @@ namespace CobranzaSP.Formularios
 
         #endregion
 
-        #region Formas
+        #region AbrirFormas
         private void btnAbrirReportes_Click(object sender, EventArgs e)
         {
             AbrirForm(new ReporteRegistros());
@@ -684,20 +684,15 @@ namespace CobranzaSP.Formularios
         private void btnImprimir_Click(object sender, EventArgs e)
         {
             AbrirForm(new ReporteInventarioToners());
-            //AccionInventario.ImprimirInventario();
         }
-        #endregion
-
-
         private void btnGarantias_Click(object sender, EventArgs e)
         {
             AbrirForm(new Garantias());
         }
+        #endregion
 
-        private void cboClientes_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
+
 
         private void cboMostrarRegistros_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -713,16 +708,6 @@ namespace CobranzaSP.Formularios
             }
             //Asignamos los registros a nuestro datagridview
             dtgCartuchos.DataSource = tabla;
-        }
-
-        private void Inventario_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cboMarca_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

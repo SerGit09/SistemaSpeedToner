@@ -30,24 +30,23 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Inventario));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabInventario = new System.Windows.Forms.TabPage();
             this.grpDatosInventario = new System.Windows.Forms.GroupBox();
+            this.cboTiposArticulos = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.btnAbrirReporteExistencias = new System.Windows.Forms.Button();
             this.txtPrecio = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.btnImprimir = new System.Windows.Forms.Button();
             this.cboMarcaSeleccionada = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.dtpFecha = new System.Windows.Forms.DateTimePicker();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.txtOficina = new System.Windows.Forms.TextBox();
-            this.Buscar = new System.Windows.Forms.Button();
             this.txtModelo = new System.Windows.Forms.TextBox();
             this.cboMarca = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -76,13 +75,14 @@
             this.cboMarcas = new System.Windows.Forms.ComboBox();
             this.dtpFechaRegistro = new System.Windows.Forms.DateTimePicker();
             this.label22 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.Buscar = new System.Windows.Forms.Button();
             this.dtgCartuchos = new System.Windows.Forms.DataGridView();
             this.erInventario = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnCancelar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnGuardar = new System.Windows.Forms.Button();
-            this.cboTiposArticulos = new System.Windows.Forms.ComboBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabInventario.SuspendLayout();
             this.grpDatosInventario.SuspendLayout();
@@ -139,6 +139,30 @@
             this.grpDatosInventario.TabIndex = 0;
             this.grpDatosInventario.TabStop = false;
             this.grpDatosInventario.Text = "Datos";
+            // 
+            // cboTiposArticulos
+            // 
+            this.cboTiposArticulos.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cboTiposArticulos.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboTiposArticulos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTiposArticulos.FormattingEnabled = true;
+            this.cboTiposArticulos.Location = new System.Drawing.Point(113, 104);
+            this.cboTiposArticulos.Margin = new System.Windows.Forms.Padding(4);
+            this.cboTiposArticulos.Name = "cboTiposArticulos";
+            this.cboTiposArticulos.Size = new System.Drawing.Size(237, 27);
+            this.cboTiposArticulos.Sorted = true;
+            this.cboTiposArticulos.TabIndex = 40;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(8, 107);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(107, 19);
+            this.label9.TabIndex = 39;
+            this.label9.Text = "Tipo Articulo:";
             // 
             // btnAbrirReporteExistencias
             // 
@@ -204,17 +228,6 @@
             this.cboMarcaSeleccionada.Sorted = true;
             this.cboMarcaSeleccionada.TabIndex = 34;
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(412, 217);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(134, 19);
-            this.label5.TabIndex = 34;
-            this.label5.Text = "Modelo Cartucho:";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -233,14 +246,6 @@
             this.dtpFecha.Size = new System.Drawing.Size(305, 27);
             this.dtpFecha.TabIndex = 10;
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(416, 239);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(237, 27);
-            this.textBox1.TabIndex = 34;
-            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
-            // 
             // txtOficina
             // 
             this.txtOficina.Location = new System.Drawing.Point(379, 28);
@@ -248,20 +253,6 @@
             this.txtOficina.Size = new System.Drawing.Size(157, 27);
             this.txtOficina.TabIndex = 9;
             this.txtOficina.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtOficina_KeyPress);
-            // 
-            // Buscar
-            // 
-            this.Buscar.FlatAppearance.BorderColor = System.Drawing.Color.DarkOrange;
-            this.Buscar.FlatAppearance.BorderSize = 2;
-            this.Buscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Buscar.ForeColor = System.Drawing.Color.White;
-            this.Buscar.Image = ((System.Drawing.Image)(resources.GetObject("Buscar.Image")));
-            this.Buscar.Location = new System.Drawing.Point(659, 239);
-            this.Buscar.Name = "Buscar";
-            this.Buscar.Size = new System.Drawing.Size(50, 27);
-            this.Buscar.TabIndex = 34;
-            this.Buscar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.Buscar.UseVisualStyleBackColor = true;
             // 
             // txtModelo
             // 
@@ -283,7 +274,7 @@
             this.cboMarca.Size = new System.Drawing.Size(237, 27);
             this.cboMarca.Sorted = true;
             this.cboMarca.TabIndex = 7;
-            this.cboMarca.SelectedIndexChanged += new System.EventHandler(this.cboMarca_SelectedIndexChanged);
+            
             // 
             // label4
             // 
@@ -528,7 +519,6 @@
             this.cboClientes.Size = new System.Drawing.Size(293, 27);
             this.cboClientes.Sorted = true;
             this.cboClientes.TabIndex = 5;
-            this.cboClientes.SelectedIndexChanged += new System.EventHandler(this.cboClientes_SelectedIndexChanged);
             // 
             // lblSerieP
             // 
@@ -610,6 +600,39 @@
             this.label22.TabIndex = 6;
             this.label22.Text = "Fecha:";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(412, 217);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(134, 19);
+            this.label5.TabIndex = 34;
+            this.label5.Text = "Modelo Cartucho:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(416, 239);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(237, 27);
+            this.textBox1.TabIndex = 34;
+            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
+            // 
+            // Buscar
+            // 
+            this.Buscar.FlatAppearance.BorderColor = System.Drawing.Color.DarkOrange;
+            this.Buscar.FlatAppearance.BorderSize = 2;
+            this.Buscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Buscar.ForeColor = System.Drawing.Color.White;
+            this.Buscar.Image = ((System.Drawing.Image)(resources.GetObject("Buscar.Image")));
+            this.Buscar.Location = new System.Drawing.Point(659, 239);
+            this.Buscar.Name = "Buscar";
+            this.Buscar.Size = new System.Drawing.Size(50, 27);
+            this.Buscar.TabIndex = 34;
+            this.Buscar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Buscar.UseVisualStyleBackColor = true;
+            // 
             // dtgCartuchos
             // 
             this.dtgCartuchos.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -618,43 +641,43 @@
             this.dtgCartuchos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dtgCartuchos.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
             this.dtgCartuchos.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgCartuchos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(117)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgCartuchos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dtgCartuchos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.InfoText;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtgCartuchos.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtgCartuchos.DefaultCellStyle = dataGridViewCellStyle2;
             this.dtgCartuchos.EnableHeadersVisualStyles = false;
             this.dtgCartuchos.Location = new System.Drawing.Point(12, 274);
             this.dtgCartuchos.Name = "dtgCartuchos";
             this.dtgCartuchos.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgCartuchos.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgCartuchos.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgCartuchos.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(66)))), ((int)(((byte)(90)))));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgCartuchos.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dtgCartuchos.RowTemplate.Height = 25;
             this.dtgCartuchos.Size = new System.Drawing.Size(1326, 691);
             this.dtgCartuchos.TabIndex = 34;
@@ -715,30 +738,6 @@
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
-            // cboTiposArticulos
-            // 
-            this.cboTiposArticulos.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cboTiposArticulos.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cboTiposArticulos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboTiposArticulos.FormattingEnabled = true;
-            this.cboTiposArticulos.Location = new System.Drawing.Point(113, 104);
-            this.cboTiposArticulos.Margin = new System.Windows.Forms.Padding(4);
-            this.cboTiposArticulos.Name = "cboTiposArticulos";
-            this.cboTiposArticulos.Size = new System.Drawing.Size(237, 27);
-            this.cboTiposArticulos.Sorted = true;
-            this.cboTiposArticulos.TabIndex = 40;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(8, 107);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(107, 19);
-            this.label9.TabIndex = 39;
-            this.label9.Text = "Tipo Articulo:";
-            // 
             // Inventario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -759,7 +758,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Inventario";
             this.Text = "Inventario";
-            this.Load += new System.EventHandler(this.Inventario_Load);
+            
             this.tabControl1.ResumeLayout(false);
             this.tabInventario.ResumeLayout(false);
             this.grpDatosInventario.ResumeLayout(false);
